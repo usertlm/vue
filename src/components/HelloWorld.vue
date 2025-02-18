@@ -4,8 +4,7 @@
     <p>
       For a guide and recipes on how to configure / customize this project,<br>
       check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-
+      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>
     <h3>电影资源分享</h3>
     <ul>
       <li><a href="https://www.dy2018.com/" target="_blank" rel="noopener">电影天堂</a></li>

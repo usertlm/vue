@@ -10,7 +10,7 @@
     <h1>Hello World</h1>
     <div>
       <iframe 
-        src="/path/to/zb.html" 
+        src="./zb.html" 
         width="100%" 
         height="600px" 
         frameborder="0"

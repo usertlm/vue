@@ -6,30 +6,6 @@
       check out the
       <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
     </p>
-    
-    <template>
-  <div>
-    <video 
-      controls 
-      width="800" 
-      height="600"
-    >
-      <source :src="videoSrc" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-  </div>
-</template>
-
-<script>
-export default {
-  data() {
-    return {
-      videoSrc: 'https://v.ddys.pro/v/kr_drama/When_the_Stars_Gossip/When_the_Stars_Gossip_S01E01.mp4' // 替换为你的视频链接
-    };
-  }
-};
-</script>
-    
     <h3>电影资源分享</h3>
     <ul>
       <li><a href="https://www.dy2018.com/" target="_blank" rel="noopener">电影天堂</a></li>

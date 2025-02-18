@@ -6,6 +6,24 @@
       check out the
       <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
     </p>
+    <iframe 
+      src="/src/components/zb.html" 
+      width="100%" 
+      height="600px" 
+      frameborder="0"
+    ></iframe>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'HelloWorld',
+  props: {
+    msg: String
+  }
+}
+</script>
+
     <h3>电影资源分享</h3>
     <ul>
       <li><a href="https://www.dy2018.com/" target="_blank" rel="noopener">电影天堂</a></li>

@@ -1,6 +1,27 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
+<template>
+  <div class="hello">
+    <h1>Hello World</h1>
+    <div v-html="htmlContent"></div>
+  </div>
+</template>
+
+<script>
+// 导入 HTML 文件内容
+import htmlContent from '@/components/zb.html';
+
+export default {
+  name: 'HelloWorld',
+  data() {
+    return {
+      htmlContent: htmlContent,
+    };
+  },
+};
+</script>
+
     <p>
       For a guide and recipes on how to configure / customize this project,<br>
       check out the

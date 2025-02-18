@@ -1,31 +1,23 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-<template>
-  <div class="hello">
-    <h1>Hello World</h1>
-    <div v-html="htmlContent"></div>
-  </div>
-</template>
-
-<script>
-// 导入 HTML 文件内容
-import htmlContent from '@/components/zb.html';
-
-export default {
-  name: 'HelloWorld',
-  data() {
-    return {
-      htmlContent: htmlContent,
-    };
-  },
-};
-</script>
-
     <p>
       For a guide and recipes on how to configure / customize this project,<br>
       check out the
       <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
+    <template>
+  <div class="hello">
+    <h1>Hello World</h1>
+    <div>
+      <iframe 
+        src="/path/to/zb.html" 
+        width="100%" 
+        height="600px" 
+        frameborder="0"
+      ></iframe>
+    </div>
+  </div>
+</template>
     </p>
     <h3>电影资源分享</h3>
     <ul>

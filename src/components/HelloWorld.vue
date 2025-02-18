@@ -13,16 +13,6 @@
       frameborder="0"
    ></iframe>
   </div>
-</template>
-
-<script>
-export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
-  }
-}
-</script>
     <h3>电影资源分享</h3>
     <ul>
       <li><a href="https://www.dy2018.com/" target="_blank" rel="noopener">电影天堂</a></li>

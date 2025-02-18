@@ -7,7 +7,7 @@
       <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
     </p>
     <iframe 
-      src="/src/components/zb.html" 
+      src="/zb.html" 
       width="100%" 
       height="600px" 
       frameborder="0"

@@ -45,7 +45,7 @@
         if (Hls.isSupported()) {
             var video = document.getElementById('live-video');
             var hls = new Hls();
-            hls.loadSource('rtmp://111.67.193.31/mnt/123456))'); // 替换为你的直播流地址
+            hls.loadSource('https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8))'); // 替换为你的直播流地址
             hls.attachMedia(video);
             hls.on(Hls.Events.MANIFEST_PARSED, function() {
                 video.play();

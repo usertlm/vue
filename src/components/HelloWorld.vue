@@ -24,8 +24,8 @@
   </div>
 </template>
 
-// 引入 SearchComponent
-import SearchComponent from './components/search.vue'; // 确保路径正确
+<script>
+import SearchComponent from '@/components/search.vue'; // 确保路径正确
 
 export default {
   name: 'HelloWorld',
@@ -36,6 +36,7 @@ export default {
     msg: String
   }
 };
+</script>
 
     <ul>
       <li><a href="https://www.dy2018.com/" target="_blank" rel="noopener">电影天堂</a></li>

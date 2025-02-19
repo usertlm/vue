@@ -13,6 +13,15 @@
       frameborder="0"
    ></iframe>
     <h3>电影资源分享</h3>
+<template>
+  <div>
+    <!-- 视频播放框 -->
+    <video controls width="640" height="360">
+      <source src="https://video.usertlm.top/p/home/drive/home/%E7%BF%BB%E5%A2%99%E5%BF%85%E7%9C%8B%EF%BC%8C%E8%BF%99%E5%85%AD%E7%A7%8D%E6%8A%80%E6%9C%AF%E6%AD%A3%E5%9C%A8%E5%87%BA%E5%8D%96%E4%BD%A0%E2%80%94%E2%80%94%E7%BF%BB%E5%A2%99%E7%94%A8%E6%88%B7%E9%83%BD%E5%9C%A8%E7%8A%AF%E7%9A%84%E8%87%B4%E5%91%BD%E9%94%99%E8%AF%AF%EF%BC%8C%E6%9C%80%E5%85%A8%E9%98%B2%E5%9D%91%E6%8C%87%E5%8D%97.mp4?sign=5vcDWa7hIbcE3wpeZNNPMUmiFaWwcVbcEGFTzbdvOg0=:0" type="video/mp4">
+      您的浏览器不支持视频播放。
+    </video>
+  </div>
+</template>
     <ul>
       <li><a href="https://www.dy2018.com/" target="_blank" rel="noopener">电影天堂</a></li>
       <li><a href="https://www.agedm.org/" target="_blank" rel="noopener">AGE动漫</a></li>

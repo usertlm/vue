@@ -15,17 +15,6 @@
 
 import SearchComponent from '@/components/search.vue'; // 确保路径正确
 
-<script>
-export default {
-  name: 'HelloWorld',
-  components: {
-    SearchComponent // 注册组件
-  },
-  props: {
-    msg: String
-  }
-};
-</script>
 
     <h3>电影资源分享</h3>
     <iframe 

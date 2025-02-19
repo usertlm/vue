@@ -7,13 +7,15 @@
 </template>
 
 <script>
+// 引入组件
 import HelloWorld from './components/HelloWorld.vue'
+import SearchComponent from './components/SearchComponent.vue' // 确保路径正确
 
 export default {
   name: 'App',
   components: {
     HelloWorld,
-    SearchComponent
+    SearchComponent // 注册组件
   }
 }
 </script>
@@ -26,6 +28,7 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  /* 添加背景图 */
   background-image: url('@/assets/20231220_163216.jpg'); /* 确保路径正确 */
   background-size: cover;
   background-position: center;

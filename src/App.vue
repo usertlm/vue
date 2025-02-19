@@ -8,7 +8,7 @@
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
-import SearchComponent from './components/SearchComponent.vue' // 确保路径正确
+import SearchComponent from './components/search.vue' // 确保路径正确
 
 export default {
   name: 'App',

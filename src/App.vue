@@ -1,5 +1,5 @@
 <template>
-  <img alt="Vue logo" src="./assets/lb.jpg">
+  <img alt="Vue logo" src="./assets/logo.png">
   <HelloWorld msg="欢迎来到usertlm"/>
 </template>
 

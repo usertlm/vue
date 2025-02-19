@@ -12,6 +12,19 @@
       height="600px" 
       frameborder="0"
     ></iframe>
+
+import SearchComponent from '@/components/search.vue'; // 确保路径正确
+
+export default {
+  name: 'HelloWorld',
+  components: {
+    SearchComponent // 注册组件
+  },
+  props: {
+    msg: String
+  }
+};
+
     <h3>电影资源分享</h3>
     <iframe 
       src="/video.html" 

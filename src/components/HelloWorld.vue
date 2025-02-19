@@ -13,40 +13,6 @@
       frameborder="0"
    ></iframe>
     <h3>电影资源分享</h3>
-<template>
-  <div>
-    <video controls width="640" height="360">
-      <source :src="videoUrl" type="video/mp4">
-      您的浏览器不支持视频播放。
-    </video>
-  </div>
-</template>
-
-<script>
-export default {
-  data() {
-    return {
-      videoUrl: ''
-    };
-  },
-  created() {
-    // 模拟从后端获取视频地址
-    this.fetchVideoUrl();
-  },
-  methods: {
-    async fetchVideoUrl() {
-      try {
-        const response = await fetch('https://your-backend-api/video');
-        const data = await response.json();
-        this.videoUrl = data.videoUrl; // 假设后端返回的视频地址字段为 videoUrl
-      } catch (error) {
-        console.error('无法获取视频地址：', error);
-      }
-    }
-  }
-};
-</script>
-
     <ul>
       <li><a href="https://www.dy2018.com/" target="_blank" rel="noopener">电影天堂</a></li>
       <li><a href="https://www.agedm.org/" target="_blank" rel="noopener">AGE动漫</a></li>

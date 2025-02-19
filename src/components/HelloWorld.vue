@@ -13,6 +13,73 @@
       frameborder="0"
     ></iframe>
 
+<script>
+import { chatWithDeepSeek } from './deepseek.js'; // 引入 DeepSeek 交互函数
+
+export default {
+  name: 'HelloWorld',
+  props: {
+    msg: String,
+  },
+  data() {
+    return {
+      userInput: '', // 用户输入的消息
+      messages: [], // 对话历史
+    };
+  },
+  methods: {
+    async sendMessage() {
+      if (!this.userInput.trim()) return;
+
+      // 添加用户消息到对话框
+      this.messages.push(`You: ${this.userInput}`);
+
+      // 调用 DeepSeek API
+      const response = await chatWithDeepSeek(this.userInput);
+
+      // 添加 DeepSeek 的回复到对话框
+      this.messages.push(`DeepSeek: ${response}`);
+
+      // 清空输入框
+      this.userInput = '';
+    },
+  },
+};
+</script>
+
+<style scoped>
+.chat-container {
+  margin-top: 20px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.chat-box {
+  height: 300px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+}
+
+.message {
+  margin: 5px 0;
+  padding: 5px;
+  border-radius: 3px;
+  background-color: #e3f2fd;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 10px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+}
+</style>
+
     <h3>电影资源分享</h3>
     <iframe 
       src="/video.html" 

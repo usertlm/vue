@@ -7,14 +7,14 @@
       <a href="https://b23.tv/DmyVWD9" target="_blank" rel="noopener">宸墨嵐的哔哩哔哩</a>.
     </p>
     <iframe 
-      src="/public/zb.html" 
+      src="/zb.html" 
       width="100%" 
       height="600px" 
       frameborder="0"
     ></iframe>
     <h3 style="margin: 20px 0;">电影资源分享</h3>
     <iframe 
-      src="/public/video.html" 
+      src="/video.html" 
       width="100%" 
       height="600px" 
       frameborder="0"

@@ -7,25 +7,24 @@
       <a href="https://b23.tv/DmyVWD9" target="_blank" rel="noopener">宸墨嵐的哔哩哔哩</a>.
     </p>
     <iframe 
-      src="/zb.html" 
+      src="/public/zb.html" 
       width="100%" 
       height="600px" 
       frameborder="0"
-   ></iframe>
-    <h3>电影资源分享</h3>
-<iframe 
-      src="/video.html" 
+    ></iframe>
+    <h3 style="margin: 20px 0;">电影资源分享</h3>
+    <iframe 
+      src="/public/video.html" 
       width="100%" 
       height="600px" 
       frameborder="0"
-   ></iframe>
-   <!-- 引入 SearchComponent -->
+    ></iframe>
     <SearchComponent />
   </div>
 </template>
 
 <script>
-import SearchComponent from '@/components/search.vue'; // 确保路径正确
+import SearchComponent from '@/components/SearchComponent.vue'; // 确保路径正确
 
 export default {
   name: 'HelloWorld',

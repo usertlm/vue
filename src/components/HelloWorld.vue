@@ -13,15 +13,11 @@
       frameborder="0"
    ></iframe>
     <h3>电影资源分享</h3>
-    <div>
     <video width="640" height="360" controls>
       <source :src="videoUrl" type="video/mp4">
       您的浏览器不支持 HTML5 视频。
     </video>
   </div>
-</template>
-
-<script>
 export default {
   data() {
     return {

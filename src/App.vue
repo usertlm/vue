@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import SearchComponent from './components/SearchComponent.vue';
+import SearchComponent from './components/search.vue';
 
 export default {
   name: 'App',

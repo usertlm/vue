@@ -23,7 +23,7 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 /* 添加背景图 */
-  background-image: url('@/assets/lb.jpg');
+  background-image: url('@/assets/20231220_163216.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

@@ -24,14 +24,13 @@
   </div>
 </template>
 
-<script>
 // 引入 SearchComponent
 import SearchComponent from './components/search.vue'; // 确保路径正确
 
 export default {
   name: 'HelloWorld',
   components: {
-    Search // 注册组件
+    SearchComponent // 注册组件
   },
   props: {
     msg: String

@@ -31,20 +31,13 @@ import SearchComponent from './components/search.vue'; // 确保路径正确
 export default {
   name: 'HelloWorld',
   components: {
-    SearchComponent // 注册组件
+    Search // 注册组件
   },
   props: {
     msg: String
   }
 };
 </script>
-
-<style scoped>
-/* 样式部分 */
-h1 {
-  color: #42b983;
-}
-</style>
     <ul>
       <li><a href="https://www.dy2018.com/" target="_blank" rel="noopener">电影天堂</a></li>
       <li><a href="https://www.agedm.org/" target="_blank" rel="noopener">AGE动漫</a></li>

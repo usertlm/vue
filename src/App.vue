@@ -3,11 +3,7 @@
     <img alt="Vue logo" src="./assets/logo.png">
     <HelloWorld msg="👇👇👇"/>
     <SearchComponent />
-  </div>
-</template>
 
-<template>
-  <div>
     <svg 
       class="icon-link" 
       @click="goToWebsite"
@@ -28,7 +24,9 @@ export default {
     }
   }
 }
-</script>
+  <script>
+ </div>
+</template>
 
 <style>
 .icon-link {

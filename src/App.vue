@@ -3,7 +3,6 @@
     <img alt="Vue logo" src="./assets/logo.png">
     <HelloWorld msg="👇👇👇"/>
     <SearchComponent />
-
     <svg 
       class="icon-link" 
       @click="goToWebsite"
@@ -17,30 +16,6 @@
 </template>
 
 <script>
-export default {
-  methods: {
-    goToWebsite() {
-      window.open('http://www.staggeringbeauty.com/', '_blank')
-    }
-  }
-}
-  <script>
- </div>
-</template>
-
-<style>
-.icon-link {
-  cursor: pointer;
-  fill: #409eff;
-  transition: fill 0.3s;
-}
-
-.icon-link:hover {
-  fill: #66b1ff;
-}
-</style>
-
-<script>
 // 引入组件
 import HelloWorld from './components/HelloWorld.vue'
 import SearchComponent from './components/search.vue' // 确保路径正确
@@ -50,6 +25,11 @@ export default {
   components: {
     HelloWorld,
     SearchComponent // 注册组件
+  },
+  methods: {
+    goToWebsite() {
+      window.open('http://www.staggeringbeauty.com/', '_blank')
+    }
   }
 }
 </script>
@@ -67,5 +47,15 @@ export default {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+.icon-link {
+  cursor: pointer;
+  fill: #409eff;
+  transition: fill 0.3s;
+}
+
+.icon-link:hover {
+  fill: #66b1ff;
 }
 </style>

@@ -36,26 +36,44 @@ export default {
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Orbitron', Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #00ffe7;
   margin-top: 60px;
-  /* 添加背景图 */
-  background-image: url('@/assets/20231220_163216.jpg'); /* 确保路径正确 */
+  background-image: linear-gradient(135deg, #0f2027 0%, #2c5364 100%), url('@/assets/20231220_163216.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  min-height: 100vh;
+  box-shadow: 0 0 40px #00ffe7 inset;
+}
+
+.neon {
+  text-shadow: 0 0 5px #00ffe7, 0 0 10px #00ffe7, 0 0 20px #00ffe7, 0 0 40px #00ffe7;
+}
+
+.glass {
+  background: rgba(255,255,255,0.08);
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: 0 4px 32px 0 rgba(0,255,231,0.15);
+  padding: 24px;
+  margin: 24px auto;
+  max-width: 800px;
 }
 
 .icon-link {
   cursor: pointer;
-  fill: #409eff;
-  transition: fill 0.3s;
+  fill: #00ffe7;
+  transition: fill 0.3s, filter 0.3s;
+  filter: drop-shadow(0 0 6px #00ffe7);
 }
 
 .icon-link:hover {
   fill: #66b1ff;
+  filter: drop-shadow(0 0 12px #66b1ff);
 }
 </style>

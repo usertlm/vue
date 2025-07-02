@@ -3,7 +3,7 @@
     <div v-if="!turnstilePassed" class="glass" style="margin-bottom: 32px;">
       <h2 class="neon">Cloudflare Turnstile 验证演示</h2>
       <div id="cf-turnstile-container">
-        <div class="cf-turnstile" data-sitekey="0x4AAAAAABjMg_aGISigBp6e" data-theme="auto" data-callback="onTurnstileSuccess"></div>
+        <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA" data-theme="auto" data-callback="onTurnstileSuccess"></div>
       </div>
     </div>
     <div v-else>
@@ -56,8 +56,7 @@ export default {
     goToWebsite() {
       window.open('http://www.staggeringbeauty.com/', '_blank')
     },
-    onTurnstileSuccess(token) {
-      // 这里可以做后端校验，当前直接通过
+    onTurnstileSuccess() {
       this.turnstilePassed = true;
     }
   }

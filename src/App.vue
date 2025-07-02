@@ -1,23 +1,25 @@
 <template>
   <div id="app">
-    <div class="glass" style="margin-bottom: 32px;">
+    <div v-if="!turnstilePassed" class="glass" style="margin-bottom: 32px;">
       <h2 class="neon">Cloudflare Turnstile 验证演示</h2>
       <div id="cf-turnstile-container">
-        <div class="cf-turnstile" data-sitekey="0x4AAAAAABjMg_aGISigBp6e" data-theme="auto"></div>
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAABjMg_aGISigBp6e" data-theme="auto" data-callback="onTurnstileSuccess"></div>
       </div>
     </div>
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="👇👇👇"/>
-    <SearchComponent />
-    <svg 
-      class="icon-link" 
-      @click="goToWebsite"
-      width="24" 
-      height="24" 
-      viewBox="0 0 24 24"
-    >
-      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-    </svg>
+    <div v-else>
+      <img alt="Vue logo" src="./assets/logo.png">
+      <HelloWorld msg="👇👇👇"/>
+      <SearchComponent />
+      <svg 
+        class="icon-link" 
+        @click="goToWebsite"
+        width="24" 
+        height="24" 
+        viewBox="0 0 24 24"
+      >
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+      </svg>
+    </div>
   </div>
 </template>
 
@@ -32,6 +34,11 @@ export default {
     HelloWorld,
     SearchComponent // 注册组件
   },
+  data() {
+    return {
+      turnstilePassed: false
+    }
+  },
   mounted() {
     // 动态加载 Cloudflare Turnstile 脚本
     if (!document.getElementById('cf-turnstile-script')) {
@@ -42,10 +49,16 @@ export default {
       script.defer = true;
       document.body.appendChild(script);
     }
+    // 注册全局回调
+    window.onTurnstileSuccess = this.onTurnstileSuccess;
   },
   methods: {
     goToWebsite() {
       window.open('http://www.staggeringbeauty.com/', '_blank')
+    },
+    onTurnstileSuccess(token) {
+      // 这里可以做后端校验，当前直接通过
+      this.turnstilePassed = true;
     }
   }
 }

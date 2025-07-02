@@ -3,6 +3,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "build:obfuscate": "javascript-obfuscator ./dist --output ./dist --compact true --self-defending true --control-flow-flattening true",
     "lint": "vue-cli-service lint"
   },
   "engines": {

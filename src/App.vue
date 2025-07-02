@@ -1,5 +1,11 @@
 <template>
   <div id="app">
+    <div class="glass" style="margin-bottom: 32px;">
+      <h2 class="neon">Cloudflare Turnstile 验证演示</h2>
+      <div id="cf-turnstile-container">
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAABjMg_aGISigBp6e" data-theme="auto"></div>
+      </div>
+    </div>
     <img alt="Vue logo" src="./assets/logo.png">
     <HelloWorld msg="👇👇👇"/>
     <SearchComponent />
@@ -25,6 +31,17 @@ export default {
   components: {
     HelloWorld,
     SearchComponent // 注册组件
+  },
+  mounted() {
+    // 动态加载 Cloudflare Turnstile 脚本
+    if (!document.getElementById('cf-turnstile-script')) {
+      const script = document.createElement('script');
+      script.id = 'cf-turnstile-script';
+      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+      script.async = true;
+      script.defer = true;
+      document.body.appendChild(script);
+    }
   },
   methods: {
     goToWebsite() {

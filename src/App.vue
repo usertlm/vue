@@ -1,10 +1,8 @@
 <template>
   <div id="app">
     <div v-if="!turnstilePassed" class="glass" style="margin-bottom: 32px;">
-      <h2 class="neon">机器人验证</h2>
-      <div id="cf-turnstile-container">
-        <div class="cf-turnstile" data-sitekey="0x4AAAAAABjMg_aGISigBp6e" data-theme="auto" data-callback="onTurnstileSuccess"></div>
-      </div>
+      <h2 class="neon">Cloudflare Turnstile 验证演示</h2>
+      <div id="cf-turnstile-container" ref="turnstile"></div>
     </div>
     <div v-else>
       <img alt="Vue logo" src="./assets/logo.png">
@@ -47,9 +45,13 @@ export default {
       script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
       script.async = true;
       script.defer = true;
+      script.onload = () => {
+        this.renderTurnstile();
+      };
       document.body.appendChild(script);
+    } else if (window.turnstile) {
+      this.renderTurnstile();
     }
-    // 注册全局回调
     window.onTurnstileSuccess = this.onTurnstileSuccess;
   },
   methods: {
@@ -58,6 +60,15 @@ export default {
     },
     onTurnstileSuccess() {
       this.turnstilePassed = true;
+    },
+    renderTurnstile() {
+      if (window.turnstile && this.$refs.turnstile) {
+        window.turnstile.render(this.$refs.turnstile, {
+          sitekey: '0x4AAAAAABjVNM6jK07d-jUz',
+          callback: this.onTurnstileSuccess,
+          theme: 'auto'
+        });
+      }
     }
   }
 }

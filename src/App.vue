@@ -64,7 +64,7 @@ export default {
     renderTurnstile() {
       if (window.turnstile && this.$refs.turnstile) {
         window.turnstile.render(this.$refs.turnstile, {
-          sitekey: '0x4AAAAAABjVNM6jK07d-jUz',
+          sitekey: '0x4AAAAAABjMg_aGISigBp6e',
           callback: this.onTurnstileSuccess,
           theme: 'auto'
         });

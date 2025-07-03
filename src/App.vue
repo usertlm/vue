@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div v-if="!turnstilePassed" class="glass" style="margin-bottom: 32px;">
-      <h2 class="neon">Cloudflare Turnstile 验证演示</h2>
+      <h2 class="neon">机器人验证</h2>
       <div id="cf-turnstile-container" ref="turnstile"></div>
     </div>
     <div v-else>

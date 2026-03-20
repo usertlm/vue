@@ -1,23 +1,17 @@
 <template>
   <div id="app">
-    <div v-if="!turnstilePassed" class="glass" style="margin-bottom: 32px;">
-      <h2 class="neon">机器人验证</h2>
-      <div id="cf-turnstile-container" ref="turnstile"></div>
-    </div>
-    <div v-else>
-      <img alt="Vue logo" src="./assets/logo.png">
-      <HelloWorld msg="👇👇👇"/>
-      <SearchComponent />
-      <svg 
-        class="icon-link" 
-        @click="goToWebsite"
-        width="24" 
-        height="24" 
-        viewBox="0 0 24 24"
-      >
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-      </svg>
-    </div>
+    <img alt="Vue logo" src="./assets/logo.png">
+    <HelloWorld msg="👇👇👇"/>
+    <SearchComponent />
+    <svg 
+      class="icon-link" 
+      @click="goToWebsite"
+      width="24" 
+      height="24" 
+      viewBox="0 0 24 24"
+    >
+      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+    </svg>
   </div>
 </template>
 
@@ -32,43 +26,9 @@ export default {
     HelloWorld,
     SearchComponent // 注册组件
   },
-  data() {
-    return {
-      turnstilePassed: false
-    }
-  },
-  mounted() {
-    // 动态加载 Cloudflare Turnstile 脚本
-    if (!document.getElementById('cf-turnstile-script')) {
-      const script = document.createElement('script');
-      script.id = 'cf-turnstile-script';
-      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
-      script.async = true;
-      script.defer = true;
-      script.onload = () => {
-        this.renderTurnstile();
-      };
-      document.body.appendChild(script);
-    } else if (window.turnstile) {
-      this.renderTurnstile();
-    }
-    window.onTurnstileSuccess = this.onTurnstileSuccess;
-  },
   methods: {
     goToWebsite() {
       window.open('http://www.staggeringbeauty.com/', '_blank')
-    },
-    onTurnstileSuccess() {
-      this.turnstilePassed = true;
-    },
-    renderTurnstile() {
-      if (window.turnstile && this.$refs.turnstile) {
-        window.turnstile.render(this.$refs.turnstile, {
-          sitekey: '0x4AAAAAABjMg_aGISigBp6e',
-          callback: this.onTurnstileSuccess,
-          theme: 'auto'
-        });
-      }
     }
   }
 }

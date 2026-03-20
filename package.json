@@ -7,7 +7,10 @@
     "lint": "vue-cli-service lint"
   },
   "engines": {
-    "node": "24.x"
+    "node": ">=18.x"
+  },
+  "resolutions": {
+    "@achrinza/node-ipc": "^10.1.11"
   },
   "dependencies": {
     "core-js": "^3.30.2",

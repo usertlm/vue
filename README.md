@@ -1,35 +1,31 @@
-# Vue.js
+# Vue 网站项目
 
-This directory is a brief example of a [Vue.js](https://vuejs.org/) app that can be deployed to Vercel with zero configuration.
+基于 Vue 3 的个人网站，包含以下功能：
 
-## Deploy Your Own
+- 哔哩哔哩直播页面
+- DeepSeek AI 对话
+- 搜索工具
+- 资源链接导航
 
-Deploy your own Vue.js project with Vercel.
+## 技术栈
 
-[![Deploy with Vercel](https://vercel.com/button)](http://www.staggeringbeauty.com/)
+- Vue 3.5.30
+- Core-js 3.49.0
+- Vue CLI 5
 
-_Live Example: https://vue-template.vercel.app_
+## 开发
 
-## Running Locally
-
-```
+```bash
 yarn install
-```
-
-#### Compile and hot-reload for development
-
-```
 yarn serve
 ```
 
-#### Compile and minify for production
+## 构建
 
-```
+```bash
 yarn build
 ```
 
-#### Lint and fix files
+## 部署
 
-```
-yarn lint
-```
+本项目托管于 Cloudflare Pages

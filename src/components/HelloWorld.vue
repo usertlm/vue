@@ -23,11 +23,11 @@
     </div>
 
     <!-- 直播页面 -->
-    <iframe src="/zb.html" width="100%" height="600px" frameborder="0"></iframe>
+    <AdSense height="100px" />
 
     <!-- 电影资源分享 -->
     <h3>电影资源分享</h3>
-    <iframe src="/video.html" width="100%" height="600px" frameborder="0"></iframe>
+    <AdSense height="100px" />
     <ul>
       <li><a href="https://www.dy2018.com/" target="_blank" rel="noopener">电影天堂</a></li>
       <li><a href="https://www.agedm.org/" target="_blank" rel="noopener">AGE动漫</a></li>
@@ -65,9 +65,13 @@
 
 <script>
 import { chatWithDeepSeek } from './deepseek.js';
+import AdSense from './AdSense.vue';
 
 export default {
   name: 'HelloWorld',
+  components: {
+    AdSense
+  },
   props: {
     msg: String,
   },

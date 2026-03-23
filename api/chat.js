@@ -1,13 +1,14 @@
 // Vercel Serverless Function for MiniMax API
-// This runs on the server, so environment variables are accessible
 
-const { MINIMAX_API_KEY, MINIMAX_BASE_URL = 'https://api.minimax.chat/v1', MINIMAX_MODEL = 'minimax-m2.7' } = process.env;
-
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
+
+  const MINIMAX_API_KEY = process.env.MINIMAX_API_KEY;
+  const MINIMAX_BASE_URL = process.env.MINIMAX_BASE_URL || 'https://api.minimax.chat/v1';
+  const MINIMAX_MODEL = process.env.MINIMAX_MODEL || 'minimax-m2.7';
 
   // Check if API key is configured
   if (!MINIMAX_API_KEY) {
@@ -49,4 +50,4 @@ export default async function handler(req, res) {
     console.error('MiniMax API error:', error);
     return res.status(500).json({ error: error.message });
   }
-}
+};

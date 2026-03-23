@@ -23,11 +23,12 @@
     </div>
 
     <!-- 直播页面 -->
-    <AdSense height="100px" />
+    <h3>直播页面</h3>
+    <p><a href="/zb.html" target="_blank">打开直播页面 →</a></p>
 
     <!-- 电影资源分享 -->
     <h3>电影资源分享</h3>
-    <AdSense height="100px" />
+    <p><a href="/video.html" target="_blank">打开视频页面 →</a></p>
     <ul>
       <li><a href="https://www.dy2018.com/" target="_blank" rel="noopener">电影天堂</a></li>
       <li><a href="https://www.agedm.org/" target="_blank" rel="noopener">AGE动漫</a></li>

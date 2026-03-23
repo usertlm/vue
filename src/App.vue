@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
+    <HlsPlayer src="https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8" />
     <HelloWorld msg="👇👇👇"/>
     <SearchComponent />
     <svg 
@@ -19,12 +19,14 @@
 // 引入组件
 import HelloWorld from './components/HelloWorld.vue'
 import SearchComponent from './components/search.vue' // 确保路径正确
+import HlsPlayer from './components/HlsPlayer.vue'
 
 export default {
   name: 'App',
   components: {
     HelloWorld,
-    SearchComponent // 注册组件
+    SearchComponent,
+    HlsPlayer
   },
   methods: {
     goToWebsite() {

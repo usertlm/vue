@@ -26,8 +26,7 @@
     <AdSense />
 
     <!-- 直播页面 -->
-    <h3>直播页面</h3>
-    <p><a href="/zb.html" target="_blank">打开直播页面 →</a></p>
+    <HlsPlayer src="https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8" />
 
     <!-- 电影资源分享 -->
     <h3>电影资源分享</h3>
@@ -70,11 +69,13 @@
 <script>
 import { chatWithDeepSeek } from './deepseek.js';
 import AdSense from './AdSense.vue';
+import HlsPlayer from './HlsPlayer.vue';
 
 export default {
   name: 'HelloWorld',
   components: {
-    AdSense
+    AdSense,
+    HlsPlayer
   },
   props: {
     msg: String,

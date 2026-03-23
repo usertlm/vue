@@ -1,41 +1,27 @@
-// MiniMax API 交互模块
-// 环境变量（在 Vercel 后台设置）：
-// - VITE_MINIMAX_API_KEY: 你的 MiniMax API 密钥
-// - VITE_MINIMAX_BASE_URL: https://api.minimax.chat/v1 (可选，有默认值)
-// - VITE_MINIMAX_MODEL: minimax-m2.7 (可选)
+// MiniMax API 代理调用
+// 使用 Vercel Serverless Function 代理，保护 API Key 安全
 
-const API_KEY = import.meta.env.VITE_MINIMAX_API_KEY;
-const BASE_URL = import.meta.env.VITE_MINIMAX_BASE_URL || 'https://api.minimax.chat/v1';
-const MODEL = import.meta.env.VITE_MINIMAX_MODEL || 'minimax-m2.7';
+const API_URL = '/api/chat';
 
 export async function chatWithMiniMax(userMessage) {
-  if (!API_KEY) {
-    return '请配置 VITE_MINIMAX_API_KEY';
-  }
-
   try {
-    const response = await fetch(`${BASE_URL}/chat/completions`, {
+    const response = await fetch(API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${API_KEY}`
       },
       body: JSON.stringify({
-        model: MODEL,
-        messages: [
-          { role: 'user', content: userMessage }
-        ],
-        stream: false
+        message: userMessage
       })
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`API 请求失败 (${response.status}): ${errorText}`);
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || `请求失败 (${response.status})`);
     }
 
     const data = await response.json();
-    return data.choices[0].message.content;
+    return data.content;
   } catch (error) {
     console.error('MiniMax API 错误:', error);
     return `抱歉，出现错误: ${error.message}`;

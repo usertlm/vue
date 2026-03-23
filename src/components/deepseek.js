@@ -10,7 +10,7 @@ const MODEL = import.meta.env.VITE_MINIMAX_MODEL || 'minimax-m2.7';
 
 export async function chatWithMiniMax(userMessage) {
   if (!API_KEY) {
-    return '请在 Vercel 环境变量中配置 VITE_MINIMAX_API_KEY';
+    return '请配置 VITE_MINIMAX_API_KEY';
   }
 
   try {

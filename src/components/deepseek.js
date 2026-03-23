@@ -1,22 +1,26 @@
-// DeepSeek API 交互模块
-// 请在此处配置你的 DeepSeek API Key
-const DEEPSEEK_API_KEY = 'your-api-key-here';
-const DEEPSEEK_API_URL = 'https://api.deepseek.com/v1/chat/completions';
+// MiniMax API 交互模块
+// 环境变量（在 Vercel 后台设置）：
+// - MINIMAX_API_KEY: 你的 MiniMax API 密钥
+// - MINIMAX_BASE_URL: https://api.minimax.chat/v1 (可选，有默认值)
+
+const API_KEY = import.meta.env.VITE_MINIMAX_API_KEY || '';
+const BASE_URL = import.meta.env.VITE_MINIMAX_BASE_URL || 'https://api.minimax.chat/v1';
+const MODEL = import.meta.env.VITE_MINIMAX_MODEL || 'minimax-m2.7';
 
 export async function chatWithDeepSeek(userMessage) {
-  if (!DEEPSEEK_API_KEY || DEEPSEEK_API_KEY === 'your-api-key-here') {
-    return '请配置 DeepSeek API Key';
+  if (!API_KEY) {
+    return '请在 Vercel 环境变量中配置 MINIMAX_API_KEY';
   }
 
   try {
-    const response = await fetch(DEEPSEEK_API_URL, {
+    const response = await fetch(`${BASE_URL}/chat/completions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
+        'Authorization': `Bearer ${API_KEY}`
       },
       body: JSON.stringify({
-        model: 'deepseek-chat',
+        model: MODEL,
         messages: [
           { role: 'user', content: userMessage }
         ]
@@ -24,13 +28,14 @@ export async function chatWithDeepSeek(userMessage) {
     });
 
     if (!response.ok) {
-      throw new Error(`API 请求失败: ${response.status}`);
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error?.message || `API 请求失败: ${response.status}`);
     }
 
     const data = await response.json();
     return data.choices[0].message.content;
   } catch (error) {
-    console.error('DeepSeek API 错误:', error);
+    console.error('MiniMax API 错误:', error);
     return `抱歉，出现错误: ${error.message}`;
   }
 }

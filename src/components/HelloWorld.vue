@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { chatWithDeepSeek } from './deepseek.js';
+import { chatWithMiniMax } from './deepseek.js';
 import AdSense from './AdSense.vue';
 
 export default {
@@ -86,8 +86,8 @@ export default {
       if (!this.userInput.trim()) return;
       this.messages.push(`You: ${this.userInput}`);
       try {
-        const response = await chatWithDeepSeek(this.userInput);
-        this.messages.push(`DeepSeek: ${response}`);
+        const response = await chatWithMiniMax(this.userInput);
+        this.messages.push(`MiniMax: ${response}`);
       } catch (err) {
         this.messages.push(`DeepSeek: 抱歉，出现错误 - ${err.message}`);
       }

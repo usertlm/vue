@@ -22,6 +22,9 @@
       <button @click="sendMessage">发送</button>
     </div>
 
+    <!-- Google AdSense -->
+    <AdSense />
+
     <!-- 直播页面 -->
     <h3>直播页面</h3>
     <p><a href="/zb.html" target="_blank">打开直播页面 →</a></p>

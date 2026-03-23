@@ -37,7 +37,7 @@ export default {
     },
     responsive: {
       type: Boolean,
-      default: 'true'
+      default: true
     }
   },
   data() {
@@ -73,7 +73,7 @@ export default {
         this.$nextTick(() => {
           if (window.adsbygoogle) {
             try {
-              adsbygoogle.push({})
+              window.adsbygoogle.push({})
             } catch (e) {
               console.error('AdSense error:', e)
             }
@@ -86,7 +86,7 @@ export default {
       this.$nextTick(() => {
         if (window.adsbygoogle) {
           try {
-            adsbygoogle.push({})
+            window.adsbygoogle.push({})
           } catch (e) {
             console.error('AdSense refresh error:', e)
           }

@@ -8,18 +8,27 @@
       <a href="http://www.staggeringbeauty.com/" target="_blank" rel="noopener">访问记录</a>.
     </p>
 
-    <!-- DeepSeek Chat -->
+    <!-- MiniMax Chat -->
     <div class="chat-container">
       <div class="chat-box" ref="chatBox">
-        <div v-for="(msg, index) in messages" :key="index" class="message">{{ msg }}</div>
+        <div v-for="(msg, index) in messages" :key="index" :class="['message', msg.type]">
+          <span class="role">{{ msg.role }}:</span>
+          <span class="content" v-html="formatContent(msg.content)"></span>
+          <span v-if="msg.streaming" class="cursor">▊</span>
+        </div>
       </div>
-      <input
-        v-model="userInput"
-        type="text"
-        placeholder="输入消息..."
-        @keyup.enter="sendMessage"
-      />
-      <button @click="sendMessage">发送</button>
+      <div class="input-area">
+        <input
+          v-model="userInput"
+          type="text"
+          placeholder="输入消息..."
+          :disabled="isLoading"
+          @keyup.enter="sendMessage"
+        />
+        <button @click="sendMessage" :disabled="isLoading">
+          {{ isLoading ? '生成中...' : '发送' }}
+        </button>
+      </div>
     </div>
 
     <!-- Google AdSense -->
@@ -36,7 +45,7 @@
     <!-- 社区资讯 -->
     <h3>社区资讯</h3>
     <ul>
-      <li><a href="https://36kr.com/" target="_blank" rel="noopener">36kr</a> - 创业资讯、科技新闻</li>
+      <li><a href="https://36kr.com/" target="_blank" rel="noopener">36kr</a> - 创业资讯，科技新闻</li>
       <li><a href="https://sspai.com/" target="_blank" rel="noopener">少数派</a> - 高品质数字消费指南</li>
       <li><a href="https://www.youtube.com/" target="_blank" rel="noopener">YouTube</a> - 全球最大的学习分享平台</li>
       <li><a href="https://www.google.com/" target="_blank" rel="noopener">Google</a> - 全球最大的搜索平台</li>
@@ -64,7 +73,6 @@
 </template>
 
 <script>
-import { chatWithMiniMax } from './deepseek.js';
 import AdSense from './AdSense.vue';
 
 export default {
@@ -79,20 +87,103 @@ export default {
     return {
       userInput: '',
       messages: [],
+      isLoading: false,
     };
   },
   methods: {
     async sendMessage() {
-      if (!this.userInput.trim()) return;
-      this.messages.push(`You: ${this.userInput}`);
-      try {
-        const response = await chatWithMiniMax(this.userInput);
-        this.messages.push(`MiniMax: ${response}`);
-      } catch (err) {
-        this.messages.push(`DeepSeek: 抱歉，出现错误 - ${err.message}`);
-      }
+      if (!this.userInput.trim() || this.isLoading) return;
+
+      const userMessage = this.userInput.trim();
       this.userInput = '';
+      this.isLoading = true;
+
+      // Add user message
+      this.messages.push({
+        role: 'You',
+        content: userMessage,
+        type: 'user'
+      });
+
+      // Add assistant message placeholder
+      const assistantMsg = {
+        role: 'MiniMax',
+        content: '',
+        type: 'assistant',
+        streaming: true
+      };
+      this.messages.push(assistantMsg);
+
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: userMessage,
+            stream: true
+          })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.error || `请求失败 (${response.status})`);
+        }
+
+        // Handle SSE streaming
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let done = false;
+
+        while (!done) {
+          const { value, done: doneReading } = await reader.read();
+          done = doneReading;
+          if (value) {
+            const chunk = decoder.decode(value, { stream: true });
+            // Parse SSE data
+            const lines = chunk.split('\n');
+            for (const line of lines) {
+              if (line.startsWith('data:')) {
+                const data = line.slice(5).trim();
+                if (data && data !== '[DONE]') {
+                  try {
+                    const parsed = JSON.parse(data);
+                    if (parsed.choices && parsed.choices[0]?.delta?.content) {
+                      assistantMsg.content += parsed.choices[0].delta.content;
+                    }
+                  } catch (e) {
+                    // Try parsing as raw text delta
+                    assistantMsg.content += data;
+                  }
+                }
+              }
+            }
+            // Scroll to bottom
+            this.$nextTick(() => {
+              if (this.$refs.chatBox) {
+                this.$refs.chatBox.scrollTop = this.$refs.chatBox.scrollHeight;
+              }
+            });
+          }
+        }
+      } catch (err) {
+        console.error('Chat error:', err);
+        assistantMsg.content = `抱歉，出现错误: ${err.message}`;
+      } finally {
+        assistantMsg.streaming = false;
+        this.isLoading = false;
+      }
     },
+    formatContent(content) {
+      // Simple formatting for the content
+      if (!content) return '';
+      return content
+        .replace(/\n/g, '<br>')
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/`(.*?)`/g, '<code>$1</code>');
+    }
   },
 };
 </script>
@@ -144,40 +235,100 @@ a:hover {
 }
 
 .chat-box {
-  height: 200px;
+  height: 300px;
   overflow-y: auto;
   border: 1px solid #ccc;
   padding: 10px;
   margin-bottom: 10px;
   background: #fff;
   text-align: left;
+  border-radius: 4px;
 }
 
 .message {
-  margin: 8px 0;
-  padding: 8px;
-  border-radius: 4px;
+  margin: 10px 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  line-height: 1.5;
+}
+
+.message.user {
   background: #e3f2fd;
+  text-align: right;
+}
+
+.message.assistant {
+  background: #f5f5f5;
+}
+
+.message .role {
+  font-weight: bold;
+  margin-right: 8px;
+  color: #666;
+}
+
+.message.user .role {
+  color: #1976d2;
+}
+
+.message.assistant .role {
+  color: #388e3c;
+}
+
+.message .content {
+  word-break: break-word;
+}
+
+.message .cursor {
+  animation: blink 1s infinite;
+  color: #42b983;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.input-area {
+  display: flex;
+  gap: 10px;
 }
 
 input {
-  width: calc(100% - 80px);
-  padding: 8px;
+  flex: 1;
+  padding: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
-  margin-right: 5px;
+  font-size: 14px;
+}
+
+input:disabled {
+  background: #f5f5f5;
 }
 
 button {
-  padding: 8px 16px;
+  padding: 10px 20px;
   background: #42b983;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 14px;
 }
 
-button:hover {
+button:hover:not(:disabled) {
   background: #359268;
+}
+
+button:disabled {
+  background: #a5d6a7;
+  cursor: not-allowed;
+}
+
+code {
+  background: #eee;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: monospace;
 }
 </style>

@@ -169,7 +169,7 @@ export default {
           
           for (const line of lines) {
             const trimmed = line.trim();
-            if (!trimmed || trimmed === '[DONE]') continue;
+            if (trimmed && trimmed === '[DONE]') continue;
             
             if (trimmed.startsWith('data:')) {
               const data = trimmed.slice(5).trim();

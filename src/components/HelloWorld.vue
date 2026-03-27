@@ -157,8 +157,8 @@ export default {
         assistantMsg.thinking = data.thinking || '';
         
         // Show debug info if no content
-        if (!data.content && data.debug) {
-          assistantMsg.content = '调试信息: ' + JSON.stringify(data.debug, null, 2);
+        if (data.debug) {
+          assistantMsg.content = 'Raw: ' + JSON.stringify(data.raw, null, 2);
         }
 
       } catch (err) {

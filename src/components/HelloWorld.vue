@@ -15,21 +15,23 @@
           <div class="role-line">
             <span class="role">{{ msg.role }}:</span>
             <span v-if="msg.role === 'MiniMax' && msg.thinkingTime" class="thinking-time">
-              思考时间: {{ msg.thinkingTime }}s
+              思考 {{ msg.thinkingTime }}s
             </span>
           </div>
 
           <!-- Collapsible thinking section -->
           <div v-if="msg.role === 'MiniMax' && msg.thinking" class="thinking-section">
             <button @click="msg.thinkingExpanded = !msg.thinkingExpanded" class="thinking-toggle">
-              {{ msg.thinkingExpanded ? '▼ 隐藏思考过程' : '▶ 显示思考过程' }}
+              {{ msg.thinkingExpanded ? '▼' : '▶' }} 思考过程
             </button>
-            <div v-if="msg.thinkingExpanded" class="thinking-content" v-html="formatContent(msg.thinking)"></div>
+            <div v-if="msg.thinkingExpanded" class="thinking-content">
+              {{ msg.thinking }}
+            </div>
           </div>
 
           <div class="content-line">
             <span class="content" v-html="formatContent(msg.content)"></span>
-            <span v-if="msg.streaming" class="cursor">▊</span>
+            <span v-if="msg.loading" class="cursor">▊</span>
           </div>
         </div>
       </div>
@@ -42,7 +44,7 @@
           @keyup.enter="sendMessage"
         />
         <button @click="sendMessage" :disabled="isLoading">
-          {{ isLoading ? '生成中...' : '发送' }}
+          {{ isLoading ? '思考中...' : '发送' }}
         </button>
       </div>
     </div>
@@ -124,10 +126,10 @@ export default {
         role: 'MiniMax',
         content: '',
         type: 'assistant',
-        streaming: true,
+        loading: true,
         thinking: '',
-        thinkingTime: 0,
-        thinkingExpanded: false
+        thinkingExpanded: false,
+        thinkingTime: 0
       };
       this.messages.push(assistantMsg);
 
@@ -140,8 +142,7 @@ export default {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            message: userMessage,
-            stream: true
+            message: userMessage
           })
         });
 
@@ -150,79 +151,29 @@ export default {
           throw new Error(errorData.error || `请求失败 (${response.status})`);
         }
 
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-        let buffer = '';
-        let reading = true;
-
-        while (reading) {
-          const { value, done } = await reader.read();
-          if (done) {
-            reading = false;
-            break;
-          }
-
-          buffer += decoder.decode(value, { stream: true });
-
-          // 用正则提取所有 data: {...} 块，兼容无换行符拼接的情况
-          const regex = /data:\s*(\{.*?\})(?=data:|\s*$)/gs;
-          let match;
-          let lastIndex = 0;
-
-          while ((match = regex.exec(buffer)) !== null) {
-            const jsonStr = match[1].trim();
-            if (jsonStr && jsonStr !== '[DONE]') {
-              this.processStreamData(jsonStr, assistantMsg);
-            }
-            lastIndex = regex.lastIndex;
-          }
-
-          // 保留未匹配完的尾部继续下一轮拼接
-          buffer = buffer.slice(lastIndex);
-
-          assistantMsg.thinkingTime = ((Date.now() - startTime) / 1000).toFixed(2);
-
-          this.$nextTick(() => {
-            if (this.$refs.chatBox) {
-              this.$refs.chatBox.scrollTop = this.$refs.chatBox.scrollHeight;
-            }
-          });
+        const data = await response.json();
+        
+        assistantMsg.content = data.content || '';
+        assistantMsg.thinking = data.thinking || '';
+        
+        // Show debug info if no content
+        if (!data.content && data.debug) {
+          assistantMsg.content = '调试信息: ' + JSON.stringify(data.debug, null, 2);
         }
+
       } catch (err) {
         console.error('Chat error:', err);
         assistantMsg.content = `抱歉，出现错误: ${err.message}`;
       } finally {
-        assistantMsg.streaming = false;
-        assistantMsg.thinkingTime = ((Date.now() - startTime) / 1000).toFixed(2);
+        assistantMsg.loading = false;
+        assistantMsg.thinkingTime = ((Date.now() - startTime) / 1000).toFixed(1);
         this.isLoading = false;
-      }
-    },
-
-    processStreamData(data, msgObj) {
-      try {
-        const parsed = JSON.parse(data);
-
-        if (parsed.choices && parsed.choices[0] && parsed.choices[0].delta && parsed.choices[0].delta.thinking) {
-          msgObj.thinking += parsed.choices[0].delta.thinking;
-        } else if (parsed.thinking) {
-          msgObj.thinking += parsed.thinking;
-        }
-
-        if (parsed.choices && parsed.choices[0] && parsed.choices[0].delta && parsed.choices[0].delta.content) {
-          msgObj.content += parsed.choices[0].delta.content;
-        } else if (parsed.choices && parsed.choices[0] && parsed.choices[0].text) {
-          msgObj.content += parsed.choices[0].text;
-        } else if (parsed.delta && parsed.delta.content) {
-          msgObj.content += parsed.delta.content;
-        } else if (parsed.content) {
-          msgObj.content += parsed.content;
-        } else if (parsed.text) {
-          msgObj.content += parsed.text;
-        }
-      } catch (e) {
-        if (data && data.length > 0) {
-          msgObj.content += data;
-        }
+        
+        this.$nextTick(() => {
+          if (this.$refs.chatBox) {
+            this.$refs.chatBox.scrollTop = this.$refs.chatBox.scrollHeight;
+          }
+        });
       }
     },
 
@@ -342,29 +293,32 @@ a:hover {
 }
 
 .thinking-toggle {
-  background: none;
-  border: none;
+  background: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
   color: #666;
   font-size: 12px;
   cursor: pointer;
-  padding: 4px 8px;
-  text-decoration: underline;
+  padding: 4px 12px;
+  margin-bottom: 4px;
 }
 
 .thinking-toggle:hover {
-  color: #333;
+  background: #e0e0e0;
 }
 
 .thinking-content {
   background: #fff9e6;
   border-left: 3px solid #ffcc00;
   padding: 8px 12px;
-  margin-top: 6px;
+  margin: 4px 0;
   font-size: 13px;
   color: #555;
   border-radius: 0 4px 4px 0;
-  max-height: 200px;
+  max-height: 150px;
   overflow-y: auto;
+  white-space: pre-wrap;
+  font-family: monospace;
 }
 
 .content-line {

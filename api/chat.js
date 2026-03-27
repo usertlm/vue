@@ -22,7 +22,6 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    // For streaming, use fetch with stream mode
     const response = await fetch(`${MINIMAX_BASE_URL}/chat/completions`, {
       method: 'POST',
       headers: {
@@ -44,22 +43,43 @@ module.exports = async function handler(req, res) {
     }
 
     if (stream) {
-      // Set headers for streaming response
+      // Set headers for streaming response (SSE)
       res.setHeader('Content-Type', 'text/event-stream');
       res.setHeader('Cache-Control', 'no-cache');
       res.setHeader('Connection', 'keep-alive');
+      res.setHeader('X-Accel-Buffering', 'no');
       
-      // Stream the response directly
+      // Stream the response directly, format as SSE
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
+      let buffer = '';
       
       try {
         while (true) {
           const { done, value } = await reader.read();
-          if (done) break;
+          if (done) {
+            if (buffer.trim()) {
+              res.write(`data: ${buffer.trim()}\n\n`);
+            }
+            res.write('data: [DONE]\n\n');
+            break;
+          }
           
-          const chunk = decoder.decode(value, { stream: true });
-          res.write(chunk);
+          if (value) {
+            buffer += decoder.decode(value, { stream: true });
+            
+            // Process complete SSE messages in buffer
+            let newlineIndex;
+            while ((newlineIndex = buffer.indexOf('\n')) !== -1) {
+              const line = buffer.slice(0, newlineIndex).trim();
+              buffer = buffer.slice(newlineIndex + 1);
+              
+              if (line) {
+                // Format as SSE data event
+                res.write(`data: ${line}\n\n`);
+              }
+            }
+          }
         }
         res.end();
       } catch (streamError) {
@@ -67,7 +87,6 @@ module.exports = async function handler(req, res) {
         res.end();
       }
     } else {
-      // Non-streaming response
       const data = await response.json();
       const content = data.choices?.[0]?.message?.content || 'No response';
       return res.status(200).json({ content });

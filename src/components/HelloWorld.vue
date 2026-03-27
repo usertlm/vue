@@ -134,38 +134,40 @@ export default {
         // Handle SSE streaming
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
-        let done = false;
+        let buffer = '';
 
-        while (!done) {
-          const { value, done: doneReading } = await reader.read();
-          done = doneReading;
-          if (value) {
-            const chunk = decoder.decode(value, { stream: true });
-            // Parse SSE data
-            const lines = chunk.split('\n');
-            for (const line of lines) {
-              if (line.startsWith('data:')) {
-                const data = line.slice(5).trim();
-                if (data && data !== '[DONE]') {
-                  try {
-                    const parsed = JSON.parse(data);
-                    if (parsed.choices && parsed.choices[0]?.delta?.content) {
-                      assistantMsg.content += parsed.choices[0].delta.content;
-                    }
-                  } catch (e) {
-                    // Try parsing as raw text delta
-                    assistantMsg.content += data;
-                  }
-                }
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          
+          // Process complete SSE messages
+          let lines = buffer.split('\n');
+          buffer = lines.pop() || ''; // Keep incomplete line in buffer
+          
+          for (const line of lines) {
+            const trimmed = line.trim();
+            if (!trimmed || trimmed === '[DONE]') continue;
+            
+            // Parse SSE format: "data: {...}"
+            if (trimmed.startsWith('data:')) {
+              const data = trimmed.slice(5).trim();
+              if (data && data !== '[DONE]') {
+                this.processStreamData(data, assistantMsg);
               }
+            } else {
+              // Try parsing raw data
+              this.processStreamData(data || trimmed, assistantMsg);
             }
-            // Scroll to bottom
-            this.$nextTick(() => {
-              if (this.$refs.chatBox) {
-                this.$refs.chatBox.scrollTop = this.$refs.chatBox.scrollHeight;
-              }
-            });
           }
+          
+          // Scroll to bottom
+          this.$nextTick(() => {
+            if (this.$refs.chatBox) {
+              this.$refs.chatBox.scrollTop = this.$refs.chatBox.scrollHeight;
+            }
+          });
         }
       } catch (err) {
         console.error('Chat error:', err);
@@ -175,6 +177,32 @@ export default {
         this.isLoading = false;
       }
     },
+    
+    processStreamData(data, msgObj) {
+      try {
+        // Try JSON parsing (OpenAI/MiniMax SSE format)
+        const parsed = JSON.parse(data);
+        
+        // Handle different API response formats
+        if (parsed.choices && parsed.choices[0]?.delta?.content) {
+          msgObj.content += parsed.choices[0].delta.content;
+        } else if (parsed.choices && parsed.choices[0]?.text) {
+          msgObj.content += parsed.choices[0].text;
+        } else if (parsed.delta?.content) {
+          msgObj.content += parsed.delta.content;
+        } else if (parsed.content) {
+          msgObj.content += parsed.content;
+        } else if (parsed.text) {
+          msgObj.content += parsed.text;
+        }
+      } catch (e) {
+        // If not JSON, treat as raw text delta
+        if (data && data.length > 0) {
+          msgObj.content += data;
+        }
+      }
+    },
+    
     formatContent(content) {
       // Simple formatting for the content
       if (!content) return '';
@@ -280,8 +308,10 @@ a:hover {
 }
 
 .message .cursor {
-  animation: blink 1s infinite;
+  display: inline-block;
+  animation: blink 0.7s infinite;
   color: #42b983;
+  font-weight: bold;
 }
 
 @keyframes blink {

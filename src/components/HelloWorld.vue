@@ -164,23 +164,21 @@ export default {
 
           buffer += decoder.decode(value, { stream: true });
 
-          const lines = buffer.split('\n');
-          buffer = lines.pop() || '';
+          // 用正则提取所有 data: {...} 块，兼容无换行符拼接的情况
+          const regex = /data:\s*(\{.*?\})(?=data:|\s*$)/gs;
+          let match;
+          let lastIndex = 0;
 
-          for (const line of lines) {
-            const trimmed = line.trim();
-            if (trimmed && trimmed === '[DONE]') continue;
-
-            let sseData = '';
-            if (trimmed.startsWith('data:')) {
-              sseData = trimmed.slice(5).trim();
-              if (sseData && sseData !== '[DONE]') {
-                this.processStreamData(sseData, assistantMsg);
-              }
-            } else {
-              this.processStreamData(sseData || trimmed, assistantMsg);
+          while ((match = regex.exec(buffer)) !== null) {
+            const jsonStr = match[1].trim();
+            if (jsonStr && jsonStr !== '[DONE]') {
+              this.processStreamData(jsonStr, assistantMsg);
             }
+            lastIndex = regex.lastIndex;
           }
+
+          // 保留未匹配完的尾部继续下一轮拼接
+          buffer = buffer.slice(lastIndex);
 
           assistantMsg.thinkingTime = ((Date.now() - startTime) / 1000).toFixed(2);
 

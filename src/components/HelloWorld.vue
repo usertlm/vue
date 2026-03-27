@@ -18,7 +18,7 @@
               思考时间: {{ msg.thinkingTime }}s
             </span>
           </div>
-          
+
           <!-- Collapsible thinking section -->
           <div v-if="msg.role === 'MiniMax' && msg.thinking" class="thinking-section">
             <button @click="msg.thinkingExpanded = !msg.thinkingExpanded" class="thinking-toggle">
@@ -26,7 +26,7 @@
             </button>
             <div v-if="msg.thinkingExpanded" class="thinking-content" v-html="formatContent(msg.thinking)"></div>
           </div>
-          
+
           <div class="content-line">
             <span class="content" v-html="formatContent(msg.content)"></span>
             <span v-if="msg.streaming" class="cursor">▊</span>
@@ -114,14 +114,12 @@ export default {
       this.userInput = '';
       this.isLoading = true;
 
-      // Add user message
       this.messages.push({
         role: 'You',
         content: userMessage,
         type: 'user'
       });
 
-      // Add assistant message placeholder
       const assistantMsg = {
         role: 'MiniMax',
         content: '',
@@ -152,39 +150,40 @@ export default {
           throw new Error(errorData.error || `请求失败 (${response.status})`);
         }
 
-        // Handle SSE streaming
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
         let buffer = '';
+        let reading = true;
 
-        while (true) {
+        while (reading) {
           const { value, done } = await reader.read();
-          if (done) break;
+          if (done) {
+            reading = false;
+            break;
+          }
 
           buffer += decoder.decode(value, { stream: true });
-          
-          // Process complete SSE messages
-          let lines = buffer.split('\n');
+
+          const lines = buffer.split('\n');
           buffer = lines.pop() || '';
-          
+
           for (const line of lines) {
             const trimmed = line.trim();
             if (trimmed && trimmed === '[DONE]') continue;
-            
+
+            let sseData = '';
             if (trimmed.startsWith('data:')) {
-              const data = trimmed.slice(5).trim();
-              if (data && data !== '[DONE]') {
-                this.processStreamData(data, assistantMsg);
+              sseData = trimmed.slice(5).trim();
+              if (sseData && sseData !== '[DONE]') {
+                this.processStreamData(sseData, assistantMsg);
               }
             } else {
-              this.processStreamData(data || trimmed, assistantMsg);
+              this.processStreamData(sseData || trimmed, assistantMsg);
             }
           }
-          
-          // Update thinking time
+
           assistantMsg.thinkingTime = ((Date.now() - startTime) / 1000).toFixed(2);
-          
-          // Scroll to bottom
+
           this.$nextTick(() => {
             if (this.$refs.chatBox) {
               this.$refs.chatBox.scrollTop = this.$refs.chatBox.scrollHeight;
@@ -200,24 +199,22 @@ export default {
         this.isLoading = false;
       }
     },
-    
+
     processStreamData(data, msgObj) {
       try {
         const parsed = JSON.parse(data);
-        
-        // Handle thinking content (MiniMax may return it differently)
-        if (parsed.choices && parsed.choices[0]?.delta?.thinking) {
+
+        if (parsed.choices && parsed.choices[0] && parsed.choices[0].delta && parsed.choices[0].delta.thinking) {
           msgObj.thinking += parsed.choices[0].delta.thinking;
         } else if (parsed.thinking) {
           msgObj.thinking += parsed.thinking;
         }
-        
-        // Handle text content
-        if (parsed.choices && parsed.choices[0]?.delta?.content) {
+
+        if (parsed.choices && parsed.choices[0] && parsed.choices[0].delta && parsed.choices[0].delta.content) {
           msgObj.content += parsed.choices[0].delta.content;
-        } else if (parsed.choices && parsed.choices[0]?.text) {
+        } else if (parsed.choices && parsed.choices[0] && parsed.choices[0].text) {
           msgObj.content += parsed.choices[0].text;
-        } else if (parsed.delta?.content) {
+        } else if (parsed.delta && parsed.delta.content) {
           msgObj.content += parsed.delta.content;
         } else if (parsed.content) {
           msgObj.content += parsed.content;
@@ -230,7 +227,7 @@ export default {
         }
       }
     },
-    
+
     formatContent(content) {
       if (!content) return '';
       return content

@@ -12,9 +12,25 @@
     <div class="chat-container">
       <div class="chat-box" ref="chatBox">
         <div v-for="(msg, index) in messages" :key="index" :class="['message', msg.type]">
-          <span class="role">{{ msg.role }}:</span>
-          <span class="content" v-html="formatContent(msg.content)"></span>
-          <span v-if="msg.streaming" class="cursor">▊</span>
+          <div class="role-line">
+            <span class="role">{{ msg.role }}:</span>
+            <span v-if="msg.role === 'MiniMax' && msg.thinkingTime" class="thinking-time">
+              思考时间: {{ msg.thinkingTime }}s
+            </span>
+          </div>
+          
+          <!-- Collapsible thinking section -->
+          <div v-if="msg.role === 'MiniMax' && msg.thinking" class="thinking-section">
+            <button @click="msg.thinkingExpanded = !msg.thinkingExpanded" class="thinking-toggle">
+              {{ msg.thinkingExpanded ? '▼ 隐藏思考过程' : '▶ 显示思考过程' }}
+            </button>
+            <div v-if="msg.thinkingExpanded" class="thinking-content" v-html="formatContent(msg.thinking)"></div>
+          </div>
+          
+          <div class="content-line">
+            <span class="content" v-html="formatContent(msg.content)"></span>
+            <span v-if="msg.streaming" class="cursor">▊</span>
+          </div>
         </div>
       </div>
       <div class="input-area">
@@ -110,9 +126,14 @@ export default {
         role: 'MiniMax',
         content: '',
         type: 'assistant',
-        streaming: true
+        streaming: true,
+        thinking: '',
+        thinkingTime: 0,
+        thinkingExpanded: false
       };
       this.messages.push(assistantMsg);
+
+      const startTime = Date.now();
 
       try {
         const response = await fetch('/api/chat', {
@@ -144,23 +165,24 @@ export default {
           
           // Process complete SSE messages
           let lines = buffer.split('\n');
-          buffer = lines.pop() || ''; // Keep incomplete line in buffer
+          buffer = lines.pop() || '';
           
           for (const line of lines) {
             const trimmed = line.trim();
             if (!trimmed || trimmed === '[DONE]') continue;
             
-            // Parse SSE format: "data: {...}"
             if (trimmed.startsWith('data:')) {
               const data = trimmed.slice(5).trim();
               if (data && data !== '[DONE]') {
                 this.processStreamData(data, assistantMsg);
               }
             } else {
-              // Try parsing raw data
               this.processStreamData(data || trimmed, assistantMsg);
             }
           }
+          
+          // Update thinking time
+          assistantMsg.thinkingTime = ((Date.now() - startTime) / 1000).toFixed(2);
           
           // Scroll to bottom
           this.$nextTick(() => {
@@ -174,16 +196,23 @@ export default {
         assistantMsg.content = `抱歉，出现错误: ${err.message}`;
       } finally {
         assistantMsg.streaming = false;
+        assistantMsg.thinkingTime = ((Date.now() - startTime) / 1000).toFixed(2);
         this.isLoading = false;
       }
     },
     
     processStreamData(data, msgObj) {
       try {
-        // Try JSON parsing (OpenAI/MiniMax SSE format)
         const parsed = JSON.parse(data);
         
-        // Handle different API response formats
+        // Handle thinking content (MiniMax may return it differently)
+        if (parsed.choices && parsed.choices[0]?.delta?.thinking) {
+          msgObj.thinking += parsed.choices[0].delta.thinking;
+        } else if (parsed.thinking) {
+          msgObj.thinking += parsed.thinking;
+        }
+        
+        // Handle text content
         if (parsed.choices && parsed.choices[0]?.delta?.content) {
           msgObj.content += parsed.choices[0].delta.content;
         } else if (parsed.choices && parsed.choices[0]?.text) {
@@ -196,7 +225,6 @@ export default {
           msgObj.content += parsed.text;
         }
       } catch (e) {
-        // If not JSON, treat as raw text delta
         if (data && data.length > 0) {
           msgObj.content += data;
         }
@@ -204,7 +232,6 @@ export default {
     },
     
     formatContent(content) {
-      // Simple formatting for the content
       if (!content) return '';
       return content
         .replace(/\n/g, '<br>')
@@ -263,7 +290,7 @@ a:hover {
 }
 
 .chat-box {
-  height: 300px;
+  height: 400px;
   overflow-y: auto;
   border: 1px solid #ccc;
   padding: 10px;
@@ -274,10 +301,10 @@ a:hover {
 }
 
 .message {
-  margin: 10px 0;
-  padding: 8px 12px;
+  margin: 12px 0;
+  padding: 10px;
   border-radius: 8px;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .message.user {
@@ -289,9 +316,15 @@ a:hover {
   background: #f5f5f5;
 }
 
-.message .role {
+.role-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.role {
   font-weight: bold;
-  margin-right: 8px;
   color: #666;
 }
 
@@ -303,8 +336,53 @@ a:hover {
   color: #388e3c;
 }
 
+.thinking-time {
+  font-size: 12px;
+  color: #888;
+  font-style: italic;
+}
+
+.thinking-section {
+  margin: 8px 0;
+}
+
+.thinking-toggle {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 4px 8px;
+  text-decoration: underline;
+}
+
+.thinking-toggle:hover {
+  color: #333;
+}
+
+.thinking-content {
+  background: #fff9e6;
+  border-left: 3px solid #ffcc00;
+  padding: 8px 12px;
+  margin-top: 6px;
+  font-size: 13px;
+  color: #555;
+  border-radius: 0 4px 4px 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.content-line {
+  display: inline;
+}
+
 .message .content {
+  color: #000;
   word-break: break-word;
+}
+
+.message.user .content {
+  color: #000;
 }
 
 .message .cursor {

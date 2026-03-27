@@ -1,5 +1,5 @@
 // Vercel Serverless Function for MiniMax API
-// Returns non-streaming response for reliable operation
+// Debug version - returns raw response for inspection
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -21,7 +21,6 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    // Use non-streaming for reliability
     const response = await fetch(`${MINIMAX_BASE_URL}/chat/completions`, {
       method: 'POST',
       headers: {
@@ -42,36 +41,16 @@ module.exports = async function handler(req, res) {
 
     const data = await response.json();
     
-    // Extract content - check various possible paths
-    let content = '';
-    let thinking = '';
-    
-    // Try standard path
-    if (data.choices?.[0]?.message?.content) {
-      content = data.choices[0].message.content;
-    }
-    // Try delta path
-    else if (data.choices?.[0]?.delta?.content) {
-      content = data.choices[0].delta.content;
-    }
-    // Try text path
-    else if (data.choices?.[0]?.text) {
-      content = data.choices[0].text;
-    }
-    
-    // Try thinking path
-    if (data.choices?.[0]?.message?.thinking) {
-      thinking = data.choices[0].message.thinking;
-    } else if (data.choices?.[0]?.thinking) {
-      thinking = data.choices[0].thinking;
-    }
-
-    return res.status(200).json({ 
-      content, 
-      thinking,
-      debug: {
-        choicesKeys: data.choices ? Object.keys(data.choices[0] || {}) : [],
-        messageKeys: data.choices?.[0]?.message ? Object.keys(data.choices[0].message) : []
+    // Return the full response for debugging
+    // Show first 500 chars of key fields
+    return res.status(200).json({
+      success: true,
+      raw: data,
+      firstChoice: data.choices?.[0] || null,
+      contentPath: {
+        message_content: data.choices?.[0]?.message?.content,
+        delta_content: data.choices?.[0]?.delta?.content,
+        text: data.choices?.[0]?.text
       }
     });
   } catch (error) {

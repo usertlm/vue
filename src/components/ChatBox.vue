@@ -20,7 +20,7 @@
         </div>
 
         <div class="content-line">
-          <span class="content">{{ msg.content }}</span>
+          <span class="content" v-html="msg.content"></span>
           <span v-if="msg.loading" class="cursor">▊</span>
         </div>
       </div>
@@ -95,15 +95,16 @@ export default {
 
         const data = await response.json();
 
-        assistantMsg.thinking = data.thinking || '';
         const responseContent = data.content || '';
+        const parsed = this.extractThinkFromContent(responseContent);
+        assistantMsg.thinking = data.thinking || parsed.thinking || '';
 
         // Show debug info if no content
         if (data.debug) {
           assistantMsg.content = this.formatContent('Raw: ' + JSON.stringify(data.raw, null, 2));
         } else {
           // 流式显示效果 - 逐字显示
-          await this.typeoutEffect(assistantMsg, responseContent);
+          await this.typeoutEffect(assistantMsg, parsed.content);
         }
 
       } catch (err) {
@@ -136,9 +137,40 @@ export default {
       }
     },
 
+    extractThinkFromContent(content) {
+      if (!content) {
+        return { thinking: '', content: '' };
+      }
+
+      const thinkingParts = [];
+      const cleanedContent = content
+        .replace(/<think>([\s\S]*?)<\/think>/gi, (_, thinkText) => {
+          const trimmed = (thinkText || '').trim();
+          if (trimmed) thinkingParts.push(trimmed);
+          return '';
+        })
+        .replace(/<\/?think>/gi, '')
+        .trim();
+
+      return {
+        thinking: thinkingParts.join('\n\n'),
+        content: cleanedContent
+      };
+    },
+
+    escapeHtml(content) {
+      return content
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    },
+
     formatContent(content) {
       if (!content) return '';
-      return content
+      const safeContent = this.escapeHtml(content);
+      return safeContent
         .replace(/\n/g, '<br>')
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
         .replace(/\*(.*?)\*/g, '<em>$1</em>')

@@ -1,5 +1,4 @@
 // Vercel Serverless Function for MiniMax API
-// Debug version - returns raw response for inspection
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -40,19 +39,40 @@ module.exports = async function handler(req, res) {
     }
 
     const data = await response.json();
-    
-    // Return the full response for debugging
-    // Show first 500 chars of key fields
+
+    // Extract content from MiniMax response
+    // Check various possible paths that different APIs use
+    let content = '';
+    let thinking = '';
+
+    // Try standard OpenAI-like path
+    if (data.choices?.[0]?.message?.content) {
+      content = data.choices[0].message.content;
+    }
+    // Try delta path (some APIs use this for non-streaming too)
+    else if (data.choices?.[0]?.delta?.content) {
+      content = data.choices[0].delta.content;
+    }
+    // Try text path
+    else if (data.choices?.[0]?.text) {
+      content = data.choices[0].text;
+    }
+    // Fallback: try to find any content-like field
+    else {
+      // Log for debugging
+      console.log('MiniMax response structure:', JSON.stringify(data).slice(0, 500));
+    }
+
+    // Try to extract thinking content if present
+    if (data.choices?.[0]?.message?.thinking) {
+      thinking = data.choices[0].message.thinking;
+    }
+
     return res.status(200).json({
-      success: true,
-      raw: data,
-      firstChoice: data.choices?.[0] || null,
-      contentPath: {
-        message_content: data.choices?.[0]?.message?.content,
-        delta_content: data.choices?.[0]?.delta?.content,
-        text: data.choices?.[0]?.text
-      }
+      content,
+      thinking
     });
+
   } catch (error) {
     console.error('MiniMax API error:', error);
     return res.status(500).json({ error: error.message });

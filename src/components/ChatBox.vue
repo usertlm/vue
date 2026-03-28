@@ -126,8 +126,6 @@ export default {
       for (let i = 0; i < chars.length; i++) {
         currentText += chars[i];
         msg.content = this.formatContent(currentText);
-        msg.content = formatted.substring(0, i + 1);
-        msg.content = formatted.substring(0, i + 1);
 
         await new Promise(resolve => setTimeout(resolve, speed));
 

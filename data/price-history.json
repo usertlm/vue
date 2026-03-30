@@ -1,31 +1,99 @@
 {
   "gpu": {
-    "rtx4090": null,
+    "rtx4090": {
+      "name": "MSI GeForce RTX 4090 Gaming X Trio 24G Gaming Graphics Card - 24GB GDDR6X, 2595 MHz, PCI Express Gen 4, 384-bit, 3X DP v 1.4a, HDMI 2.1a (Supports 4K & 8K HDR)",
+      "price": 3740.0,
+      "currency": "USD"
+    },
     "rtx4080": null,
-    "rtx4070": null,
-    "rx7900xtx": null,
-    "rx7800xt": null
+    "rtx4070": {
+      "name": "ASUS Dual GeForce RTX™ 4070 EVO OC Edition 12GB GDDR6X is Designed for Broad Compatibility, with a 2.5-Slot Design, Axial-tech Fan Design, 0dB Technology, Auto-Extreme Technology, and More (Renewed)",
+      "price": 529.99,
+      "currency": "USD"
+    },
+    "rx7900xtx": {
+      "name": "XFX Radeon RX 7900XT Gaming Graphics Card with 20GB GDDR6, AMD RDNA 3 RX-79TMBABF9",
+      "price": 699.99,
+      "currency": "USD"
+    },
+    "rx7800xt": {
+      "name": "XFX Speedster MERC319 RX 7800 XT Black Gaming Graphics Card 16GB GDDR6 HDMI 3xDP, AMD RDNA 3 RX-78TMERCB9",
+      "price": 539.99,
+      "currency": "USD"
+    }
   },
   "cpu": {
-    "i9-14900k": null,
-    "i7-14700k": null,
+    "i9-14900k": {
+      "name": "Intel® Core™ i9-14900K Desktop Processor",
+      "price": 468.97,
+      "currency": "USD"
+    },
+    "i7-14700k": {
+      "name": "Core™ i7-14700K New Gaming Desktop Processor 20 cores (8 P-cores + 12 E-cores) with Integrated Graphics - Unlocked",
+      "price": 339.79,
+      "currency": "USD"
+    },
     "r9-7950x": null,
-    "r7-7800x3d": null,
-    "i5-14600k": null
+    "r7-7800x3d": {
+      "name": "AMD Ryzen 7 7800X3D 8-Core, 16-Thread Desktop Processor",
+      "price": 368.99,
+      "currency": "USD"
+    },
+    "i5-14600k": {
+      "name": "Core™ i5-14600K Desktop Processor",
+      "price": 289.99,
+      "currency": "USD"
+    }
   },
   "ram": {
-    "ddr5-32g": null,
-    "ddr5-64g": null,
-    "ddr4-32g": null
+    "ddr5-32g": {
+      "name": "CORSAIR Vengence RGB DDR5 RAM 32GB (2x16GB) 6000MHz CL36-44-44-96 1.35V Intel XMP 3.0 Computer Memory – Black (CMH32GX5M2E6000C36)",
+      "price": 369.99,
+      "currency": "USD"
+    },
+    "ddr5-64g": {
+      "name": "Crucial 64GB DDR5 RAM, 5600MHz (or 5200MHz or 4800MHz) Laptop Memory Kit, SODIMM 262-Pin, Compatible with 13th Gen Intel Core and AMD Ryzen 6000 - CT2K32G56C46S5",
+      "price": 579.99,
+      "currency": "USD"
+    },
+    "ddr4-32g": {
+      "name": "CORSAIR Vengeance LPX DDR4 RAM 32GB (2x16GB) 3200MHz CL16-20-20-38 1.35V Intel AMD Desktop Computer Memory - Black (CMK32GX4M2E3200C16)",
+      "price": 219.99,
+      "currency": "USD"
+    }
   },
   "ssd": {
-    "990pro-2t": null,
-    "sn850x-2t": null,
-    "p7000z-2t": null
+    "990pro-2t": {
+      "name": "990 PRO SSD 2TB NVMe M.2 PCIe Gen4, M.2 2280 Internal Solid State Hard Drive, Seq. Read Speeds Up to 7,450 MB/s for High End Computing, Gaming, and Heavy Duty Workstations, MZ-V9P2T0B/AM",
+      "price": 399.99,
+      "currency": "USD"
+    },
+    "sn850x-2t": {
+      "name": "WD_BLACK SN850X 2TB NVMe SSD - M.2 2280, Up to 7,300 MB/s Read speeds, Up to 6,300 MB/s write speeds, Gaming Expansion, High Performance Internal Solid State Drive - WDS200T2X0E",
+      "price": 354.99,
+      "currency": "USD"
+    },
+    "p7000z-2t": {
+      "name": "Seagate BarraCuda 2TB Internal Hard Drive HDD – 3.5 Inch SATA 6Gb/s 7200 RPM 256MB Cache – Frustration Free Packaging (ST2000DM008/ST2000DMZ08)",
+      "price": 89.99,
+      "currency": "USD"
+    }
   },
   "monitor": {
-    "lg-27gp95r": null,
-    "dell-g3223q": null,
-    "samsung-odyssey": null
+    "lg-27gp95r": {
+      "name": "27G850A-B 27-inch Ultragear 4K UHD (3840 x 2160) IPS Gaming Monitor, Dual-Mode 240Hz, 1ms, NVIDIA G-Sync Compatible, AMD FreeSync Premium Pro, VESA DisplayHDR 600, HDMI, DisplayPort 2.1, Black",
+      "price": 460.0,
+      "currency": "USD"
+    },
+    "dell-g3223q": {
+      "name": "G3223Q Gaming Monitor - 32-Inch 4K Ultra UHD (3840x2160), 144Hz 1Ms Display, AMD FreeSync+NVIDIA G-SYNC Compatible, Height/Swivel/Tilt Adjustability, 3Yr Advanced Exchange - Black",
+      "price": 499.99,
+      "currency": "USD"
+    },
+    "samsung-odyssey": {
+      "name": "37” Odyssey G7 (G75F) 4K UHD Resolution, 165Hz, Curved Gaming Monitor, 1ms Response Time (GtG), VESA DisplayHDR™ 600, AMD FreeSync™ Premium Pro, LS37FG75DENXZA, 2025",
+      "price": 599.99,
+      "currency": "USD"
+    }
   }
 }

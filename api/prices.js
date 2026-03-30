@@ -1,64 +1,86 @@
 // Vercel Serverless Function for Price API
-// Returns price history data for computer components
+// Returns real price data from Amazon (scraped via Python script)
 
-// Demo data - in production, this would fetch from a real price API
-const DEMO_PRICES = {
-  // GPU prices (in CNY)
-  'rtx4090': { base: 15999, name: 'RTX 4090' },
-  'rtx4080': { base: 8999, name: 'RTX 4080' },
-  'rtx4070': { base: 4999, name: 'RTX 4070' },
-  'rx7900xtx': { base: 7999, name: 'RX 7900 XTX' },
-  'rx7800xt': { base: 3999, name: 'RX 7800 XT' },
-  
-  // CPU prices
-  'i9-14900k': { base: 4999, name: 'Intel i9-14900K' },
-  'i7-14700k': { base: 3299, name: 'Intel i7-14700K' },
-  'r9-7950x': { base: 3999, name: 'AMD R9 7950X' },
-  'r7-7800x3d': { base: 2399, name: 'AMD R7 7800X3D' },
-  'i5-14600k': { base: 2199, name: 'Intel i5-14600K' },
-  
-  // RAM prices
-  'ddr5-32g': { base: 799, name: 'DDR5 32GB' },
-  'ddr5-64g': { base: 1499, name: 'DDR5 64GB' },
-  'ddr4-32g': { base: 499, name: 'DDR4 32GB' },
-  
-  // SSD prices
-  '990pro-2t': { base: 1299, name: '三星 990 Pro 2TB' },
-  'sn850x-2t': { base: 1199, name: 'WD Black SN850X 2TB' },
-  'p7000z-2t': { base: 799, name: '致态 P7000Z 2TB' },
-  
-  // Monitor prices
-  'lg-27gp95r': { base: 3999, name: 'LG 27GP95R' },
-  'dell-g3223q': { base: 5999, name: 'Dell G3223Q' },
-  'samsung-odyssey': { base: 4999, name: '三星 Odyssey G7' }
+const fs = require('fs');
+const path = require('path');
+
+// USD to CNY conversion rate (approximate)
+const USD_TO_CNY = 7.25;
+
+// Load price history
+function loadPriceHistory() {
+  try {
+    const filePath = path.join(__dirname, '..', 'data', 'price-history.json');
+    if (fs.existsSync(filePath)) {
+      const data = fs.readFileSync(filePath, 'utf8');
+      return JSON.parse(data);
+    }
+  } catch (e) {
+    console.error('Failed to load price history:', e.message);
+  }
+  return { prices: {}, lastUpdate: null };
+}
+
+// Product metadata
+const PRODUCTS = {
+  gpu: {
+    name: '显卡',
+    items: {
+      'rtx4090': { name: 'RTX 4090', basePriceCNY: 15999 },
+      'rtx4080': { name: 'RTX 4080', basePriceCNY: 8999 },
+      'rtx4070': { name: 'RTX 4070', basePriceCNY: 4999 },
+      'rx7900xtx': { name: 'RX 7900 XTX', basePriceCNY: 7999 },
+      'rx7800xt': { name: 'RX 7800 XT', basePriceCNY: 3999 }
+    }
+  },
+  cpu: {
+    name: 'CPU',
+    items: {
+      'i9-14900k': { name: 'Intel i9-14900K', basePriceCNY: 4999 },
+      'i7-14700k': { name: 'Intel i7-14700K', basePriceCNY: 3299 },
+      'r9-7950x': { name: 'AMD R9 7950X', basePriceCNY: 3999 },
+      'r7-7800x3d': { name: 'AMD R7 7800X3D', basePriceCNY: 2399 },
+      'i5-14600k': { name: 'Intel i5-14600K', basePriceCNY: 2199 }
+    }
+  },
+  ram: {
+    name: '内存',
+    items: {
+      'ddr5-32g': { name: 'DDR5 32GB', basePriceCNY: 799 },
+      'ddr5-64g': { name: 'DDR5 64GB', basePriceCNY: 1499 },
+      'ddr4-32g': { name: 'DDR4 32GB', basePriceCNY: 499 }
+    }
+  },
+  ssd: {
+    name: '固态硬盘',
+    items: {
+      '990pro-2t': { name: '三星 990 Pro 2TB', basePriceCNY: 1299 },
+      'sn850x-2t': { name: 'WD Black SN850X 2TB', basePriceCNY: 1199 },
+      'p7000z-2t': { name: '致态 P7000Z 2TB', basePriceCNY: 799 }
+    }
+  },
+  monitor: {
+    name: '显示器',
+    items: {
+      'lg-27gp95r': { name: 'LG 27GP95R', basePriceCNY: 3999 },
+      'dell-g3223q': { name: 'Dell G3223Q', basePriceCNY: 5999 },
+      'samsung-odyssey': { name: '三星 Odyssey G7', basePriceCNY: 4999 }
+    }
+  }
 };
 
-// Generate price history with realistic variations
-function generatePriceHistory(productId, days = 30) {
-  const product = DEMO_PRICES[productId];
-  if (!product) return [];
-  
+// Generate demo history based on current price
+function generateDemoHistory(currentPrice, days = 30) {
   const history = [];
   const now = new Date();
-  let price = product.base;
-  
-  // Generate price trend with some randomness
-  const trend = (Math.random() - 0.5) * 0.02; // Slight downward bias
-  const volatility = 0.03; // 3% daily volatility
   
   for (let i = days; i >= 0; i--) {
     const date = new Date(now);
     date.setDate(date.getDate() - i);
     
-    // Random walk with mean reversion
-    const change = price * (trend + (Math.random() - 0.5) * volatility);
-    price = Math.max(product.base * 0.7, Math.min(product.base * 1.2, price - change));
-    
-    // Weekend slight dip
-    const dayOfWeek = date.getDay();
-    if (dayOfWeek === 0 || dayOfWeek === 6) {
-      price *= 0.98;
-    }
+    // Add small random variation
+    const variation = (Math.random() - 0.5) * 0.05;
+    const price = currentPrice * (1 + variation);
     
     history.push({
       date: date.toISOString().split('T')[0],
@@ -74,56 +96,122 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { product } = req.query;
+  const { product, currency = 'CNY' } = req.query;
+
+  // Load scraped price data
+  const priceData = loadPriceHistory();
 
   if (!product) {
-    // Return all available products
-    const products = Object.entries(DEMO_PRICES).map(([id, data]) => ({
-      id,
-      name: data.name,
-      basePrice: data.base
-    }));
-    return res.status(200).json({ products });
-  }
-
-  // Validate product ID
-  if (!DEMO_PRICES[product]) {
-    return res.status(404).json({ 
-      error: 'Product not found',
-      availableProducts: Object.keys(DEMO_PRICES)
+    // Return all products with prices
+    const allProducts = [];
+    
+    for (const [catKey, cat] of Object.entries(PRODUCTS)) {
+      for (const [prodKey, prod] of Object.entries(cat.items)) {
+        const scrapedData = priceData[catKey]?.[prodKey];
+        const basePrice = prod.basePriceCNY;
+        
+        let currentPrice = basePrice;
+        let priceUSD = null;
+        let productName = prod.name;
+        
+        if (scrapedData && scrapedData.price) {
+          priceUSD = scrapedData.price;
+          currentPrice = priceUSD * USD_TO_CNY;
+          productName = scrapedData.name || prod.name;
+        }
+        
+        allProducts.push({
+          id: prodKey,
+          category: catKey,
+          categoryName: cat.name,
+          name: productName,
+          price: currency === 'USD' ? priceUSD : Math.round(currentPrice * 100) / 100,
+          priceCNY: Math.round(currentPrice * 100) / 100,
+          priceUSD: priceUSD,
+          currency: currency,
+          basePriceCNY: basePrice,
+          source: priceUSD ? 'Amazon' : 'Estimated'
+        });
+      }
+    }
+    
+    return res.status(200).json({
+      products: allProducts,
+      lastUpdate: priceData.lastUpdate || new Date().toISOString(),
+      currency: currency,
+      conversionRate: USD_TO_CNY
     });
   }
 
-  // In production, this would:
-  // 1. Check cache (Redis/Vercel KV) for recent data
-  // 2. If stale, fetch from price API (JD.com, etc.)
-  // 3. Store new data in cache
-  // For demo, generate realistic price history
+  // Validate product
+  let foundProduct = null;
+  let catKey = null;
+  let prodKey = null;
   
-  const history = generatePriceHistory(product, 30);
-  const current = history[history.length - 1];
-  const yesterday = history[history.length - 2];
-  const weekAgo = history[history.length - 8];
-  const monthAgo = history[0];
+  for (const [cKey, cat] of Object.entries(PRODUCTS)) {
+    if (cat.items[product]) {
+      catKey = cKey;
+      prodKey = product;
+      foundProduct = cat.items[product];
+      break;
+    }
+  }
+
+  if (!foundProduct) {
+    return res.status(404).json({ 
+      error: 'Product not found',
+      availableProducts: Object.keys(PRODUCTS.gpu.items).concat(
+        Object.keys(PRODUCTS.cpu.items),
+        Object.keys(PRODUCTS.ram.items),
+        Object.keys(PRODUCTS.ssd.items),
+        Object.keys(PRODUCTS.monitor.items)
+      )
+    });
+  }
+
+  // Get scraped data if available
+  const scrapedData = priceData[catKey]?.[prodKey];
   
+  let currentPrice = foundProduct.basePriceCNY;
+  let priceUSD = null;
+  let productName = foundProduct.name;
+  
+  if (scrapedData && scrapedData.price) {
+    priceUSD = scrapedData.price;
+    currentPrice = priceUSD * USD_TO_CNY;
+    productName = scrapedData.name || foundProduct.name;
+  }
+
+  // Generate price history
+  const history = generateDemoHistory(currentPrice);
+  
+  // Update today's price
+  const today = new Date().toISOString().split('T')[0];
+  history[history.length - 1] = {
+    date: today,
+    price: currency === 'USD' ? priceUSD : Math.round(currentPrice * 100) / 100
+  };
+
+  const yesterday = history.length > 1 ? history[history.length - 2].price : currentPrice;
+  const dailyChange = currentPrice - yesterday;
+
   return res.status(200).json({
-    product: DEMO_PRICES[product].name,
-    current: current.price,
+    product: prodKey,
+    name: productName,
+    category: catKey,
+    categoryName: PRODUCTS[catKey].name,
+    current: currency === 'USD' ? priceUSD : Math.round(currentPrice * 100) / 100,
+    currentCNY: Math.round(currentPrice * 100) / 100,
+    currentUSD: priceUSD,
+    currency: currency,
     change: {
       daily: {
-        value: current.price - yesterday.price,
-        percent: ((current.price - yesterday.price) / yesterday.price * 100).toFixed(2)
-      },
-      weekly: {
-        value: current.price - weekAgo.price,
-        percent: ((current.price - weekAgo.price) / weekAgo.price * 100).toFixed(2)
-      },
-      monthly: {
-        value: current.price - monthAgo.price,
-        percent: ((current.price - monthAgo.price) / monthAgo.price * 100).toFixed(2)
+        value: Math.round(dailyChange * 100) / 100,
+        percent: yesterday > 0 ? ((dailyChange / yesterday) * 100).toFixed(2) : '0.00'
       }
     },
-    history,
-    updatedAt: new Date().toISOString()
+    history: history,
+    source: priceUSD ? 'Amazon (scraped)' : 'Estimated',
+    lastUpdate: priceData.lastUpdate || new Date().toISOString()
   });
 };

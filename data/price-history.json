@@ -1,99 +1,219 @@
 {
-  "gpu": {
-    "rtx4090": {
-      "name": "MSI GeForce RTX 4090 Gaming X Trio 24G Gaming Graphics Card - 24GB GDDR6X, 2595 MHz, PCI Express Gen 4, 384-bit, 3X DP v 1.4a, HDMI 2.1a (Supports 4K & 8K HDR)",
-      "price": 3740.0,
-      "currency": "USD"
-    },
-    "rtx4080": null,
-    "rtx4070": {
-      "name": "ASUS Dual GeForce RTX™ 4070 EVO OC Edition 12GB GDDR6X is Designed for Broad Compatibility, with a 2.5-Slot Design, Axial-tech Fan Design, 0dB Technology, Auto-Extreme Technology, and More (Renewed)",
-      "price": 529.99,
-      "currency": "USD"
-    },
-    "rx7900xtx": {
-      "name": "XFX Radeon RX 7900XT Gaming Graphics Card with 20GB GDDR6, AMD RDNA 3 RX-79TMBABF9",
-      "price": 699.99,
-      "currency": "USD"
-    },
-    "rx7800xt": {
-      "name": "XFX Speedster MERC319 RX 7800 XT Black Gaming Graphics Card 16GB GDDR6 HDMI 3xDP, AMD RDNA 3 RX-78TMERCB9",
-      "price": 539.99,
-      "currency": "USD"
-    }
-  },
-  "cpu": {
-    "i9-14900k": {
-      "name": "Intel® Core™ i9-14900K Desktop Processor",
-      "price": 468.97,
-      "currency": "USD"
-    },
-    "i7-14700k": {
-      "name": "Core™ i7-14700K New Gaming Desktop Processor 20 cores (8 P-cores + 12 E-cores) with Integrated Graphics - Unlocked",
-      "price": 339.79,
-      "currency": "USD"
-    },
-    "r9-7950x": null,
-    "r7-7800x3d": {
-      "name": "AMD Ryzen 7 7800X3D 8-Core, 16-Thread Desktop Processor",
-      "price": 368.99,
-      "currency": "USD"
-    },
-    "i5-14600k": {
-      "name": "Core™ i5-14600K Desktop Processor",
-      "price": 289.99,
-      "currency": "USD"
-    }
-  },
-  "ram": {
-    "ddr5-32g": {
-      "name": "CORSAIR Vengence RGB DDR5 RAM 32GB (2x16GB) 6000MHz CL36-44-44-96 1.35V Intel XMP 3.0 Computer Memory – Black (CMH32GX5M2E6000C36)",
-      "price": 369.99,
-      "currency": "USD"
-    },
-    "ddr5-64g": {
-      "name": "Crucial 64GB DDR5 RAM, 5600MHz (or 5200MHz or 4800MHz) Laptop Memory Kit, SODIMM 262-Pin, Compatible with 13th Gen Intel Core and AMD Ryzen 6000 - CT2K32G56C46S5",
-      "price": 579.99,
-      "currency": "USD"
-    },
-    "ddr4-32g": {
-      "name": "CORSAIR Vengeance LPX DDR4 RAM 32GB (2x16GB) 3200MHz CL16-20-20-38 1.35V Intel AMD Desktop Computer Memory - Black (CMK32GX4M2E3200C16)",
-      "price": 219.99,
-      "currency": "USD"
-    }
-  },
-  "ssd": {
-    "990pro-2t": {
-      "name": "990 PRO SSD 2TB NVMe M.2 PCIe Gen4, M.2 2280 Internal Solid State Hard Drive, Seq. Read Speeds Up to 7,450 MB/s for High End Computing, Gaming, and Heavy Duty Workstations, MZ-V9P2T0B/AM",
-      "price": 399.99,
-      "currency": "USD"
-    },
-    "sn850x-2t": {
-      "name": "WD_BLACK SN850X 2TB NVMe SSD - M.2 2280, Up to 7,300 MB/s Read speeds, Up to 6,300 MB/s write speeds, Gaming Expansion, High Performance Internal Solid State Drive - WDS200T2X0E",
-      "price": 354.99,
-      "currency": "USD"
-    },
-    "p7000z-2t": {
-      "name": "Seagate BarraCuda 2TB Internal Hard Drive HDD – 3.5 Inch SATA 6Gb/s 7200 RPM 256MB Cache – Frustration Free Packaging (ST2000DM008/ST2000DMZ08)",
-      "price": 89.99,
-      "currency": "USD"
-    }
-  },
-  "monitor": {
-    "lg-27gp95r": {
-      "name": "27G850A-B 27-inch Ultragear 4K UHD (3840 x 2160) IPS Gaming Monitor, Dual-Mode 240Hz, 1ms, NVIDIA G-Sync Compatible, AMD FreeSync Premium Pro, VESA DisplayHDR 600, HDMI, DisplayPort 2.1, Black",
-      "price": 460.0,
-      "currency": "USD"
-    },
-    "dell-g3223q": {
-      "name": "G3223Q Gaming Monitor - 32-Inch 4K Ultra UHD (3840x2160), 144Hz 1Ms Display, AMD FreeSync+NVIDIA G-SYNC Compatible, Height/Swivel/Tilt Adjustability, 3Yr Advanced Exchange - Black",
-      "price": 499.99,
-      "currency": "USD"
-    },
-    "samsung-odyssey": {
-      "name": "37” Odyssey G7 (G75F) 4K UHD Resolution, 165Hz, Curved Gaming Monitor, 1ms Response Time (GtG), VESA DisplayHDR™ 600, AMD FreeSync™ Premium Pro, LS37FG75DENXZA, 2025",
-      "price": 599.99,
-      "currency": "USD"
-    }
-  }
+ "lastUpdated": null,
+ "categories": {
+ "cpu": [
+ {
+ "id": "cpu-1",
+ "name": "Intel i9-14900K",
+ "price": 3899,
+ "history": [
+ { "time": "2024-05-01T00:00:00Z", "price": 4299, "source": "init" },
+ { "time": "2024-06-01T00:00:00Z", "price": 4099, "source": "init" },
+ { "time": "2024-07-01T00:00:00Z", "price": 3999, "source": "init" },
+ { "time": "2024-08-01T00:00:00Z", "price": 3899, "source": "init" }
+ ]
+ },
+ {
+ "id": "cpu-2",
+ "name": "AMD Ryzen 9 7950X",
+ "price": 4199,
+ "history": [
+ { "time": "2024-05-01T00:00:00Z", "price": 4599, "source": "init" },
+ { "time": "2024-06-01T00:00:00Z", "price": 4399, "source": "init" },
+ { "time": "2024-07-01T00:00:00Z", "price": 4299, "source": "init" },
+ { "time": "2024-08-01T00:00:00Z", "price": 4199, "source": "init" }
+ ]
+ },
+ {
+ "id": "cpu-3",
+ "name": "Intel i5-14600K",
+ "price": 1899,
+ "history": [
+ { "time": "2024-05-01T00:00:00Z", "price": 2199, "source": "init" },
+ { "time": "2024-06-01T00:00:00Z", "price": 2099, "source": "init" },
+ { "time": "2024-07-01T00:00:00Z", "price": 1999, "source": "init" },
+ { "time": "2024-08-01T00:00:00Z", "price": 1899, "source": "init" }
+ ]
+ },
+ {
+ "id": "cpu-4",
+ "name": "AMD Ryzen 5 7600X",
+ "price": 1599,
+ "history": [
+ { "time": "2024-05-01T00:00:00Z", "price": 1899, "source": "init" },
+ { "time": "2024-06-01T00:00:00Z", "price": 1799, "source": "init" },
+ { "time": "2024-07-01T00:00:00Z", "price": 1699, "source": "init" },
+ { "time": "2024-08-01T00:00:00Z", "price": 1599, "source": "init" }
+ ]
+ }
+ ],
+ "gpu": [
+ {
+ "id": "gpu-1",
+ "name": "RTX 4090 24G",
+ "price": 13999,
+ "history": [
+ { "time": "2024-05-01T00:00:00Z", "price": 16999, "source": "init" },
+ { "time": "2024-06-01T00:00:00Z", "price": 15999, "source": "init" },
+ { "time": "2024-07-01T00:00:00Z", "price": 14999, "source": "init" },
+ { "time": "2024-08-01T00:00:00Z", "price": 13999, "source": "init" }
+ ]
+ },
+ {
+ "id": "gpu-2",
+ "name": "RX 7900 XTX",
+ "price": 6499,
+ "history": [
+ { "time": "2024-05-01T00:00:00Z", "price": 7499, "source": "init" },
+ { "time": "2024-06-01T00:00:00Z", "price": 7199, "source": "init" },
+ { "time": "2024-07-01T00:00:00Z", "price": 6799, "source": "init" },
+ { "time": "2024-08-01T00:00:00Z", "price": 6499, "source": "init" }
+ ]
+ },
+ {
+ "id": "gpu-3",
+ "name": "RTX 4070 Ti",
+ "price": 5699,
+ "history": [
+ { "time": "2024-05-01T00:00:00Z", "price": 6299, "source": "init" },
+ { "time": "2024-06-01T00:00:00Z", "price": 6099, "source": "init" },
+ { "time": "2024-07-01T00:00:00Z", "price": 5899, "source": "init" },
+ { "time": "2024-08-01T00:00:00Z", "price": 5699, "source": "init" }
+ ]
+ },
+ {
+ "id": "gpu-4",
+ "name": "RTX 4060 8G",
+ "price": 2399,
+ "history": [
+ { "time": "2024-05-01T00:00:00Z", "price": 2799, "source": "init" },
+ { "time": "2024-06-01T00:00:00Z", "price": 2699, "source": "init" },
+ { "time": "2024-07-01T00:00:00Z", "price": 2599, "source": "init" },
+ { "time": "2024-08-01T00:00:00Z", "price": 2399, "source": "init" }
+ ]
+ }
+ ],
+ "ram": [
+ {
+ "id": "ram-1",
+ "name": "芝奇 DDR5 32G",
+ "price": 699,
+ "history": [
+ { "time": "2024-05-01T00:00:00Z", "price": 899, "source": "init" },
+ { "time": "2024-06-01T00:00:00Z", "price": 799, "source": "init" },
+ { "time": "2024-08-01T00:00:00Z", "price": 699, "source": "init" }
+ ]
+ },
+ {
+ "id": "ram-2",
+ "name": "海力士 DDR5 16G",
+ "price": 349,
+ "history": [
+ { "time": "2024-05-01T00:00:00Z", "price": 449, "source": "init" },
+ { "time": "2024-06-01T00:00:00Z", "price": 399, "source": "init" },
+ { "time": "2024-08-01T00:00:00Z", "price": 349, "source": "init" }
+ ]
+ },
+ {
+ "id": "ram-3",
+ "name": "金士顿 DDR4 32G",
+ "price": 399,
+ "history": [
+ { "time": "2024-05-01T00:00:00Z", "price": 499, "source": "init" },
+ { "time": "2024-06-01T00:00:00Z", "price": 449, "source": "init" },
+ { "time": "2024-08-01T00:00:00Z", "price": 399, "source": "init" }
+ ]
+ }
+ ],
+ "ssd": [
+ {
+ "id": "ssd-1",
+ "name": "三星 990 Pro 2T",
+ "price": 1199,
+ "history": [
+ { "time": "2024-05-01T00:00:00Z", "price": 1499, "source": "init" },
+ { "time": "2024-06-01T00:00:00Z", "price": 1399, "source": "init" },
+ { "time": "2024-08-01T00:00:00Z", "price": 1199, "source": "init" }
+ ]
+ },
+ {
+ "id": "ssd-2",
+ "name": "西数 SN850X 1T",
+ "price": 699,
+ "history": [
+ { "time": "2024-05-01T00:00:00Z", "price": 899, "source": "init" },
+ { "time": "2024-06-01T00:00:00Z", "price": 799, "source": "init" },
+ { "time": "2024-08-01T00:00:00Z", "price": 699, "source": "init" }
+ ]
+ },
+ {
+ "id": "ssd-3",
+ "name": "致态 TiPlus7100 2T",
+ "price": 599,
+ "history": [
+ { "time": "2024-05-01T00:00:00Z", "price": 799, "source": "init" },
+ { "time": "2024-06-01T00:00:00Z", "price": 699, "source": "init" },
+ { "time": "2024-08-01T00:00:00Z", "price": 599, "source": "init" }
+ ]
+ }
+ ],
+ "mb": [
+ {
+ "id": "mb-1",
+ "name": "ROG Z790 APEX",
+ "price": 3499,
+ "history": [
+ { "time": "2024-05-01T00:00:00Z", "price": 3999, "source": "init" },
+ { "time": "2024-08-01T00:00:00Z", "price": 3499, "source": "init" }
+ ]
+ },
+ {
+ "id": "mb-2",
+ "name": "微星 MAG X670E",
+ "price": 1999,
+ "history": [
+ { "time": "2024-05-01T00:00:00Z", "price": 2399, "source": "init" },
+ { "time": "2024-08-01T00:00:00Z", "price": 1999, "source": "init" }
+ ]
+ },
+ {
+ "id": "mb-3",
+ "name": "华硕 B660M-K",
+ "price": 799,
+ "history": [
+ { "time": "2024-05-01T00:00:00Z", "price": 999, "source": "init" },
+ { "time": "2024-08-01T00:00:00Z", "price": 799, "source": "init" }
+ ]
+ }
+ ],
+ "cool": [
+ {
+ "id": "cool-1",
+ "name": "猫头鹰 NH-D15",
+ "price": 699,
+ "history": [
+ { "time": "2024-05-01T00:00:00Z", "price": 799, "source": "init" },
+ { "time": "2024-08-01T00:00:00Z", "price": 699, "source": "init" }
+ ]
+ },
+ {
+ "id": "cool-2",
+ "name": "海盗船 H150i Elite",
+ "price": 999,
+ "history": [
+ { "time": "2024-05-01T00:00:00Z", "price": 1199, "source": "init" },
+ { "time": "2024-08-01T00:00:00Z", "price": 999, "source": "init" }
+ ]
+ },
+ {
+ "id": "cool-3",
+ "name": "利民 FC140",
+ "price": 349,
+ "history": [
+ { "time": "2024-05-01T00:00:00Z", "price": 449, "source": "init" },
+ { "time": "2024-08-01T00:00:00Z", "price": 349, "source": "init" }
+ ]
+ }
+ ]
+ }
 }

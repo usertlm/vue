@@ -25,8 +25,8 @@
     </div>
 
     <!-- Price Chart -->
-    <div class="chart-container" v-if="selectedProduct">
-      <LineChart :data="chartData" :options="chartOptions" />
+    <div class="chart-container" v-if="selectedProduct && chartData.datasets && chartData.datasets.length">
+      <Line :data="chartData" :options="chartOptions" />
       
       <!-- Price Stats -->
       <div class="price-stats">
@@ -38,17 +38,17 @@
           <span class="label">相比昨日</span>
           <span class="value">
             {{ priceChange >= 0 ? '↑' : '↓' }} 
-            ¥{{ Math.abs(priceChange).toFixed(2) }}
+            ¥{{ Math.abs(priceChange).toFixed(0) }}
             ({{ priceChangePercent }}%)
           </span>
         </div>
         <div class="stat lowest">
           <span class="label">历史最低</span>
-          <span class="value">¥{{ lowestPrice }}</span>
+          <span class="value">¥{{ historyLow }}</span>
         </div>
         <div class="stat highest">
           <span class="label">历史最高</span>
-          <span class="value">¥{{ highestPrice }}</span>
+          <span class="value">¥{{ historyHigh }}</span>
         </div>
       </div>
 
@@ -62,15 +62,19 @@
     </div>
 
     <!-- Empty State -->
-    <div v-else class="empty-state">
+    <div v-else-if="!selectedProduct" class="empty-state">
       <p>👆 请选择一个配件型号查看价格趋势</p>
+    </div>
+
+    <!-- Loading State -->
+    <div v-else class="loading-state">
+      <p>加载中...</p>
     </div>
   </div>
 </template>
 
 <script>
-// eslint-disable-next-line vue/no-reserved-component-names
-import { Line as LineChart } from 'vue-chartjs';
+import { Line } from 'vue-chartjs';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -94,118 +98,61 @@ ChartJS.register(
   Filler
 );
 
-// Product categories and items
+// Product categories
 const CATEGORIES = [
   { id: 'gpu', name: '显卡', icon: '🎮' },
   { id: 'cpu', name: 'CPU', icon: '⚙️' },
   { id: 'ram', name: '内存', icon: '💾' },
   { id: 'ssd', name: '固态硬盘', icon: '💿' },
-  { id: 'monitor', name: '显示器', icon: '🖥️' }
+  { id: 'mb', name: '主板', icon: '🔌' },
+  { id: 'cool', name: '散热器', icon: '❄️' }
 ];
-
-const PRODUCTS = {
-  gpu: [
-    { id: 'rtx4090', name: 'RTX 4090' },
-    { id: 'rtx4080', name: 'RTX 4080' },
-    { id: 'rtx4070', name: 'RTX 4070' },
-    { id: 'rx7900xtx', name: 'RX 7900 XTX' },
-    { id: 'rx7800xt', name: 'RX 7800 XT' }
-  ],
-  cpu: [
-    { id: 'i9-14900k', name: 'Intel i9-14900K' },
-    { id: 'i7-14700k', name: 'Intel i7-14700K' },
-    { id: 'r9-7950x', name: 'AMD R9 7950X' },
-    { id: 'r7-7800x3d', name: 'AMD R7 7800X3D' },
-    { id: 'i5-14600k', name: 'Intel i5-14600K' }
-  ],
-  ram: [
-    { id: 'ddr5-32g', name: 'DDR5 32GB' },
-    { id: 'ddr5-64g', name: 'DDR5 64GB' },
-    { id: 'ddr4-32g', name: 'DDR4 32GB' }
-  ],
-  ssd: [
-    { id: '990pro-2t', name: '三星 990 Pro 2TB' },
-    { id: 'sn850x-2t', name: 'WD Black SN850X 2TB' },
-    { id: 'p7000z-2t', name: '致态 P7000Z 2TB' }
-  ],
-  monitor: [
-    { id: 'lg-27gp95r', name: 'LG 27GP95R' },
-    { id: 'dell-g3223q', name: 'Dell G3223Q' },
-    { id: 'samsung-odyssey', name: '三星 Odyssey G7' }
-  ]
-};
-
-// Generate demo price history
-function generateDemoHistory(basePrice, days = 30) {
-  const history = [];
-  const now = new Date();
-  let price = basePrice;
-  
-  for (let i = days; i >= 0; i--) {
-    const date = new Date(now);
-    date.setDate(date.getDate() - i);
-    
-    // Random walk with trend
-    const change = (Math.random() - 0.5) * basePrice * 0.05;
-    price = Math.max(basePrice * 0.7, Math.min(basePrice * 1.3, price + change));
-    
-    history.push({
-      date: date.toISOString().split('T')[0],
-      price: Math.round(price * 100) / 100
-    });
-  }
-  
-  return history;
-}
 
 export default {
   name: 'PriceChart',
   components: {
-    LineChart
+    Line
   },
   data() {
     return {
       categories: CATEGORIES,
       selectedCategory: 'gpu',
       selectedProduct: '',
-      products: PRODUCTS,
-      priceHistory: [],
+      priceData: null,
       isLoading: false,
-      lastUpdate: null
     };
   },
   computed: {
     currentProducts() {
-      return this.products[this.selectedCategory] || [];
+      if (!this.priceData || !this.priceData.categories) return [];
+      return this.priceData.categories[this.selectedCategory] || [];
     },
-    currentPriceData() {
-      if (!this.selectedProduct || this.priceHistory.length === 0) return null;
-      return this.priceHistory[this.priceHistory.length - 1];
+    currentProductData() {
+      if (!this.selectedProduct || !this.currentProducts.length) return null;
+      return this.currentProducts.find(p => p.id === this.selectedProduct);
     },
     currentPrice() {
-      return this.currentPriceData?.price?.toFixed(2) || '0.00';
+      return this.currentProductData?.price?.toFixed(0) || '0';
     },
-    lowestPrice() {
-      if (this.priceHistory.length === 0) return '0.00';
-      const lowest = Math.min(...this.priceHistory.map(h => h.price));
-      return lowest.toFixed(2);
+    historyLow() {
+      return this.currentProductData?.historyLow?.toFixed(0) || '0';
     },
-    highestPrice() {
-      if (this.priceHistory.length === 0) return '0.00';
-      const highest = Math.max(...this.priceHistory.map(h => h.price));
-      return highest.toFixed(2);
+    historyHigh() {
+      return this.currentProductData?.historyHigh?.toFixed(0) || '0';
     },
     priceChange() {
-      if (this.priceHistory.length < 2) return 0;
-      const current = this.priceHistory[this.priceHistory.length - 1].price;
-      const yesterday = this.priceHistory[this.priceHistory.length - 2].price;
-      return current - yesterday;
+      if (!this.currentProductData || !this.currentProductData.trend || this.currentProductData.trend.length < 2) return 0;
+      const trend = this.currentProductData.trend;
+      const len = trend.length;
+      return trend[len - 1].price - trend[len - 2].price;
     },
     priceChangePercent() {
-      if (this.priceHistory.length < 2) return '0.00';
-      const yesterday = this.priceHistory[this.priceHistory.length - 2].price;
-      if (yesterday === 0) return '0.00';
-      return ((this.priceChange / yesterday) * 100).toFixed(2);
+      if (!this.currentProductData || !this.currentProductData.trend || this.currentProductData.trend.length < 2) return '0.00';
+      const trend = this.currentProductData.trend;
+      const len = trend.length;
+      const yesterdayPrice = trend[len - 2].price;
+      if (yesterdayPrice === 0) return '0.00';
+      return ((this.priceChange / yesterdayPrice) * 100).toFixed(2);
     },
     priceChangeClass() {
       if (this.priceChange > 0) return 'up';
@@ -213,30 +160,32 @@ export default {
       return '';
     },
     lastUpdateTime() {
-      if (!this.lastUpdate) return '从未';
-      return new Date(this.lastUpdate).toLocaleString('zh-CN');
+      if (!this.priceData || !this.priceData.lastUpdated) return '从未';
+      const date = new Date(this.priceData.lastUpdated);
+      return date.toLocaleString('zh-CN');
     },
     chartData() {
-      if (this.priceHistory.length === 0) {
-        return {
-          labels: [],
-          datasets: []
-        };
+      if (!this.currentProductData || !this.currentProductData.trend) {
+        return { labels: [], datasets: [] };
       }
       
-      const productName = this.currentProducts.find(p => p.id === this.selectedProduct)?.name || '';
+      const trend = this.currentProductData.trend;
+      const productName = this.currentProductData.name || '';
       
       return {
-        labels: this.priceHistory.map(h => h.date.slice(5)), // MM-DD format
+        labels: trend.map(h => {
+          const d = new Date(h.time);
+          return `${d.getMonth() + 1}/${d.getDate()}`;
+        }),
         datasets: [
           {
             label: productName,
-            data: this.priceHistory.map(h => h.price),
+            data: trend.map(h => h.price),
             borderColor: '#42b983',
             backgroundColor: 'rgba(66, 185, 131, 0.1)',
             fill: true,
             tension: 0.4,
-            pointRadius: 4,
+            pointRadius: 3,
             pointHoverRadius: 6,
             pointBackgroundColor: '#42b983',
             pointBorderColor: '#fff',
@@ -266,7 +215,7 @@ export default {
             borderWidth: 1,
             displayColors: false,
             callbacks: {
-              label: (context) => `价格: ¥${context.raw.toFixed(2)}`
+              label: (context) => `价格: ¥${context.raw.toFixed(0)}`
             }
           }
         },
@@ -295,89 +244,31 @@ export default {
   watch: {
     selectedCategory() {
       this.selectedProduct = '';
-      this.priceHistory = [];
     }
   },
   mounted() {
-    this.loadDataFromStorage();
+    this.loadData();
   },
   methods: {
-    loadDataFromStorage() {
+    async loadData() {
       try {
-        const stored = localStorage.getItem('priceData');
-        if (stored) {
-          const data = JSON.parse(stored);
-          this.priceHistory = data.history || [];
-          this.lastUpdate = data.lastUpdate;
+        const response = await fetch('/api/prices');
+        if (response.ok) {
+          this.priceData = await response.json();
         }
       } catch (e) {
         console.error('Failed to load price data:', e);
       }
     },
-    saveDataToStorage() {
-      try {
-        localStorage.setItem('priceData', JSON.stringify({
-          history: this.priceHistory,
-          lastUpdate: this.lastUpdate
-        }));
-      } catch (e) {
-        console.error('Failed to save price data:', e);
-      }
-    },
     async loadProductData() {
       if (!this.selectedProduct) return;
-      
-      this.isLoading = true;
-      
-      try {
-        // Try to fetch from API
-        const response = await fetch(`/api/prices?product=${this.selectedProduct}`);
-        if (response.ok) {
-          const data = await response.json();
-          this.priceHistory = data.history || [];
-          this.lastUpdate = new Date().toISOString();
-        } else {
-          // Use demo data
-          this.generateDemoData();
-        }
-      } catch (e) {
-        // Use demo data on error
-        this.generateDemoData();
-      }
-      
-      this.saveDataToStorage();
-      this.isLoading = false;
-    },
-    generateDemoData() {
-      // Demo base prices
-      const basePrices = {
-        'rtx4090': 15999,
-        'rtx4080': 8999,
-        'rtx4070': 4999,
-        'rx7900xtx': 7999,
-        'rx7800xt': 3999,
-        'i9-14900k': 4999,
-        'i7-14700k': 3299,
-        'r9-7950x': 3999,
-        'r7-7800x3d': 2399,
-        'i5-14600k': 2199,
-        'ddr5-32g': 799,
-        'ddr5-64g': 1499,
-        'ddr4-32g': 499,
-        '990pro-2t': 1299,
-        'sn850x-2t': 1199,
-        'p7000z-2t': 799,
-        'lg-27gp95r': 3999,
-        'dell-g3223q': 5999,
-        'samsung-odyssey': 4999
-      };
-      
-      const basePrice = basePrices[this.selectedProduct] || 1000;
-      this.priceHistory = generateDemoHistory(basePrice);
-      this.lastUpdate = new Date().toISOString();
+      // Data is already loaded, just trigger reactivity
+      this.$forceUpdate();
     },
     async refreshData() {
-      await this.loadProductData();
+      this.isLoading = true;
+      await this.loadData();
+      this.isLoading = false;
     }
   }
 };
@@ -521,7 +412,8 @@ export default {
   cursor: not-allowed;
 }
 
-.empty-state {
+.empty-state,
+.loading-state {
   text-align: center;
   padding: 40px;
   color: #888;

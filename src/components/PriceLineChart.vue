@@ -26,7 +26,7 @@ ChartJS.register(
 export default {
   name: 'PriceLineChart',
   components: {
-    Line
+    LineChart: Line
   },
   props: {
     data: {
@@ -38,6 +38,6 @@ export default {
       default: () => ({})
     }
   },
-  template: '<Line :data="data" :options="options" />'
+  template: '<LineChart :data="data" :options="options" />'
 };
 </script>

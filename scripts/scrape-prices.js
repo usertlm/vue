@@ -3,16 +3,15 @@
  * Price Scraper Script
  * Fetches computer component prices and stores historical data
  * 
- * Usage: node scrape-prices.js [--product gpu|cpu|ram|ssd|monitor|all]
+ * Usage: node scrape-prices.js
  * 
- * This script can be run as a cron job every 10 minutes:
- * */10 * * * * cd /path/to/vue && node scripts/scrape-prices.js >> logs/prices.log 2>&1
+ * For cron job (every 10 minutes), see SKILL.md
  */
 
 const fs = require('fs');
 const path = require('path');
 
-// Product configurations with base prices and search terms
+// Product configurations with base prices
 const PRODUCTS = {
   gpu: {
     name: '显卡',
@@ -72,7 +71,7 @@ async function fetchPrice(productId, basePrice) {
   // Simulate API call with realistic price variation
   await new Promise(resolve => setTimeout(resolve, 100));
   
-  // Generate realistic price with small random variation (±3%)
+  // Generate realistic price with small random variation (3%)
   const variation = (Math.random() - 0.5) * 0.06;
   const price = basePrice * (1 + variation);
   
@@ -104,37 +103,27 @@ function saveHistory(history) {
     }
     history.lastUpdate = new Date().toISOString();
     fs.writeFileSync(HISTORY_FILE, JSON.stringify(history, null, 2));
-    console.log(`Saved price data to ${HISTORY_FILE}`);
+    console.log('Saved price data to ' + HISTORY_FILE);
   } catch (e) {
     console.error('Failed to save history:', e.message);
   }
 }
 
 /**
- * Scrape prices for a specific category or all
+ * Scrape prices for all categories
  */
-async function scrapePrices(category = 'all') {
-  const categories = category === 'all' 
-    ? Object.keys(PRODUCTS) 
-    : [category];
-  
+async function scrapePrices() {
   const history = loadHistory();
   const today = new Date().toISOString().split('T')[0];
   
-  console.log(`\n${'='.repeat(50)}`);
-  console.log(`Price Scraping - ${new Date().toLocaleString('zh-CN')}`);
-  console.log(`Categories: ${categories.join(', ')}`);
+  console.log('\n' + '='.repeat(50));
+  console.log('Price Scraping - ' + new Date().toLocaleString('zh-CN'));
   console.log('='.repeat(50));
   
-  for (const cat of categories) {
-    if (!PRODUCTS[cat]) {
-      console.warn(`Unknown category: ${cat}`);
-      continue;
-    }
+  for (const [catKey, cat] of Object.entries(PRODUCTS)) {
+    console.log('\n[' + cat.name + ']');
     
-    console.log(`\n[${PRODUCTS[cat].name}]`);
-    
-    for (const item of PRODUCTS[cat].items) {
+    for (const item of cat.items) {
       try {
         const price = await fetchPrice(item.id, item.basePrice);
         
@@ -157,17 +146,18 @@ async function scrapePrices(category = 'all') {
         const change = price - lastPrice;
         const changePercent = ((change / lastPrice) * 100).toFixed(2);
         
-        console.log(`  ${item.name}: ¥${price.toFixed(2)} (${change >= 0 ? '+' : ''}${change.toFixed(2)} / ${changePercent}%)`);
+        const changeStr = change >= 0 ? '+' + change.toFixed(2) : change.toFixed(2);
+        console.log('  ' + item.name + ': ¥' + price.toFixed(2) + ' (' + changeStr + ' / ' + changePercent + '%)');
         
       } catch (e) {
-        console.error(`  Failed to fetch ${item.name}:`, e.message);
+        console.error('  Failed to fetch ' + item.name + ':', e.message);
       }
     }
   }
   
   saveHistory(history);
   
-  console.log(`\nDone! Last update: ${history.lastUpdate}`);
+  console.log('\nDone! Last update: ' + history.lastUpdate);
   return history;
 }
 
@@ -178,12 +168,12 @@ function printComparison(history) {
   const today = new Date().toISOString().split('T')[0];
   const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
   
-  console.log(`\n${'='.repeat(50)}`);
+  console.log('\n' + '='.repeat(50));
   console.log('Price Comparison (vs yesterday)');
   console.log('='.repeat(50));
   
   for (const [catKey, cat] of Object.entries(PRODUCTS)) {
-    console.log(`\n${cat.name}:`);
+    console.log('\n' + cat.name + ':');
     
     for (const item of cat.items) {
       if (!history.prices[item.id]) continue;
@@ -194,18 +184,15 @@ function printComparison(history) {
       if (!todayPrice) continue;
       
       const change = todayPrice - yesterdayPrice;
-      const changeStr = change >= 0 ? `↑ +¥${change.toFixed(2)}` : `↓ -¥${Math.abs(change).toFixed(2)}`;
+      const changeStr = change >= 0 ? 'UP +¥' + change.toFixed(2) : 'DOWN -¥' + Math.abs(change).toFixed(2);
       
-      console.log(`  ${item.name}: ¥${todayPrice.toFixed(2)} ${changeStr}`);
+      console.log('  ' + item.name + ': ¥' + todayPrice.toFixed(2) + ' ' + changeStr);
     }
   }
 }
 
 // Main execution
-const args = process.argv.slice(2);
-const category = args[0] || 'all';
-
-scrapePrices(category)
+scrapePrices()
   .then(history => {
     printComparison(history);
     process.exit(0);

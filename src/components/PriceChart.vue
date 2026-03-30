@@ -26,7 +26,7 @@
 
     <!-- Price Chart -->
     <div class="chart-container" v-if="selectedProduct">
-      <Line :data="chartData" :options="chartOptions" />
+      <LineChart :data="chartData" :options="chartOptions" />
       
       <!-- Price Stats -->
       <div class="price-stats">
@@ -69,7 +69,8 @@
 </template>
 
 <script>
-import { Line } from 'vue-chartjs';
+// eslint-disable-next-line vue/no-reserved-component-names
+import { Line as LineChart } from 'vue-chartjs';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -160,7 +161,7 @@ function generateDemoHistory(basePrice, days = 30) {
 export default {
   name: 'PriceChart',
   components: {
-    Line
+    LineChart
   },
   data() {
     return {

@@ -26,7 +26,7 @@
 
     <!-- Price Chart -->
     <div class="chart-container" v-if="selectedProduct && chartData.datasets && chartData.datasets.length">
-      <Line :data="chartData" :options="chartOptions" />
+      <PriceLineChart :data="chartData" :options="chartOptions" />
       
       <!-- Price Stats -->
       <div class="price-stats">
@@ -74,29 +74,7 @@
 </template>
 
 <script>
-import { Line } from 'vue-chartjs';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-} from 'chart.js';
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-);
+import PriceLineChart from './PriceLineChart.vue';
 
 // Product categories
 const CATEGORIES = [
@@ -111,7 +89,7 @@ const CATEGORIES = [
 export default {
   name: 'PriceChart',
   components: {
-    Line
+    PriceLineChart
   },
   data() {
     return {

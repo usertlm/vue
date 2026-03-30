@@ -11,6 +11,9 @@
     <!-- AI Chat Box -->
     <ChatBox />
 
+    <!-- Price Tracker Chart -->
+    <PriceChart />
+
     <!-- Google AdSense -->
     <AdSense />
 
@@ -55,12 +58,14 @@
 <script>
 import AdSense from './AdSense.vue';
 import ChatBox from './ChatBox.vue';
+import PriceChart from './PriceChart.vue';
 
 export default {
   name: 'HelloWorld',
   components: {
     AdSense,
-    ChatBox
+    ChatBox,
+    PriceChart
   },
   props: {
     msg: String,

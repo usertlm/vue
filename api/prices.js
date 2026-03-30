@@ -18,7 +18,7 @@ function loadPriceHistory() {
   } catch (e) {
     console.error('Failed to load price history:', e.message);
   }
-  return { prices: {}, lastUpdate: null };
+  return { prices: {}, updatedAt: null };
 }
 
 // Product metadata
@@ -137,7 +137,7 @@ module.exports = async function handler(req, res) {
     
     return res.status(200).json({
       products: allProducts,
-      lastUpdate: priceData.lastUpdate || new Date().toISOString(),
+      updatedAt: priceData.updatedAt || new Date().toISOString(),
       currency: currency,
       conversionRate: USD_TO_CNY
     });
@@ -212,6 +212,6 @@ module.exports = async function handler(req, res) {
     },
     history: history,
     source: priceUSD ? 'Amazon (scraped)' : 'Estimated',
-    lastUpdate: priceData.lastUpdate || new Date().toISOString()
+    updatedAt: priceData.updatedAt || new Date().toISOString()
   });
 };

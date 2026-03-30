@@ -10,7 +10,7 @@
       playsinline
       class="video-player"
     ></video>
-    <p class="stream-url">直播源: {{ src }}</p>
+
   </div>
 </template>
 
@@ -139,10 +139,5 @@ export default {
   border-radius: 4px;
 }
 
-.stream-url {
-  font-size: 12px;
-  color: #888;
-  margin-top: 8px;
-  word-break: break-all;
-}
+
 </style>

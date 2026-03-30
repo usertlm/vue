@@ -161,11 +161,21 @@ def main():
     data_dir = os.path.join(os.path.dirname(__file__), '..', 'data')
     os.makedirs(data_dir, exist_ok=True)
     
+    # Create output with timestamp
+    output = {
+        'updatedAt': datetime.now().isoformat(),
+        'source': 'Amazon via Scrapling',
+        'currency': 'USD',
+        'prices': results
+    }
+    
     output_file = os.path.join(data_dir, 'price-history.json')
     with open(output_file, 'w', encoding='utf-8') as f:
-        json.dump(results, f, ensure_ascii=False, indent=2)
+        json.dump(output, f, ensure_ascii=False, indent=2)
     
     print(f"\nSaved to {output_file}")
+    print(f"Updated: {output['updatedAt']}")
+    
     return results
 
 

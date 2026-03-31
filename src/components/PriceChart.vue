@@ -192,6 +192,7 @@ export default {
       return this.priceHistory.filter(h => new Date(h.time) >= cutoff);
     },
     priceChange() {
+      // priceHistory is newest-first, so [0] is today, [1] is yesterday
       if (this.priceHistory.length < 2) return 0;
       return this.priceHistory[0].price - this.priceHistory[1].price;
     },
@@ -216,7 +217,10 @@ export default {
         return { labels: [], datasets: [] };
       }
       
-      const trend = this.priceHistory.slice(0, 30);
+      // priceHistory is newest-first (reversed from trend which is oldest-first)
+      // We want to show chart with oldest on left, newest on right
+      const trend = [...this.priceHistory].reverse(); // oldest-first for chart
+      
       const productName = this.currentProductData.name || '';
       
       return {

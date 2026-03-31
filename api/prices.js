@@ -9,7 +9,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const DATA_FILE = path.join(process.cwd(), 'data', 'price-history.json');
+// Data file path - use absolute path from __dirname
+const DATA_FILE = path.join(__dirname, '..', 'data', 'price-history.json');
 
 const DATA_FILE_CONTENTS = {
  lastUpdated: new Date().toISOString(),

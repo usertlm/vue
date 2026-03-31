@@ -1,33 +1,28 @@
 # ============================================================
-# 定时价格爬虫 · 每10分钟抓取一次电脑配件价格
+# 定时价格爬虫 · 每天早上自动更新
+# 使用 Playwright 爬取京东/淘宝/亚马逊真实价格
 #
 # 所需 Secrets（在仓库 Settings → Secrets → Actions 中配置）:
+# GITHUB_TOKEN — 自动提供
 # SCRAPER_SECRET — 与 api/prices.js 保持一致的密钥
-# API_BASE_URL — 如 https://your-site.vercel.app
-# VERCEL_TOKEN — （可选）用于触发 Vercel 重新部署
 # ============================================================
 
 name: 💰 电脑配件价格爬虫
 
 on:
   schedule:
-    # 每天早上 8:30 (北京时间) = UTC 00:30
-    # GitHub Actions 免费版支持每小时一次，我们设为每天早8点
+    # 每天早上 8:00 (北京时间) = UTC 00:00
     - cron: "0 0 * * *"
 
-  # 支持手动触发（方便调试）
+  # 支持手动触发
   workflow_dispatch:
     inputs:
       categories:
         description: "指定分类 (留空=全部): cpu gpu ram ssd mb cool"
         required: false
         default: ""
-      dry_run:
-        description: "只保存本地，不推送 API"
-        type: boolean
-        default: false
 
-# 防止并发冲突：同一时间只允许运行一个爬虫任务
+# 防止并发冲突
 concurrency:
   group: price-scraper
   cancel-in-progress: false
@@ -36,79 +31,57 @@ jobs:
   scrape:
     name: 🕷️ 抓取最新价格
     runs-on: ubuntu-latest
-    timeout-minutes: 8 # 单次最长8分钟，留2分钟余量
+    timeout-minutes: 15
 
     steps:
       # ── 1. 检出代码 ──────────────────────────────────────
       - name: ⬇️ Checkout
         uses: actions/checkout@v4
-        with:
-          # 需要写权限，用于提交 price-history.json
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       # ── 2. 配置 Python ───────────────────────────────────
       - name: 🐍 Setup Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-          cache: pip
+          cache: 'pip'
 
-      # ── 3. 安装依赖 ──────────────────────────────────────
+      # ── 3. 安装 Playwright ──────────────────────────────
+      - name: 🧪 Install Playwright
+        run: |
+          pip install playwright
+          playwright install chromium
+          playwright install-deps
+
+      # ── 4. 安装其他依赖 ─────────────────────────────────
       - name: 📦 Install dependencies
         run: |
-          pip install --upgrade pip
           pip install requests beautifulsoup4 lxml
 
-      # ── 4. 运行爬虫 ──────────────────────────────────────
-      - name: 🚀 Run price scraper
+      # ── 5. 运行 Playwright 爬虫 ──────────────────────────
+      - name: 🚀 Run Playwright scraper
         env:
           SCRAPER_SECRET: ${{ secrets.SCRAPER_SECRET }}
-          API_BASE_URL: ${{ secrets.API_BASE_URL }}
         run: |
-          CATEGORIES="${{ github.event.inputs.categories }}"
-          DRY_RUN="${{ github.event.inputs.dry_run }}"
+          python scripts/playwright_scraper.py
 
-          CMD="python scripts/real-price-scraper.py"
-          if [ -n "$CATEGORIES" ]; then
-            CMD="$CMD --categories $CATEGORIES"
-          fi
-          if [ "$DRY_RUN" = "true" ]; then
-            CMD="$CMD --no-push"
-          fi
-
-          echo "执行命令: $CMD"
-          $CMD
-
-      # ── 5. 提交价格历史到仓库 ────────────────────────────
+      # ── 6. 提交价格历史到仓库 ────────────────────────────
       - name: 💾 Commit price history
         run: |
           git config --local user.email "price-bot@github-actions"
           git config --local user.name "Price Bot 🤖"
           git add data/price-history.json
-          # 仅当文件有变化时才提交
           if git diff --staged --quiet; then
             echo "✅ 价格无变化，跳过提交"
           else
             TIMESTAMP=$(date -u "+%Y-%m-%d %H:%M UTC")
-            git commit -m "💰 价格更新: $TIMESTAMP [skip ci]"
+            git commit -m "💰 价格更新: $TIMESTAMP"
             git push
             echo "✅ price-history.json 已提交"
           fi
 
-      # ── 6. 上传日志（失败时方便调试）────────────────────
-      - name: 📋 Upload logs on failure
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: scraper-error-log-${{ github.run_number }}
-          path: |
-            *.log
-            data/
-          retention-days: 7
-
-  # ── 价格异常通知（可选）────────────────────────────────────
+  # ── 通知（可选）────────────────────────────────────
   notify:
-    name: 🔔 价格异常通知
+    name: 🔔 通知
     runs-on: ubuntu-latest
     needs: scrape
     if: failure()

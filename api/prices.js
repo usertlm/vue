@@ -4,6 +4,7 @@
  * GET /api/prices → 返回所有分类最新价格 + 历史记录
  * GET /api/prices?id=cpu-1 → 返回单个商品历史
  * POST /api/prices → 爬虫写入新价格（需要 SCRAPER_SECRET 验证）
+ * POST /api/prices/trigger → 触发 GitHub Actions 手动更新
  */
 
 const fs = require('fs');
@@ -11,14 +12,82 @@ const path = require('path');
 
 const DATA_FILE = path.join(process.cwd(), 'data', 'price-history.json');
 
+// GitHub相关信息
+const GITHUB_REPO = 'usertlm/vue';
+const WORKFLOW_ID = 'price-scraper.yml';
+
+const DATA_FILE_CONTENTS = {
+ lastUpdated: new Date().toISOString(),
+ categories: {
+ cpu: [
+ { id: 'cpu-1', name: 'Intel Core Ultra 9 285K', price: 4999, history: [] },
+ { id: 'cpu-2', name: 'Intel Core Ultra 7 265K', price: 3299, history: [] },
+ { id: 'cpu-3', name: 'Intel Core Ultra 5 245K', price: 2299, history: [] },
+ { id: 'cpu-4', name: 'AMD Ryzen 9 9950X', price: 4499, history: [] },
+ { id: 'cpu-5', name: 'AMD Ryzen 9 9900X', price: 3299, history: [] },
+ { id: 'cpu-6', name: 'AMD Ryzen 7 9700X', price: 2299, history: [] },
+ { id: 'cpu-7', name: 'AMD Ryzen 5 9600X', price: 1699, history: [] },
+ { id: 'cpu-8', name: 'AMD Ryzen 7 9800X3D', price: 3799, history: [] }
+ ],
+ gpu: [
+ { id: 'gpu-1', name: 'NVIDIA RTX 5090', price: 19999, history: [] },
+ { id: 'gpu-2', name: 'NVIDIA RTX 5080', price: 9999, history: [] },
+ { id: 'gpu-3', name: 'NVIDIA RTX 5070 Ti', price: 6999, history: [] },
+ { id: 'gpu-4', name: 'NVIDIA RTX 5070', price: 5499, history: [] },
+ { id: 'gpu-5', name: 'AMD RX 9070 XT', price: 5999, history: [] },
+ { id: 'gpu-6', name: 'AMD RX 9070', price: 4499, history: [] },
+ { id: 'gpu-7', name: 'NVIDIA RTX 4090 D', price: 15999, history: [] },
+ { id: 'gpu-8', name: 'AMD RX 7900 XTX', price: 7999, history: [] }
+ ],
+ ram: [
+ { id: 'ram-1', name: 'DDR5 32GB (2x16GB) 6000MHz', price: 699, history: [] },
+ { id: 'ram-2', name: 'DDR5 64GB (2x32GB) 6000MHz', price: 1399, history: [] },
+ { id: 'ram-3', name: 'DDR5 128GB (4x32GB) 6000MHz', price: 2799, history: [] },
+ { id: 'ram-4', name: 'DDR4 32GB (2x16GB) 3200MHz', price: 399, history: [] },
+ { id: 'ram-5', name: 'DDR5 96GB (2x48GB) 6400MHz', price: 1899, history: [] }
+ ],
+ ssd: [
+ { id: 'ssd-1', name: '三星 990 Pro 2TB', price: 1299, history: [] },
+ { id: 'ssd-2', name: '三星 990 Pro 4TB', price: 2299, history: [] },
+ { id: 'ssd-3', name: 'WD Black SN850X 2TB', price: 1199, history: [] },
+ { id: 'ssd-4', name: '致态 TiPlus7100 2TB', price: 799, history: [] },
+ { id: 'ssd-5', name: '海力士 P41 2TB', price: 1099, history: [] },
+ { id: 'ssd-6', name: '三星 9100 Pro 2TB', price: 1599, history: [] }
+ ],
+ mb: [
+ { id: 'mb-1', name: 'ROG MAXIMUS Z890 APEX', price: 6999, history: [] },
+ { id: 'mb-2', name: 'ROG STRIX Z890-E', price: 3999, history: [] },
+ { id: 'mb-3', name: 'MSI MEG Z890 ACE', price: 5499, history: [] },
+ { id: 'mb-4', name: 'ROG CROSSHAIR X870E HERO', price: 4999, history: [] },
+ { id: 'mb-5', name: 'MSI MAG X870 TOMAHAWK', price: 1999, history: [] },
+ { id: 'mb-6', name: '华硕 B850M-K', price: 899, history: [] }
+ ],
+ cool: [
+ { id: 'cool-1', name: '猫头鹰 NH-D15', price: 799, history: [] },
+ { id: 'cool-2', name: '猫头鹰 NH-U12A', price: 699, history: [] },
+ { id: 'cool-3', name: '利民 FC140', price: 399, history: [] },
+ { id: 'cool-4', name: '海盗船 H150i Elite', price: 1199, history: [] },
+ { id: 'cool-5', name: '华硕 龙神3代 360', price: 1699, history: [] }
+ ]
+ }
+};
+
 /** 读取价格历史文件 */
 function readHistory() {
  try {
- if (!fs.existsSync(DATA_FILE)) return getDefaultData();
+ if (!fs.existsSync(DATA_FILE)) {
+ writeHistory(DATA_FILE_CONTENTS);
+ return DATA_FILE_CONTENTS;
+ }
  const raw = fs.readFileSync(DATA_FILE, 'utf-8');
- return JSON.parse(raw);
+ const data = JSON.parse(raw);
+ if (!data.lastUpdated) {
+ data.lastUpdated = new Date().toISOString();
+ writeHistory(data);
+ }
+ return data;
  } catch {
- return getDefaultData();
+ return DATA_FILE_CONTENTS;
  }
 }
 
@@ -29,50 +98,8 @@ function writeHistory(data) {
  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf-8');
 }
 
-/** 默认骨架数据（首次运行时初始化） */
-function getDefaultData() {
- return {
- lastUpdated: null,
- categories: {
- cpu: [
- { id: 'cpu-1', name: 'Intel i9-14900K', price: 3899, history: [] },
- { id: 'cpu-2', name: 'AMD Ryzen 9 7950X', price: 4199, history: [] },
- { id: 'cpu-3', name: 'Intel i5-14600K', price: 1899, history: [] },
- { id: 'cpu-4', name: 'AMD Ryzen 5 7600X', price: 1599, history: [] },
- ],
- gpu: [
- { id: 'gpu-1', name: 'RTX 4090 24G', price: 13999, history: [] },
- { id: 'gpu-2', name: 'RX 7900 XTX', price: 6499, history: [] },
- { id: 'gpu-3', name: 'RTX 4070 Ti', price: 5699, history: [] },
- { id: 'gpu-4', name: 'RTX 4060 8G', price: 2399, history: [] },
- ],
- ram: [
- { id: 'ram-1', name: '芝奇 DDR5 32G', price: 699, history: [] },
- { id: 'ram-2', name: '海力士 DDR5 16G', price: 349, history: [] },
- { id: 'ram-3', name: '金士顿 DDR4 32G', price: 399, history: [] },
- ],
- ssd: [
- { id: 'ssd-1', name: '三星 990 Pro 2T', price: 1199, history: [] },
- { id: 'ssd-2', name: '西数 SN850X 1T', price: 699, history: [] },
- { id: 'ssd-3', name: '致态 TiPlus7100 2T', price: 599, history: [] },
- ],
- mb: [
- { id: 'mb-1', name: 'ROG Z790 APEX', price: 3499, history: [] },
- { id: 'mb-2', name: '微星 MAG X670E', price: 1999, history: [] },
- { id: 'mb-3', name: '华硕 B660M-K', price: 799, history: [] },
- ],
- cool: [
- { id: 'cool-1', name: '猫头鹰 NH-D15', price: 699, history: [] },
- { id: 'cool-2', name: '海盗船 H150i Elite', price: 999, history: [] },
- { id: 'cool-3', name: '利民 FC140', price: 349, history: [] },
- ],
- },
- };
-}
-
 /** 组装客户端响应格式 */
 function buildResponse(data, itemId) {
- // 单商品历史查询
  if (itemId) {
  for (const items of Object.values(data.categories)) {
  const found = items.find(i => i.id === itemId);
@@ -81,40 +108,41 @@ function buildResponse(data, itemId) {
  id: found.id,
  name: found.name,
  currentPrice: found.price,
- history: found.history.slice(-100), // 最近100条
+ history: found.history.slice(-100),
  };
  }
  }
  return null;
  }
 
- // 全量数据，精简历史（最近30条）
  const result = { lastUpdated: data.lastUpdated, categories: {} };
  for (const [cat, items] of Object.entries(data.categories)) {
  result.categories[cat] = items.map(item => ({
  id: item.id,
  name: item.name,
  price: item.price,
- // 用于前端折线图的 trend 数组
  trend: (item.history || []).slice(-30).map(h => ({
  time: h.time,
  price: h.price,
  })),
- historyLow: Math.min(...(item.history.map(h => h.price)), item.price),
- historyHigh: Math.max(...(item.history.map(h => h.price)), item.price),
+ historyLow: item.history && item.history.length > 0 
+ ? Math.min(...item.history.map(h => h.price)) 
+ : item.price,
+ historyHigh: item.history && item.history.length > 0 
+ ? Math.max(...item.history.map(h => h.price)) 
+ : item.price,
  }));
  }
  return result;
 }
 
 module.exports = async (req, res) => {
- // ── CORS ────────────────────────────────────────────────
  res.setHeader('Access-Control-Allow-Origin', '*');
  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
  if (req.method === 'OPTIONS') return res.status(200).end();
 
- // ── GET: 返回价格数据 ────────────────────────────────────
+ // GET 请求
  if (req.method === 'GET') {
  const { id } = req.query;
  const data = readHistory();
@@ -128,8 +156,49 @@ module.exports = async (req, res) => {
  return res.status(200).json(payload);
  }
 
- // ── POST: 爬虫写入新价格 ─────────────────────────────────
+ // POST 请求 - 检查是否是触发器请求
  if (req.method === 'POST') {
+ const url = req.url || '';
+ 
+ // 触发 GitHub Actions
+ if (url.includes('trigger')) {
+ const githubToken = process.env.GITHUB_TOKEN;
+ 
+ if (!githubToken) {
+ return res.status(500).json({ error: 'GitHub Token 未配置' });
+ }
+
+ try {
+ const response = await fetch(
+ `https://api.github.com/repos/${GITHUB_REPO}/actions/workflows/${WORKFLOW_ID}/dispatches`,
+ {
+ method: 'POST',
+ headers: {
+ 'Authorization': `Bearer ${githubToken}`,
+ 'Accept': 'application/vnd.github.v3+json',
+ 'Content-Type': 'application/json',
+ },
+ body: JSON.stringify({
+ ref: 'main'
+ })
+ }
+ );
+
+ if (response.status === 204 || response.status === 200) {
+ return res.status(200).json({ 
+ success: true, 
+ message: 'GitHub Actions 已触发，请等待几分钟后刷新查看最新价格'
+ });
+ } else {
+ const error = await response.text();
+ return res.status(response.status).json({ error: '触发失败', details: error });
+ }
+ } catch (e) {
+ return res.status(500).json({ error: e.message });
+ }
+ }
+
+ // 爬虫写入新价格
  const secret = req.headers['authorization'];
  if (!secret || secret !== `Bearer ${process.env.SCRAPER_SECRET}`) {
  return res.status(401).json({ error: '未授权' });
@@ -158,10 +227,8 @@ module.exports = async (req, res) => {
  const newPrice = Number(incoming.price);
  if (isNaN(newPrice) || newPrice <= 0) return;
 
- // 仅当价格有变化时记录历史
  if (local.price !== newPrice) {
  local.history.push({ time: now, price: newPrice, source: incoming.source || 'unknown' });
- // 保留最近 500 条历史
  if (local.history.length > 500) local.history.shift();
  }
  local.price = newPrice;

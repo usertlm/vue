@@ -1,55 +1,55 @@
 {
- "lastUpdated": "2026-03-31T12:00:00Z",
+ "lastUpdated": "2026-03-31T12:30:00Z",
  "categories": {
  "cpu": [
- { "id": "cpu-1", "name": "Intel Core Ultra 9 285K", "price": 5499, "history": [] },
- { "id": "cpu-2", "name": "Intel Core Ultra 7 265K", "price": 3699, "history": [] },
- { "id": "cpu-3", "name": "Intel Core Ultra 5 245K", "price": 2499, "history": [] },
- { "id": "cpu-4", "name": "AMD Ryzen 9 9950X", "price": 4999, "history": [] },
- { "id": "cpu-5", "name": "AMD Ryzen 9 9900X", "price": 3699, "history": [] },
- { "id": "cpu-6", "name": "AMD Ryzen 7 9700X", "price": 2599, "history": [] },
- { "id": "cpu-7", "name": "AMD Ryzen 5 9600X", "price": 1899, "history": [] },
- { "id": "cpu-8", "name": "AMD Ryzen 7 9800X3D", "price": 4199, "history": [] }
+ { "id": "cpu-1", "name": "Intel Core Ultra 9 285K", "price": 3949, "history": [] },
+ { "id": "cpu-2", "name": "Intel Core Ultra 7 265K", "price": 2799, "history": [] },
+ { "id": "cpu-3", "name": "Intel Core Ultra 5 245K", "price": 1899, "history": [] },
+ { "id": "cpu-4", "name": "AMD Ryzen 9 9950X", "price": 4499, "history": [] },
+ { "id": "cpu-5", "name": "AMD Ryzen 9 9900X", "price": 3299, "history": [] },
+ { "id": "cpu-6", "name": "AMD Ryzen 7 9700X", "price": 2299, "history": [] },
+ { "id": "cpu-7", "name": "AMD Ryzen 5 9600X", "price": 1599, "history": [] },
+ { "id": "cpu-8", "name": "AMD Ryzen 7 9800X3D", "price": 3799, "history": [] }
  ],
  "gpu": [
- { "id": "gpu-1", "name": "NVIDIA RTX 5090", "price": 29999, "history": [] },
- { "id": "gpu-2", "name": "NVIDIA RTX 5080", "price": 11999, "history": [] },
- { "id": "gpu-3", "name": "NVIDIA RTX 5070 Ti", "price": 7999, "history": [] },
- { "id": "gpu-4", "name": "NVIDIA RTX 5070", "price": 6299, "history": [] },
- { "id": "gpu-5", "name": "AMD RX 9070 XT", "price": 6999, "history": [] },
- { "id": "gpu-6", "name": "AMD RX 9070", "price": 4999, "history": [] },
- { "id": "gpu-7", "name": "NVIDIA RTX 4090 D", "price": 18999, "history": [] },
- { "id": "gpu-8", "name": "AMD RX 7900 XTX", "price": 8999, "history": [] }
+ { "id": "gpu-1", "name": "NVIDIA RTX 5090 D", "price": 16499, "history": [] },
+ { "id": "gpu-2", "name": "NVIDIA RTX 5080", "price": 8299, "history": [] },
+ { "id": "gpu-3", "name": "NVIDIA RTX 5070 Ti", "price": 6299, "history": [] },
+ { "id": "gpu-4", "name": "NVIDIA RTX 5070", "price": 4499, "history": [] },
+ { "id": "gpu-5", "name": "AMD RX 9070 XT", "price": 4999, "history": [] },
+ { "id": "gpu-6", "name": "AMD RX 9070", "price": 3899, "history": [] },
+ { "id": "gpu-7", "name": "NVIDIA RTX 4090 D", "price": 13999, "history": [] },
+ { "id": "gpu-8", "name": "AMD RX 7900 XTX", "price": 6499, "history": [] }
  ],
  "ram": [
- { "id": "ram-1", "name": "DDR5 32GB (2x16GB) 6000MHz", "price": 799, "history": [] },
- { "id": "ram-2", "name": "DDR5 64GB (2x32GB) 6000MHz", "price": 1599, "history": [] },
- { "id": "ram-3", "name": "DDR5 128GB (4x32GB) 6000MHz", "price": 2999, "history": [] },
- { "id": "ram-4", "name": "DDR4 32GB (2x16GB) 3200MHz", "price": 459, "history": [] },
- { "id": "ram-5", "name": "DDR5 96GB (2x48GB) 6400MHz", "price": 2199, "history": [] }
+ { "id": "ram-1", "name": "DDR5 32GB (2x16GB) 6000MHz", "price": 699, "history": [] },
+ { "id": "ram-2", "name": "DDR5 64GB (2x32GB) 6000MHz", "price": 1399, "history": [] },
+ { "id": "ram-3", "name": "DDR5 128GB (4x32GB) 6000MHz", "price": 2599, "history": [] },
+ { "id": "ram-4", "name": "DDR4 32GB (2x16GB) 3200MHz", "price": 359, "history": [] },
+ { "id": "ram-5", "name": "DDR5 96GB (2x48GB) 6400MHz", "price": 1899, "history": [] }
  ],
  "ssd": [
- { "id": "ssd-1", "name": "三星 990 Pro 2TB", "price": 1499, "history": [] },
- { "id": "ssd-2", "name": "三星 990 Pro 4TB", "price": 2599, "history": [] },
- { "id": "ssd-3", "name": "WD Black SN850X 2TB", "price": 1399, "history": [] },
- { "id": "ssd-4", "name": "致态 TiPlus7100 2TB", "price": 899, "history": [] },
- { "id": "ssd-5", "name": "海力士 P41 2TB", "price": 1199, "history": [] },
- { "id": "ssd-6", "name": "三星 9100 Pro 2TB", "price": 1799, "history": [] }
+ { "id": "ssd-1", "name": "三星 990 Pro 2TB", "price": 1299, "history": [] },
+ { "id": "ssd-2", "name": "三星 990 Pro 4TB", "price": 2299, "history": [] },
+ { "id": "ssd-3", "name": "WD Black SN850X 2TB", "price": 1099, "history": [] },
+ { "id": "ssd-4", "name": "致态 TiPlus7100 2TB", "price": 799, "history": [] },
+ { "id": "ssd-5", "name": "海力士 P41 2TB", "price": 999, "history": [] },
+ { "id": "ssd-6", "name": "三星 9100 Pro 2TB", "price": 1499, "history": [] }
  ],
  "mb": [
- { "id": "mb-1", "name": "ROG MAXIMUS Z890 APEX", "price": 7999, "history": [] },
- { "id": "mb-2", "name": "ROG STRIX Z890-E", "price": 4599, "history": [] },
- { "id": "mb-3", "name": "MSI MEG Z890 ACE", "price": 6299, "history": [] },
- { "id": "mb-4", "name": "ROG CROSSHAIR X870E HERO", "price": 5699, "history": [] },
- { "id": "mb-5", "name": "MSI MAG X870 TOMAHAWK", "price": 2299, "history": [] },
- { "id": "mb-6", "name": "华硕 B850M-K", "price": 999, "history": [] }
+ { "id": "mb-1", "name": "ROG MAXIMUS Z890 APEX", "price": 6999, "history": [] },
+ { "id": "mb-2", "name": "ROG STRIX Z890-E", "price": 3999, "history": [] },
+ { "id": "mb-3", "name": "MSI MEG Z890 ACE", "price": 5499, "history": [] },
+ { "id": "mb-4", "name": "ROG CROSSHAIR X870E HERO", "price": 4999, "history": [] },
+ { "id": "mb-5", "name": "MSI MAG X870 TOMAHAWK", "price": 1999, "history": [] },
+ { "id": "mb-6", "name": "华硕 B850M-K", "price": 799, "history": [] }
  ],
  "cool": [
- { "id": "cool-1", "name": "猫头鹰 NH-D15", "price": 899, "history": [] },
- { "id": "cool-2", "name": "猫头鹰 NH-U12A", "price": 799, "history": [] },
- { "id": "cool-3", "name": "利民 FC140", "price": 459, "history": [] },
- { "id": "cool-4", "name": "海盗船 H150i Elite", "price": 1399, "history": [] },
- { "id": "cool-5", "name": "华硕 龙神3代 360", "price": 1899, "history": [] }
+ { "id": "cool-1", "name": "猫头鹰 NH-D15", "price": 799, "history": [] },
+ { "id": "cool-2", "name": "猫头鹰 NH-U12A", "price": 699, "history": [] },
+ { "id": "cool-3", "name": "利民 FC140", "price": 369, "history": [] },
+ { "id": "cool-4", "name": "海盗船 H150i Elite", "price": 1199, "history": [] },
+ { "id": "cool-5", "name": "华硕 龙神3代 360", "price": 1699, "history": [] }
  ]
  }
 }

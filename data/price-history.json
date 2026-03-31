@@ -4,215 +4,241 @@
  "cpu": [
  {
  "id": "cpu-1",
- "name": "Intel i9-14900K",
- "price": 3899,
- "history": [
- { "time": "2024-05-01T00:00:00Z", "price": 4299, "source": "init" },
- { "time": "2024-06-01T00:00:00Z", "price": 4099, "source": "init" },
- { "time": "2024-07-01T00:00:00Z", "price": 3999, "source": "init" },
- { "time": "2024-08-01T00:00:00Z", "price": 3899, "source": "init" }
- ]
+ "name": "Intel Core Ultra 9 285K",
+ "price": 4999,
+ "history": []
  },
  {
  "id": "cpu-2",
- "name": "AMD Ryzen 9 7950X",
- "price": 4199,
- "history": [
- { "time": "2024-05-01T00:00:00Z", "price": 4599, "source": "init" },
- { "time": "2024-06-01T00:00:00Z", "price": 4399, "source": "init" },
- { "time": "2024-07-01T00:00:00Z", "price": 4299, "source": "init" },
- { "time": "2024-08-01T00:00:00Z", "price": 4199, "source": "init" }
- ]
+ "name": "Intel Core Ultra 7 265K",
+ "price": 3299,
+ "history": []
  },
  {
  "id": "cpu-3",
- "name": "Intel i5-14600K",
- "price": 1899,
- "history": [
- { "time": "2024-05-01T00:00:00Z", "price": 2199, "source": "init" },
- { "time": "2024-06-01T00:00:00Z", "price": 2099, "source": "init" },
- { "time": "2024-07-01T00:00:00Z", "price": 1999, "source": "init" },
- { "time": "2024-08-01T00:00:00Z", "price": 1899, "source": "init" }
- ]
+ "name": "Intel Core Ultra 5 245K",
+ "price": 2299,
+ "history": []
  },
  {
  "id": "cpu-4",
- "name": "AMD Ryzen 5 7600X",
- "price": 1599,
- "history": [
- { "time": "2024-05-01T00:00:00Z", "price": 1899, "source": "init" },
- { "time": "2024-06-01T00:00:00Z", "price": 1799, "source": "init" },
- { "time": "2024-07-01T00:00:00Z", "price": 1699, "source": "init" },
- { "time": "2024-08-01T00:00:00Z", "price": 1599, "source": "init" }
- ]
+ "name": "AMD Ryzen 9 9950X",
+ "price": 4499,
+ "history": []
+ },
+ {
+ "id": "cpu-5",
+ "name": "AMD Ryzen 9 9900X",
+ "price": 3299,
+ "history": []
+ },
+ {
+ "id": "cpu-6",
+ "name": "AMD Ryzen 7 9700X",
+ "price": 2299,
+ "history": []
+ },
+ {
+ "id": "cpu-7",
+ "name": "AMD Ryzen 5 9600X",
+ "price": 1699,
+ "history": []
+ },
+ {
+ "id": "cpu-8",
+ "name": "AMD Ryzen 7 9800X3D",
+ "price": 3799,
+ "history": []
  }
  ],
  "gpu": [
  {
  "id": "gpu-1",
- "name": "RTX 4090 24G",
- "price": 13999,
- "history": [
- { "time": "2024-05-01T00:00:00Z", "price": 16999, "source": "init" },
- { "time": "2024-06-01T00:00:00Z", "price": 15999, "source": "init" },
- { "time": "2024-07-01T00:00:00Z", "price": 14999, "source": "init" },
- { "time": "2024-08-01T00:00:00Z", "price": 13999, "source": "init" }
- ]
+ "name": "NVIDIA RTX 5090",
+ "price": 19999,
+ "history": []
  },
  {
  "id": "gpu-2",
- "name": "RX 7900 XTX",
- "price": 6499,
- "history": [
- { "time": "2024-05-01T00:00:00Z", "price": 7499, "source": "init" },
- { "time": "2024-06-01T00:00:00Z", "price": 7199, "source": "init" },
- { "time": "2024-07-01T00:00:00Z", "price": 6799, "source": "init" },
- { "time": "2024-08-01T00:00:00Z", "price": 6499, "source": "init" }
- ]
+ "name": "NVIDIA RTX 5080",
+ "price": 9999,
+ "history": []
  },
  {
  "id": "gpu-3",
- "name": "RTX 4070 Ti",
- "price": 5699,
- "history": [
- { "time": "2024-05-01T00:00:00Z", "price": 6299, "source": "init" },
- { "time": "2024-06-01T00:00:00Z", "price": 6099, "source": "init" },
- { "time": "2024-07-01T00:00:00Z", "price": 5899, "source": "init" },
- { "time": "2024-08-01T00:00:00Z", "price": 5699, "source": "init" }
- ]
+ "name": "NVIDIA RTX 5070 Ti",
+ "price": 6999,
+ "history": []
  },
  {
  "id": "gpu-4",
- "name": "RTX 4060 8G",
- "price": 2399,
- "history": [
- { "time": "2024-05-01T00:00:00Z", "price": 2799, "source": "init" },
- { "time": "2024-06-01T00:00:00Z", "price": 2699, "source": "init" },
- { "time": "2024-07-01T00:00:00Z", "price": 2599, "source": "init" },
- { "time": "2024-08-01T00:00:00Z", "price": 2399, "source": "init" }
- ]
+ "name": "NVIDIA RTX 5070",
+ "price": 5499,
+ "history": []
+ },
+ {
+ "id": "gpu-5",
+ "name": "AMD RX 9070 XT",
+ "price": 5999,
+ "history": []
+ },
+ {
+ "id": "gpu-6",
+ "name": "AMD RX 9070",
+ "price": 4499,
+ "history": []
+ },
+ {
+ "id": "gpu-7",
+ "name": "NVIDIA RTX 4090 D",
+ "price": 15999,
+ "history": []
+ },
+ {
+ "id": "gpu-8",
+ "name": "AMD RX 7900 XTX",
+ "price": 7999,
+ "history": []
  }
  ],
  "ram": [
  {
  "id": "ram-1",
- "name": "芝奇 DDR5 32G",
+ "name": "DDR5 32GB (2x16GB) 6000MHz",
  "price": 699,
- "history": [
- { "time": "2024-05-01T00:00:00Z", "price": 899, "source": "init" },
- { "time": "2024-06-01T00:00:00Z", "price": 799, "source": "init" },
- { "time": "2024-08-01T00:00:00Z", "price": 699, "source": "init" }
- ]
+ "history": []
  },
  {
  "id": "ram-2",
- "name": "海力士 DDR5 16G",
- "price": 349,
- "history": [
- { "time": "2024-05-01T00:00:00Z", "price": 449, "source": "init" },
- { "time": "2024-06-01T00:00:00Z", "price": 399, "source": "init" },
- { "time": "2024-08-01T00:00:00Z", "price": 349, "source": "init" }
- ]
+ "name": "DDR5 64GB (2x32GB) 6000MHz",
+ "price": 1399,
+ "history": []
  },
  {
  "id": "ram-3",
- "name": "金士顿 DDR4 32G",
+ "name": "DDR5 128GB (4x32GB) 6000MHz",
+ "price": 2799,
+ "history": []
+ },
+ {
+ "id": "ram-4",
+ "name": "DDR4 32GB (2x16GB) 3200MHz",
  "price": 399,
- "history": [
- { "time": "2024-05-01T00:00:00Z", "price": 499, "source": "init" },
- { "time": "2024-06-01T00:00:00Z", "price": 449, "source": "init" },
- { "time": "2024-08-01T00:00:00Z", "price": 399, "source": "init" }
- ]
+ "history": []
+ },
+ {
+ "id": "ram-5",
+ "name": "DDR5 96GB (2x48GB) 6400MHz",
+ "price": 1899,
+ "history": []
  }
  ],
  "ssd": [
  {
  "id": "ssd-1",
- "name": "三星 990 Pro 2T",
- "price": 1199,
- "history": [
- { "time": "2024-05-01T00:00:00Z", "price": 1499, "source": "init" },
- { "time": "2024-06-01T00:00:00Z", "price": 1399, "source": "init" },
- { "time": "2024-08-01T00:00:00Z", "price": 1199, "source": "init" }
- ]
+ "name": "三星 990 Pro 2TB",
+ "price": 1299,
+ "history": []
  },
  {
  "id": "ssd-2",
- "name": "西数 SN850X 1T",
- "price": 699,
- "history": [
- { "time": "2024-05-01T00:00:00Z", "price": 899, "source": "init" },
- { "time": "2024-06-01T00:00:00Z", "price": 799, "source": "init" },
- { "time": "2024-08-01T00:00:00Z", "price": 699, "source": "init" }
- ]
+ "name": "三星 990 Pro 4TB",
+ "price": 2299,
+ "history": []
  },
  {
  "id": "ssd-3",
- "name": "致态 TiPlus7100 2T",
- "price": 599,
- "history": [
- { "time": "2024-05-01T00:00:00Z", "price": 799, "source": "init" },
- { "time": "2024-06-01T00:00:00Z", "price": 699, "source": "init" },
- { "time": "2024-08-01T00:00:00Z", "price": 599, "source": "init" }
- ]
+ "name": "WD Black SN850X 2TB",
+ "price": 1199,
+ "history": []
+ },
+ {
+ "id": "ssd-4",
+ "name": "致态 TiPlus7100 2TB",
+ "price": 799,
+ "history": []
+ },
+ {
+ "id": "ssd-5",
+ "name": "海力士 P41 2TB",
+ "price": 1099,
+ "history": []
+ },
+ {
+ "id": "ssd-6",
+ "name": "三星 9100 Pro 2TB",
+ "price": 1599,
+ "history": []
  }
  ],
  "mb": [
  {
  "id": "mb-1",
- "name": "ROG Z790 APEX",
- "price": 3499,
- "history": [
- { "time": "2024-05-01T00:00:00Z", "price": 3999, "source": "init" },
- { "time": "2024-08-01T00:00:00Z", "price": 3499, "source": "init" }
- ]
+ "name": "ROG MAXIMUS Z890 APEX",
+ "price": 6999,
+ "history": []
  },
  {
  "id": "mb-2",
- "name": "微星 MAG X670E",
- "price": 1999,
- "history": [
- { "time": "2024-05-01T00:00:00Z", "price": 2399, "source": "init" },
- { "time": "2024-08-01T00:00:00Z", "price": 1999, "source": "init" }
- ]
+ "name": "ROG STRIX Z890-E",
+ "price": 3999,
+ "history": []
  },
  {
  "id": "mb-3",
- "name": "华硕 B660M-K",
- "price": 799,
- "history": [
- { "time": "2024-05-01T00:00:00Z", "price": 999, "source": "init" },
- { "time": "2024-08-01T00:00:00Z", "price": 799, "source": "init" }
- ]
+ "name": "MSI MEG Z890 ACE",
+ "price": 5499,
+ "history": []
+ },
+ {
+ "id": "mb-4",
+ "name": "ROG CROSSHAIR X870E HERO",
+ "price": 4999,
+ "history": []
+ },
+ {
+ "id": "mb-5",
+ "name": "MSI MAG X870 TOMAHAWK",
+ "price": 1999,
+ "history": []
+ },
+ {
+ "id": "mb-6",
+ "name": "华硕 B850M-K",
+ "price": 899,
+ "history": []
  }
  ],
  "cool": [
  {
  "id": "cool-1",
  "name": "猫头鹰 NH-D15",
- "price": 699,
- "history": [
- { "time": "2024-05-01T00:00:00Z", "price": 799, "source": "init" },
- { "time": "2024-08-01T00:00:00Z", "price": 699, "source": "init" }
- ]
+ "price": 799,
+ "history": []
  },
  {
  "id": "cool-2",
- "name": "海盗船 H150i Elite",
- "price": 999,
- "history": [
- { "time": "2024-05-01T00:00:00Z", "price": 1199, "source": "init" },
- { "time": "2024-08-01T00:00:00Z", "price": 999, "source": "init" }
- ]
+ "name": "猫头鹰 NH-U12A",
+ "price": 699,
+ "history": []
  },
  {
  "id": "cool-3",
  "name": "利民 FC140",
- "price": 349,
- "history": [
- { "time": "2024-05-01T00:00:00Z", "price": 449, "source": "init" },
- { "time": "2024-08-01T00:00:00Z", "price": 349, "source": "init" }
- ]
+ "price": 399,
+ "history": []
+ },
+ {
+ "id": "cool-4",
+ "name": "海盗船 H150i Elite",
+ "price": 1199,
+ "history": []
+ },
+ {
+ "id": "cool-5",
+ "name": "华硕 龙神3代 360",
+ "price": 1699,
+ "history": []
  }
  ]
  }

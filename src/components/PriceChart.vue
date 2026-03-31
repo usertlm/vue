@@ -1,24 +1,23 @@
 <template>
   <div class="price-tracker">
-    <h3>💻 电脑配件价格趋势</h3>
+    <h3>🎮 电脑配件价格趋势 📊</h3>
     
     <!-- Search Bar -->
     <div class="search-bar">
       <input
         v-model="searchQuery"
         type="text"
-        placeholder="搜索配件型号..."
+        placeholder="🔍 搜索配件型号..."
         class="search-input"
       />
-      <button @click="searchProducts" class="search-btn">🔍</button>
+      <button @click="searchProducts" class="search-btn">搜索</button>
     </div>
 
     <!-- Search Results -->
     <div v-if="searchResults.length > 0" class="search-results">
-      <h4>搜索结果</h4>
       <div class="result-item" v-for="item in searchResults" :key="item.id" @click="selectSearchResult(item)">
         <span class="result-name">{{ item.name }}</span>
-        <span class="result-price">¥{{ item.price }}</span>
+        <span class="result-price">💰 ¥{{ item.price }}</span>
       </div>
     </div>
 
@@ -37,44 +36,55 @@
     <!-- Product Select -->
     <div class="product-select">
       <select v-model="selectedProduct" @change="loadProductData">
-        <option value="">选择配件型号...</option>
+        <option value="">📦 选择配件型号...</option>
         <option v-for="p in currentProducts" :key="p.id" :value="p.id">
-          {{ p.name }} - ¥{{ p.price }}
+          {{ p.name }} - 💵 ¥{{ p.price }}
         </option>
       </select>
     </div>
 
     <!-- Price Chart -->
     <div class="chart-container" v-if="selectedProduct && chartData.datasets && chartData.datasets.length">
-      <PriceLineChart :data="chartData" :options="chartOptions" />
+      <div class="chart-header">
+        <span class="product-emoji">📈</span>
+        <span class="product-title">{{ currentProductData?.name }}</span>
+      </div>
+      
+      <div class="chart-wrapper">
+        <PriceLineChart :data="chartData" :options="chartOptions" />
+      </div>
       
       <!-- Price Stats -->
       <div class="price-stats">
         <div class="stat current">
-          <span class="label">当前价格</span>
-          <span class="value">¥{{ currentPrice }}</span>
+          <span class="stat-icon">💴</span>
+          <span class="stat-label">当前价格</span>
+          <span class="stat-value">¥{{ currentPrice }}</span>
         </div>
         <div class="stat change" :class="priceChangeClass">
-          <span class="label">相比昨日</span>
-          <span class="value">
-            {{ priceChange >= 0 ? '↑' : '↓' }} 
-            ¥{{ Math.abs(priceChange).toFixed(0) }}
-            ({{ priceChangePercent }}%)
+          <span class="stat-icon">{{ priceChange >= 0 ? '📈' : '📉' }}</span>
+          <span class="stat-label">相比昨日</span>
+          <span class="stat-value">
+            {{ priceChange >= 0 ? '↑' : '↓' }} ¥{{ Math.abs(priceChange).toFixed(0) }} ({{ priceChangePercent }}%)
           </span>
         </div>
         <div class="stat lowest">
-          <span class="label">历史最低</span>
-          <span class="value">¥{{ historyLow }}</span>
+          <span class="stat-icon">🪙</span>
+          <span class="stat-label">历史最低</span>
+          <span class="stat-value">¥{{ historyLow }}</span>
         </div>
         <div class="stat highest">
-          <span class="label">历史最高</span>
-          <span class="value">¥{{ historyHigh }}</span>
+          <span class="stat-icon">💎</span>
+          <span class="stat-label">历史最高</span>
+          <span class="stat-value">¥{{ historyHigh }}</span>
         </div>
       </div>
 
       <!-- Price History Timeline -->
       <div class="history-section" v-if="priceHistory.length > 0">
-        <h4>📅 价格历史</h4>
+        <div class="history-header">
+          <span class="history-title">📅 价格历史</span>
+        </div>
         <div class="history-filter">
           <button 
             v-for="range in timeRanges" 
@@ -87,8 +97,8 @@
         </div>
         <div class="history-list">
           <div v-for="(item, index) in filteredHistory" :key="index" class="history-item">
-            <span class="history-date">{{ formatDate(item.time) }}</span>
-            <span class="history-price">¥{{ item.price }}</span>
+            <span class="history-date">🗓️ {{ formatDate(item.time) }}</span>
+            <span class="history-price">💰 ¥{{ item.price }}</span>
             <span class="history-change" :class="getChangeClass(item)">
               {{ getChangeLabel(item) }}
             </span>
@@ -98,20 +108,23 @@
 
       <!-- Last Update Time -->
       <div class="update-time">
+        <span class="update-icon">⏰</span>
         最后更新: {{ lastUpdateTime }}
         <button @click="refreshData" class="refresh-btn" :disabled="isLoading">
-          {{ isLoading ? '刷新中...' : '🔄 刷新' }}
+          {{ isLoading ? '🔄 更新中...' : '🔄 刷新' }}
         </button>
       </div>
     </div>
 
     <!-- Empty State -->
     <div v-else-if="!selectedProduct && searchResults.length === 0" class="empty-state">
+      <div class="empty-icon">🎯</div>
       <p>👆 选择一个配件型号或搜索查看价格趋势</p>
     </div>
 
     <!-- Loading State -->
     <div v-else-if="isLoading" class="loading-state">
+      <div class="loading-icon">⏳</div>
       <p>加载中...</p>
     </div>
   </div>
@@ -215,15 +228,15 @@ export default {
           {
             label: productName,
             data: trend.map(h => h.price),
-            borderColor: '#42b983',
-            backgroundColor: 'rgba(66, 185, 131, 0.1)',
+            borderColor: '#FF6B6B',
+            backgroundColor: 'rgba(255, 107, 107, 0.2)',
             fill: true,
             tension: 0.4,
-            pointRadius: 3,
-            pointHoverRadius: 6,
-            pointBackgroundColor: '#42b983',
+            pointRadius: 6,
+            pointHoverRadius: 10,
+            pointBackgroundColor: '#FF6B6B',
             pointBorderColor: '#fff',
-            pointBorderWidth: 2
+            pointBorderWidth: 3
           }
         ]
       };
@@ -241,34 +254,36 @@ export default {
             display: false
           },
           tooltip: {
-            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            backgroundColor: 'rgba(255, 107, 107, 0.9)',
             titleColor: '#fff',
             bodyColor: '#fff',
-            padding: 12,
-            borderColor: '#42b983',
-            borderWidth: 1,
+            padding: 15,
+            borderColor: '#FF4757',
+            borderWidth: 2,
             displayColors: false,
             callbacks: {
-              label: (context) => `价格: ¥${context.raw.toFixed(0)}`
+              label: (context) => `💰 价格: ¥${context.raw.toFixed(0)}`
             }
           }
         },
         scales: {
           x: {
             grid: {
-              color: 'rgba(0, 0, 0, 0.05)'
+              color: 'rgba(255, 107, 107, 0.1)'
             },
             ticks: {
               maxRotation: 45,
-              minRotation: 0
+              minRotation: 0,
+              color: '#666'
             }
           },
           y: {
             grid: {
-              color: 'rgba(0, 0, 0, 0.05)'
+              color: 'rgba(255, 107, 107, 0.1)'
             },
             ticks: {
-              callback: (value) => `¥${value}`
+              callback: (value) => `¥${value}`,
+              color: '#666'
             }
           }
         }
@@ -302,7 +317,6 @@ export default {
       this.searchQuery = '';
     },
     selectSearchResult(item) {
-      // Find category for this item
       for (const [catKey, cat] of Object.entries(this.priceData.categories)) {
         const found = cat.find(p => p.id === item.id);
         if (found) {
@@ -365,110 +379,132 @@ export default {
 
 <style scoped>
 .price-tracker {
-  max-width: 800px;
+  max-width: 850px;
   margin: 30px auto;
-  padding: 20px;
-  background: #f9f9f9;
-  border-radius: 12px;
-  border: 1px solid #e0e0e0;
+  padding: 25px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
 }
 
 .price-tracker h3 {
   text-align: center;
-  color: #333;
-  margin-bottom: 20px;
-}
-
-.price-tracker h4 {
-  color: #555;
-  margin: 16px 0 12px;
+  color: #fff;
+  margin-bottom: 25px;
+  font-size: 24px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
 }
 
 .search-bar {
   display: flex;
-  gap: 8px;
-  margin-bottom: 16px;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
 .search-input {
   flex: 1;
-  padding: 10px 16px;
-  border: 2px solid #ddd;
-  border-radius: 8px;
-  font-size: 14px;
+  padding: 14px 20px;
+  border: 3px solid #fff;
+  border-radius: 50px;
+  font-size: 15px;
+  background: #fff;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 .search-input:focus {
   outline: none;
-  border-color: #42b983;
+  border-color: #FFD93D;
 }
 
 .search-btn {
-  padding: 10px 16px;
-  background: #42b983;
+  padding: 14px 28px;
+  background: #FFD93D;
   border: none;
-  border-radius: 8px;
+  border-radius: 50px;
   cursor: pointer;
+  font-weight: bold;
+  color: #333;
+  box-shadow: 0 4px 15px rgba(255, 217, 61, 0.4);
+  transition: all 0.3s;
+}
+
+.search-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 217, 61, 0.5);
 }
 
 .search-results {
   background: #fff;
-  border-radius: 8px;
-  padding: 12px;
-  margin-bottom: 16px;
-  max-height: 200px;
-  overflow-y: auto;
+  border-radius: 16px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
 
 .result-item {
   display: flex;
   justify-content: space-between;
-  padding: 10px;
+  padding: 12px;
   cursor: pointer;
-  border-radius: 6px;
-  margin-bottom: 4px;
+  border-radius: 12px;
+  margin-bottom: 6px;
+  background: #f8f9ff;
+  transition: all 0.2s;
 }
 
 .result-item:hover {
-  background: #f0f9f4;
+  background: #667eea;
+  color: #fff;
+}
+
+.result-item:last-child {
+  margin-bottom: 0;
 }
 
 .result-name {
-  color: #333;
+  font-weight: 500;
 }
 
 .result-price {
-  color: #42b983;
+  color: #FF6B6B;
   font-weight: bold;
+}
+
+.result-item:hover .result-price {
+  color: #FFD93D;
 }
 
 .category-tabs {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
   justify-content: center;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 .tab-btn {
-  padding: 8px 16px;
-  border: 2px solid #ddd;
-  background: #fff;
-  border-radius: 20px;
+  padding: 12px 20px;
+  border: 3px solid transparent;
+  background: rgba(255,255,255,0.9);
+  border-radius: 50px;
   cursor: pointer;
   font-size: 14px;
-  transition: all 0.2s;
+  font-weight: 500;
+  color: #333;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 .tab-btn:hover {
-  border-color: #42b983;
-  background: #f0f9f4;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
 }
 
 .tab-btn.active {
-  border-color: #42b983;
-  background: #42b983;
-  color: white;
+  background: #FFD93D;
+  color: #333;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(255, 217, 61, 0.4);
 }
 
 .product-select {
@@ -477,177 +513,264 @@ export default {
 }
 
 .product-select select {
-  padding: 10px 20px;
-  font-size: 14px;
-  border: 2px solid #ddd;
-  border-radius: 8px;
-  min-width: 250px;
+  padding: 14px 24px;
+  font-size: 15px;
+  border: 3px solid #fff;
+  border-radius: 50px;
+  min-width: 280px;
   cursor: pointer;
+  background: #fff;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 .product-select select:focus {
   outline: none;
-  border-color: #42b983;
+  border-color: #FFD93D;
 }
 
 .chart-container {
   background: #fff;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.15);
 }
 
-.chart-container canvas {
-  max-height: 300px;
+.chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.product-emoji {
+  font-size: 32px;
+}
+
+.product-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+}
+
+.chart-wrapper {
+  height: 280px;
+  margin-bottom: 20px;
+}
+
+.chart-wrapper canvas {
+  max-height: 280px;
 }
 
 .price-stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  margin-top: 20px;
+  gap: 15px;
+  margin-bottom: 20px;
 }
 
 .stat {
   text-align: center;
-  padding: 12px;
-  background: #f5f5f5;
-  border-radius: 8px;
+  padding: 18px 12px;
+  background: linear-gradient(135deg, #f8f9ff 0%, #e8ecff 100%);
+  border-radius: 16px;
+  border: 2px solid #e8ecff;
+  transition: all 0.3s;
 }
 
-.stat .label {
+.stat:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+}
+
+.stat-icon {
+  font-size: 24px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.stat-label {
   display: block;
   font-size: 12px;
   color: #888;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
-.stat .value {
+.stat-value {
   display: block;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
   color: #333;
 }
 
-.stat.change.up .value {
-  color: #e74c3c;
+.stat.change.up .stat-value {
+  color: #FF6B6B;
 }
 
-.stat.change.down .value {
-  color: #27ae60;
+.stat.change.down .stat-value {
+  color: #27AE60;
 }
 
 .history-section {
   margin-top: 20px;
   padding-top: 20px;
-  border-top: 1px solid #eee;
+  border-top: 2px dashed #e8ecff;
+}
+
+.history-header {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.history-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
 }
 
 .history-filter {
   display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 15px;
 }
 
 .range-btn {
-  padding: 6px 12px;
-  border: 1px solid #ddd;
+  padding: 8px 18px;
+  border: 2px solid #667eea;
   background: #fff;
-  border-radius: 6px;
+  border-radius: 50px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 13px;
+  color: #667eea;
+  transition: all 0.3s;
 }
 
 .range-btn.active {
-  background: #42b983;
-  color: white;
-  border-color: #42b983;
+  background: #667eea;
+  color: #fff;
 }
 
 .history-list {
-  max-height: 200px;
+  max-height: 220px;
   overflow-y: auto;
 }
 
 .history-item {
   display: flex;
   justify-content: space-between;
-  padding: 8px;
-  border-bottom: 1px solid #f5f5f5;
-}
-
-.history-item:last-child {
-  border-bottom: none;
+  align-items: center;
+  padding: 12px 15px;
+  background: #f8f9ff;
+  border-radius: 12px;
+  margin-bottom: 8px;
 }
 
 .history-date {
-  color: #888;
+  color: #666;
   font-size: 13px;
 }
 
 .history-price {
   font-weight: bold;
   color: #333;
+  font-size: 15px;
 }
 
 .history-change {
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .history-change.up {
-  color: #e74c3c;
+  color: #FF6B6B;
 }
 
 .history-change.down {
-  color: #27ae60;
+  color: #27AE60;
 }
 
 .update-time {
   text-align: center;
-  margin-top: 16px;
-  font-size: 12px;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 2px dashed #e8ecff;
   color: #888;
+  font-size: 13px;
+}
+
+.update-icon {
+  margin-right: 5px;
 }
 
 .refresh-btn {
-  margin-left: 12px;
-  padding: 6px 12px;
-  background: #42b983;
+  margin-left: 15px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 50px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: bold;
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+  transition: all 0.3s;
 }
 
 .refresh-btn:hover:not(:disabled) {
-  background: #359268;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.5);
 }
 
 .refresh-btn:disabled {
-  background: #a5d6a7;
+  opacity: 0.7;
   cursor: not-allowed;
 }
 
 .empty-state,
 .loading-state {
   text-align: center;
-  padding: 40px;
-  color: #888;
+  padding: 50px;
+  color: #fff;
+}
+
+.empty-icon,
+.loading-icon {
+  font-size: 60px;
+  margin-bottom: 15px;
+}
+
+.empty-state p,
+.loading-state p {
+  font-size: 18px;
 }
 
 @media (max-width: 600px) {
+  .price-tracker {
+    margin: 15px;
+    padding: 20px;
+    border-radius: 20px;
+  }
+  
   .price-stats {
     grid-template-columns: repeat(2, 1fr);
   }
   
   .category-tabs {
-    gap: 6px;
+    gap: 8px;
   }
   
   .tab-btn {
-    padding: 6px 12px;
-    font-size: 12px;
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+  
+  .chart-wrapper {
+    height: 220px;
+  }
+  
+  .chart-wrapper canvas {
+    max-height: 220px;
   }
 }
 </style>

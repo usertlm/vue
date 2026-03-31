@@ -356,27 +356,7 @@ export default {
     },
     async refreshData() {
       this.isLoading = true;
-      try {
-        // 触发 GitHub Actions
-        const response = await fetch('/api/prices/trigger', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
-        
-        if (response.ok) {
-          alert('✅ 已触发价格更新！GitHub Actions 正在运行，请稍后刷新页面查看最新价格。');
-        } else {
-          // 如果触发失败，尝试直接刷新数据
-          await this.loadData();
-          alert('⚠️ 触发失败，已直接刷新数据');
-        }
-      } catch (e) {
-        console.error('Refresh error:', e);
-        // 即使出错也尝试加载数据
-        await this.loadData();
-      }
+      await this.loadData();
       this.isLoading = false;
     }
   }

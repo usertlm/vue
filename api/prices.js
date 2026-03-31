@@ -4,17 +4,12 @@
  * GET /api/prices → 返回所有分类最新价格 + 历史记录
  * GET /api/prices?id=cpu-1 → 返回单个商品历史
  * POST /api/prices → 爬虫写入新价格（需要 SCRAPER_SECRET 验证）
- * POST /api/prices/trigger → 触发 GitHub Actions 手动更新
  */
 
 const fs = require('fs');
 const path = require('path');
 
 const DATA_FILE = path.join(process.cwd(), 'data', 'price-history.json');
-
-// GitHub相关信息
-const GITHUB_REPO = 'usertlm/vue';
-const WORKFLOW_ID = 'price-scraper.yml';
 
 const DATA_FILE_CONTENTS = {
  lastUpdated: new Date().toISOString(),
@@ -142,7 +137,6 @@ module.exports = async (req, res) => {
  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
  if (req.method === 'OPTIONS') return res.status(200).end();
 
- // GET 请求
  if (req.method === 'GET') {
  const { id } = req.query;
  const data = readHistory();
@@ -156,49 +150,7 @@ module.exports = async (req, res) => {
  return res.status(200).json(payload);
  }
 
- // POST 请求 - 检查是否是触发器请求
  if (req.method === 'POST') {
- const url = req.url || '';
- 
- // 触发 GitHub Actions
- if (url.includes('trigger')) {
- const githubToken = process.env.GITHUB_TOKEN;
- 
- if (!githubToken) {
- return res.status(500).json({ error: 'GitHub Token 未配置' });
- }
-
- try {
- const response = await fetch(
- `https://api.github.com/repos/${GITHUB_REPO}/actions/workflows/${WORKFLOW_ID}/dispatches`,
- {
- method: 'POST',
- headers: {
- 'Authorization': `Bearer ${githubToken}`,
- 'Accept': 'application/vnd.github.v3+json',
- 'Content-Type': 'application/json',
- },
- body: JSON.stringify({
- ref: 'main'
- })
- }
- );
-
- if (response.status === 204 || response.status === 200) {
- return res.status(200).json({ 
- success: true, 
- message: 'GitHub Actions 已触发，请等待几分钟后刷新查看最新价格'
- });
- } else {
- const error = await response.text();
- return res.status(response.status).json({ error: '触发失败', details: error });
- }
- } catch (e) {
- return res.status(500).json({ error: e.message });
- }
- }
-
- // 爬虫写入新价格
  const secret = req.headers['authorization'];
  if (!secret || secret !== `Bearer ${process.env.SCRAPER_SECRET}`) {
  return res.status(401).json({ error: '未授权' });

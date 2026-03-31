@@ -11,8 +11,8 @@ name: 💰 电脑配件价格爬虫
 
 on:
   schedule:
-    # 每天早上 8:00 (北京时间) = UTC 00:00
-    - cron: "0 0 * * *"
+    # 每30分钟运行一次
+    - cron: "*/30 * * * *"
 
   # 支持手动触发
   workflow_dispatch:

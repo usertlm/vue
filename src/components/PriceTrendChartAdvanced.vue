@@ -94,43 +94,26 @@ export default {
       lastUpdateTime: '现在',
       timeLabels: [],
       priceData: {},
-      componentsInfo: {
-        'cpu-1': { name: 'Intel Core Ultra 9 285K', color: '#FF6B9D', basePrice: 3949 },
-        'cpu-2': { name: 'Intel Core Ultra 7 265K', color: '#FF85B4', basePrice: 2799 },
-        'cpu-3': { name: 'AMD Ryzen 9 9950X', color: '#FFB3D9', basePrice: 4499 },
-        'cpu-4': { name: 'AMD Ryzen 7 9700X', color: '#FFBE6F', basePrice: 2299 },
-        'gpu-1': { name: 'NVIDIA RTX 5090 D', color: '#00D4FF', basePrice: 16499 },
-        'gpu-2': { name: 'NVIDIA RTX 5080', color: '#00E5FF', basePrice: 8299 },
-        'gpu-3': { name: 'AMD RX 9070 XT', color: '#00F7FF', basePrice: 4999 },
-        'ram-1': { name: 'DDR5 32GB 6000MHz', color: '#4ECDC4', basePrice: 699 },
-        'ram-2': { name: 'DDR5 64GB 6000MHz', color: '#5FD8CC', basePrice: 1399 },
-        'ram-3': { name: 'DDR4 32GB 3200MHz', color: '#70E5D8', basePrice: 359 },
-        'ssd-1': { name: '三星 990 Pro 2TB', color: '#95E1D3', basePrice: 1299 },
-        'ssd-2': { name: 'WD Black SN850X 2TB', color: '#A8E8DC', basePrice: 1099 },
-        'ssd-3': { name: '致态 TiPlus7100 2TB', color: '#BCEFE5', basePrice: 799 },
-        'mb-1': { name: 'ROG STRIX Z890-E', color: '#FFD700', basePrice: 3999 },
-        'mb-2': { name: 'ROG CROSSHAIR X870E', color: '#FFC700', basePrice: 4999 },
-        'cool-1': { name: '猫头鹰 NH-D15', color: '#A8D8FF', basePrice: 799 },
-        'cool-2': { name: '猫头鹰 NH-U12A', color: '#C5E0FF', basePrice: 699 }
-      },
-      originalPrices: {}
+      componentsInfo: {},
+      originalPrices: {},
+      apiUrl: process.env.VUE_APP_API_URL || 'http://localhost:5000'
     };
   },
   watch: {
     selectedIds: {
       handler() {
-        this.initializeData();
-        this.createChart();
-        this.startAutoUpdate();
+        if (this.selectedIds.length > 0) {
+          this.loadDataFromApi();
+        } else {
+          this.stopAutoUpdate();
+        }
       },
       deep: true
     }
   },
   mounted() {
     if (this.selectedIds.length > 0) {
-      this.initializeData();
-      this.createChart();
-      this.startAutoUpdate();
+      this.loadDataFromApi();
     }
   },
   beforeUnmount() {
@@ -140,6 +123,114 @@ export default {
     }
   },
   methods: {
+    /**
+     * 从API加载数据
+     */
+    async loadDataFromApi() {
+      try {
+        // 先加载所有配件信息用于初始化componentsInfo
+        await this.loadAllComponents();
+        // 然后加载选中配件的历史数据
+        await this.loadSelectedComponentsData();
+        this.createChart();
+        this.startAutoUpdate();
+      } catch (error) {
+        console.error('加载数据失败:', error);
+        // 降级到本地mock数据
+        this.initializeData();
+        this.createChart();
+        this.startAutoUpdate();
+      }
+    },
+
+    /**
+     * 从API加载所有配件信息
+     */
+    async loadAllComponents() {
+      try {
+        const response = await fetch(`${this.apiUrl}/api/components`);
+        if (!response.ok) throw new Error('Failed to fetch components');
+
+        const result = await response.json();
+        const components = result.data || [];
+
+        // 构建componentsInfo对象（用于颜色和名称映射）
+        this.componentsInfo = {};
+        const colorPalette = {
+          cpu: ['#FF6B9D', '#FF85B4', '#FFB3D9', '#FFBE6F'],
+          gpu: ['#00D4FF', '#00E5FF', '#00F7FF'],
+          ram: ['#4ECDC4', '#5FD8CC', '#70E5D8'],
+          ssd: ['#95E1D3', '#A8E8DC', '#BCEFE5'],
+          mb: ['#FFD700', '#FFC700', '#FFED4E'],
+          cool: ['#A8D8FF', '#C5E0FF', '#E1EEFF']
+        };
+
+        let categoryIndex = {};
+
+        components.forEach(comp => {
+          const category = comp.category;
+          if (!categoryIndex[category]) categoryIndex[category] = 0;
+
+          const colorArray = colorPalette[category] || ['#00ffe7'];
+          const color = colorArray[categoryIndex[category]++ % colorArray.length];
+
+          this.componentsInfo[comp.id] = {
+            name: comp.name,
+            color: color,
+            basePrice: comp.price
+          };
+        });
+      } catch (error) {
+        console.error('加载配件信息失败:', error);
+      }
+    },
+
+    /**
+     * 加载选中配件的历史数据
+     */
+    async loadSelectedComponentsData() {
+      const now = new Date();
+      this.timeLabels = [];
+
+      // 生成过去30天的日期标签
+      for (let i = 29; i >= 0; i--) {
+        const date = new Date(now);
+        date.setDate(date.getDate() - i);
+        this.timeLabels.push(
+          date.toLocaleDateString('zh-CN', { month: '2-digit', day: '2-digit' })
+        );
+      }
+
+      this.priceData = {};
+      this.originalPrices = {};
+
+      // 并行加载所有选中配件的相关历史数据
+      const promises = this.selectedIds.map(id => this.fetchComponentHistory(id));
+      await Promise.all(promises);
+    },
+
+    /**
+     * 获取单个配件的历史数据
+     */
+    async fetchComponentHistory(componentId) {
+      try {
+        const response = await fetch(`${this.apiUrl}/api/prices/${componentId}`);
+        if (!response.ok) throw new Error(`Failed to fetch ${componentId}`);
+
+        const result = await response.json();
+        const historyData = result.data;
+
+        if (historyData && historyData.history) {
+          // 提取最后30条记录的价格
+          const prices = historyData.history.slice(-30).map(h => h.price);
+          this.priceData[componentId] = prices;
+          this.originalPrices[componentId] = prices[0];
+        }
+      } catch (error) {
+        console.error(`获取 ${componentId} 历史数据失败:`, error);
+      }
+    },
+
     initializeData() {
       // 初始化时间标签 - 过去30天
       const now = new Date();
@@ -332,10 +423,10 @@ export default {
       Object.keys(this.priceData).forEach(key => {
         const arr = this.priceData[key];
         const info = this.componentsInfo[key];
-        
+
         arr.shift();
         const lastPrice = arr[arr.length - 1];
-        
+
         // 基于基础价格的随机波动
         const volatility = info.basePrice * 0.05;
         const newPrice = lastPrice + (Math.random() - 0.5) * volatility;
@@ -347,11 +438,11 @@ export default {
       this.timeLabels.push(
         now.toLocaleDateString('zh-CN', { month: '2-digit', day: '2-digit' })
       );
-      
-      this.lastUpdateTime = now.toLocaleTimeString('zh-CN', { 
-        hour: '2-digit', 
-        minute: '2-digit', 
-        second: '2-digit' 
+
+      this.lastUpdateTime = now.toLocaleTimeString('zh-CN', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
       });
     },
 

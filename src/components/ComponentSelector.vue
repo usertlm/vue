@@ -100,40 +100,10 @@ export default {
         { id: 'mb', name: '主板', emote: '🔌' },
         { id: 'cool', name: '散热器', emote: '❄️' }
       ],
-      // 详细的配件数据（可从API获取）
-      componentsData: {
-        cpu: [
-          { id: 'cpu-1', name: 'Intel Core Ultra 9 285K', price: 3949, trend: -3.2, specs: '24核', emote: '💻', color: '#FF6B9D' },
-          { id: 'cpu-2', name: 'Intel Core Ultra 7 265K', price: 2799, trend: -2.8, specs: '16核', emote: '💻', color: '#FF85B4' },
-          { id: 'cpu-3', name: 'AMD Ryzen 9 9950X', price: 4499, trend: -1.5, specs: '16核', emote: '💻', color: '#FFB3D9' },
-          { id: 'cpu-4', name: 'AMD Ryzen 7 9700X', price: 2299, trend: -4.1, specs: '12核', emote: '💻', color: '#FFBE6F' }
-        ],
-        gpu: [
-          { id: 'gpu-1', name: 'NVIDIA RTX 5090 D', price: 16499, trend: 2.1, specs: '32GB GDDR7', emote: '🎮', color: '#00D4FF' },
-          { id: 'gpu-2', name: 'NVIDIA RTX 5080', price: 8299, trend: 1.3, specs: '16GB', emote: '🎮', color: '#00E5FF' },
-          { id: 'gpu-3', name: 'AMD RX 9070 XT', price: 4999, trend: -2.0, specs: '16GB GDDR6', emote: '🎮', color: '#00F7FF' }
-        ],
-        ram: [
-          { id: 'ram-1', name: 'DDR5 32GB 6000MHz', price: 699, trend: -5.3, specs: '2x16GB Kit', emote: '🧠', color: '#4ECDC4' },
-          { id: 'ram-2', name: 'DDR5 64GB 6000MHz', price: 1399, trend: -3.8, specs: '2x32GB Kit', emote: '🧠', color: '#5FD8CC' },
-          { id: 'ram-3', name: 'DDR4 32GB 3200MHz', price: 359, trend: -6.2, specs: '2x16GB Kit', emote: '🧠', color: '#70E5D8' }
-        ],
-        ssd: [
-          { id: 'ssd-1', name: '三星 990 Pro 2TB', price: 1299, trend: -2.4, specs: 'PCIe 4.0', emote: '💾', color: '#95E1D3' },
-          { id: 'ssd-2', name: 'WD Black SN850X 2TB', price: 1099, trend: -1.9, specs: 'PCIe 4.0', emote: '💾', color: '#A8E8DC' },
-          { id: 'ssd-3', name: '致态 TiPlus7100 2TB', price: 799, trend: -3.5, specs: 'PCIe 4.0', emote: '💾', color: '#BCEFE5' }
-        ],
-        mb: [
-          { id: 'mb-1', name: 'ROG STRIX Z890-E', price: 3999, trend: 0.5, specs: 'Intel Z890', emote: '🔌', color: '#FFD700' },
-          { id: 'mb-2', name: 'ROG CROSSHAIR X870E', price: 4999, trend: 1.2, specs: 'AMD X870E', emote: '🔌', color: '#FFC700' },
-          { id: 'mb-3', name: '华硕 B850M-K', price: 799, trend: -1.8, specs: 'AMD B850M', emote: '🔌', color: '#FFED4E' }
-        ],
-        cool: [
-          { id: 'cool-1', name: '猫头鹰 NH-D15', price: 799, trend: -0.3, specs: '双塔风冷', emote: '❄️', color: '#A8D8FF' },
-          { id: 'cool-2', name: '猫头鹰 NH-U12A', price: 699, trend: 0.8, specs: '单塔风冷', emote: '❄️', color: '#C5E0FF' },
-          { id: 'cool-3', name: '海盗船 H150i Elite', price: 1299, trend: -1.5, specs: '360mm一体', emote: '❄️', color: '#E1EEFF' }
-        ]
-      }
+      componentsData: {},
+      apiUrl: process.env.VUE_APP_API_URL || 'http://localhost:5000',
+      loading: false,
+      error: null
     };
   },
   computed: {
@@ -141,7 +111,110 @@ export default {
       return this.componentsData[this.selectedCategory] || [];
     }
   },
+  mounted() {
+    this.loadComponents();
+  },
   methods: {
+    /**
+     * 从API加载所有配件数据
+     */
+    async loadComponents() {
+      try {
+        this.loading = true;
+        this.error = null;
+
+        const response = await fetch(`${this.apiUrl}/api/components`);
+        if (!response.ok) throw new Error('Failed to fetch components');
+
+        const result = await response.json();
+        const components = result.data || [];
+
+        // 按分类组织配件数据
+        this.componentsData = {
+          cpu: [],
+          gpu: [],
+          ram: [],
+          ssd: [],
+          mb: [],
+          cool: []
+        };
+
+        const colorPalette = {
+          cpu: ['#FF6B9D', '#FF85B4', '#FFB3D9', '#FFBE6F'],
+          gpu: ['#00D4FF', '#00E5FF', '#00F7FF'],
+          ram: ['#4ECDC4', '#5FD8CC', '#70E5D8'],
+          ssd: ['#95E1D3', '#A8E8DC', '#BCEFE5'],
+          mb: ['#FFD700', '#FFC700', '#FFED4E'],
+          cool: ['#A8D8FF', '#C5E0FF', '#E1EEFF']
+        };
+
+        let categoryIndex = {};
+
+        components.forEach(comp => {
+          const category = comp.category;
+
+          if (!categoryIndex[category]) {
+            categoryIndex[category] = 0;
+          }
+
+          if (!this.componentsData[category]) {
+            this.componentsData[category] = [];
+          }
+
+          const colorArray = colorPalette[category] || ['#00ffe7'];
+          const color = colorArray[categoryIndex[category]++ % colorArray.length];
+
+          this.componentsData[category].push({
+            id: comp.id,
+            name: comp.name,
+            price: comp.price,
+            trend: comp.trend || 0,
+            specs: this.getSpecsFromCategory(category, comp.name),
+            emote: this.getEmojiFromCategory(category),
+            color: color
+          });
+        });
+
+        this.loading = false;
+      } catch (error) {
+        console.error('Error loading components:', error);
+        this.error = '加载配件数据失败，请稍后重试';
+        this.loading = false;
+        // 可以在这里添加降级逻辑使用本地mock数据
+      }
+    },
+
+    /**
+     * 根据分类获取规格信息
+     */
+    getSpecsFromCategory(category, name) {
+      // 根据产品名称提取规格信息
+      const specMap = {
+        cpu: name.includes('285K') ? '24核' : name.includes('265K') ? '16核' : name.includes('9950X') ? '16核' : '12核',
+        gpu: name.includes('5090') ? '32GB' : name.includes('5080') ? '16GB' : '16GB',
+        ram: name.includes('64GB') ? '2x32GB' : '2x16GB',
+        ssd: 'PCIe 4.0',
+        mb: '',
+        cool: name.includes('NH-D15') ? '双塔风冷' : name.includes('H150i') ? '360mm一体' : '单塔风冷'
+      };
+      return specMap[category] || '';
+    },
+
+    /**
+     * 根据分类获取emoji
+     */
+    getEmojiFromCategory(category) {
+      const emojiMap = {
+        cpu: '💻',
+        gpu: '🎮',
+        ram: '🧠',
+        ssd: '💾',
+        mb: '🔌',
+        cool: '❄️'
+      };
+      return emojiMap[category] || '📦';
+    },
+
     toggleComponent(id) {
       const index = this.selectedComponents.indexOf(id);
       if (index > -1) {

@@ -11,8 +11,8 @@
     <!-- AI Chat Box -->
     <ChatBox />
 
-    <!-- Price Tracker Chart -->
-    <PriceChart />
+    <!-- 电脑配件价格趋势 -->
+    <PriceTrendChart />
 
     <!-- Google AdSense -->
     <AdSense />
@@ -58,14 +58,14 @@
 <script>
 import AdSense from './AdSense.vue';
 import ChatBox from './ChatBox.vue';
-import PriceChart from './PriceChart.vue';
+import PriceTrendChart from './PriceTrendChart.vue';
 
 export default {
   name: 'HelloWorld',
   components: {
     AdSense,
     ChatBox,
-    PriceChart
+    PriceTrendChart
   },
   props: {
     msg: String,

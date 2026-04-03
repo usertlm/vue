@@ -2,6 +2,19 @@
   <div id="app">
     <HlsPlayer src="https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8" />
     <HelloWorld msg="👇👇👇"/>
+
+    <!-- 电脑配件价格趋势系统 -->
+    <div class="price-trend-section">
+      <ComponentSelector 
+        @update:selected="handleSelectionChange"
+        @view-chart="handleViewChart"
+      />
+      <PriceTrendChartAdvanced 
+        :selectedIds="selectedComponentIds"
+        @remove="removeComponentFromChart"
+      />
+    </div>
+
     <SearchComponent />
     <svg
       class="icon-link"
@@ -28,9 +41,40 @@ export default {
     SearchComponent,
     HlsPlayer
   },
+  components: {
+    HelloWorld,
+    SearchComponent,
+    HlsPlayer,
+    ComponentSelector: () => import('./components/ComponentSelector.vue'),
+    PriceTrendChartAdvanced: () => import('./components/PriceTrendChartAdvanced.vue'),
+  },
+  data() {
+    return {
+      selectedComponentIds: []
+    };
+  },
   methods: {
     goToWebsite() {
       window.open('http://www.staggeringbeauty.com/', '_blank')
+    },
+    handleSelectionChange(ids) {
+      this.selectedComponentIds = ids;
+    },
+    handleViewChart(ids) {
+      this.selectedComponentIds = ids;
+      // 滚动到图表区域
+      setTimeout(() => {
+        const chartElement = document.querySelector('.price-trend-section');
+        if (chartElement) {
+          chartElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+    },
+    removeComponentFromChart(id) {
+      const index = this.selectedComponentIds.indexOf(id);
+      if (index > -1) {
+        this.selectedComponentIds.splice(index, 1);
+      }
     }
   }
 }
@@ -65,6 +109,11 @@ export default {
   padding: 24px;
   margin: 24px auto;
   max-width: 800px;
+
+.price-trend-section {
+  margin: 60px auto;
+  padding: 0 20px;
+}
 }
 
 .icon-link {

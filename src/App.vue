@@ -39,11 +39,6 @@ export default {
   components: {
     HelloWorld,
     SearchComponent,
-    HlsPlayer
-  },
-  components: {
-    HelloWorld,
-    SearchComponent,
     HlsPlayer,
     ComponentSelector: () => import('./components/ComponentSelector.vue'),
     PriceTrendChartAdvanced: () => import('./components/PriceTrendChartAdvanced.vue'),
@@ -109,11 +104,11 @@ export default {
   padding: 24px;
   margin: 24px auto;
   max-width: 800px;
+}
 
 .price-trend-section {
   margin: 60px auto;
   padding: 0 20px;
-}
 }
 
 .icon-link {

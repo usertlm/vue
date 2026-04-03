@@ -118,7 +118,7 @@ export default {
   },
   watch: {
     selectedIds: {
-      handler(newIds) {
+      handler() {
         this.initializeData();
         this.createChart();
         this.startAutoUpdate();

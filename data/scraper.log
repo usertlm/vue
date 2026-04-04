@@ -1,0 +1,440 @@
+00:00:05 [INFO] ✅ Playwright 浏览器已启动（淘宝爬虫就绪）
+00:00:05 [INFO] 
+⚙️ 正在爬取 CPU...
+00:01:05 [WARNING]   ❌ 获取失败 Intel Core Ultra 9 285K
+00:02:07 [WARNING]   ❌ 获取失败 Intel Core Ultra 7 265K
+00:03:07 [WARNING]   ❌ 获取失败 Intel Core Ultra 5 245K
+00:04:06 [WARNING]   ❌ 获取失败 AMD Ryzen 9 9950X
+00:05:07 [WARNING]   ❌ 获取失败 AMD Ryzen 9 9900X
+00:06:07 [WARNING]   ❌ 获取失败 AMD Ryzen 7 9700X
+00:07:07 [WARNING]   ❌ 获取失败 AMD Ryzen 5 9600X
+00:08:08 [WARNING]   ❌ 获取失败 AMD Ryzen 7 9800X3D
+00:08:09 [INFO] 
+🎮 正在爬取 GPU...
+00:09:07 [WARNING]   ❌ 获取失败 NVIDIA RTX 5090 D
+00:10:07 [WARNING]   ❌ 获取失败 NVIDIA RTX 5080
+00:11:07 [WARNING]   ❌ 获取失败 NVIDIA RTX 5070 Ti
+00:12:06 [WARNING]   ❌ 获取失败 NVIDIA RTX 5070
+00:13:06 [WARNING]   ❌ 获取失败 AMD RX 9070 XT
+00:14:06 [WARNING]   ❌ 获取失败 AMD RX 9070
+00:15:05 [WARNING]   ❌ 获取失败 NVIDIA RTX 4090 D
+00:16:05 [WARNING]   ❌ 获取失败 AMD RX 7900 XTX
+00:16:08 [INFO] 
+💾 正在爬取 RAM...
+00:17:06 [WARNING]   ❌ 获取失败 DDR5 32GB (2x16GB) 6000MHz
+00:18:06 [WARNING]   ❌ 获取失败 DDR5 64GB (2x32GB) 6000MHz
+00:19:07 [WARNING]   ❌ 获取失败 DDR5 128GB (4x32GB) 6000MHz
+00:20:06 [WARNING]   ❌ 获取失败 DDR4 32GB (2x16GB) 3200MHz
+00:21:06 [WARNING]   ❌ 获取失败 DDR5 96GB (2x48GB) 6400MHz
+00:21:08 [INFO] 
+💿 正在爬取 SSD...
+00:22:06 [WARNING]   ❌ 获取失败 三星 990 Pro 2TB
+00:23:05 [WARNING]   ❌ 获取失败 三星 990 Pro 4TB
+00:24:05 [WARNING]   ❌ 获取失败 WD Black SN850X 2TB
+00:25:04 [WARNING]   ❌ 获取失败 致态 TiPlus7100 2TB
+00:26:05 [WARNING]   ❌ 获取失败 海力士 P41 2TB
+00:27:05 [WARNING]   ❌ 获取失败 三星 9100 Pro 2TB
+00:27:07 [INFO] 
+🔌 正在爬取 MB...
+00:28:05 [WARNING]   ❌ 获取失败 ROG MAXIMUS Z890 APEX
+00:29:04 [WARNING]   ❌ 获取失败 ROG STRIX Z890-E
+00:30:05 [WARNING]   ❌ 获取失败 MSI MEG Z890 ACE
+00:31:04 [WARNING]   ❌ 获取失败 ROG CROSSHAIR X870E HERO
+00:32:04 [WARNING]   ❌ 获取失败 MSI MAG X870 TOMAHAWK
+00:33:04 [WARNING]   ❌ 获取失败 华硕 B850M-K
+00:33:06 [INFO] 
+❄️ 正在爬取 COOL...
+00:34:04 [WARNING]   ❌ 获取失败 猫头鹰 NH-D15
+00:35:03 [WARNING]   ❌ 获取失败 猫头鹰 NH-U12A
+00:36:03 [WARNING]   ❌ 获取失败 利民 FC140
+00:37:04 [WARNING]   ❌ 获取失败 海盗船 H150i Elite
+00:38:04 [WARNING]   ❌ 获取失败 华硕 龙神3代 360
+00:38:05 [INFO] 
+📊 爬取完成: 0 成功, 38 失败
+00:38:05 [INFO] 💾 数据已保存: /home/drive/home/.openclaw/workspace/vue/data/price-history.json
+00:38:05 [INFO] ✅ 本轮爬取完成
+02:00:02 [INFO] ✅ Playwright 浏览器已启动（淘宝爬虫就绪）
+02:00:02 [INFO] 
+⚙️ 正在爬取 CPU...
+02:01:02 [WARNING]   ❌ 获取失败 Intel Core Ultra 9 285K
+02:02:03 [WARNING]   ❌ 获取失败 Intel Core Ultra 7 265K
+02:03:03 [WARNING]   ❌ 获取失败 Intel Core Ultra 5 245K
+02:04:03 [WARNING]   ❌ 获取失败 AMD Ryzen 9 9950X
+02:05:03 [WARNING]   ❌ 获取失败 AMD Ryzen 9 9900X
+02:06:03 [WARNING]   ❌ 获取失败 AMD Ryzen 7 9700X
+02:07:04 [WARNING]   ❌ 获取失败 AMD Ryzen 5 9600X
+02:08:03 [WARNING]   ❌ 获取失败 AMD Ryzen 7 9800X3D
+02:08:04 [INFO] 
+🎮 正在爬取 GPU...
+02:09:03 [WARNING]   ❌ 获取失败 NVIDIA RTX 5090 D
+02:10:03 [WARNING]   ❌ 获取失败 NVIDIA RTX 5080
+02:11:02 [WARNING]   ❌ 获取失败 NVIDIA RTX 5070 Ti
+02:12:03 [WARNING]   ❌ 获取失败 NVIDIA RTX 5070
+02:13:02 [WARNING]   ❌ 获取失败 AMD RX 9070 XT
+02:14:03 [WARNING]   ❌ 获取失败 AMD RX 9070
+02:15:04 [WARNING]   ❌ 获取失败 NVIDIA RTX 4090 D
+02:16:05 [WARNING]   ❌ 获取失败 AMD RX 7900 XTX
+02:16:06 [INFO] 
+💾 正在爬取 RAM...
+02:17:05 [WARNING]   ❌ 获取失败 DDR5 32GB (2x16GB) 6000MHz
+02:18:05 [WARNING]   ❌ 获取失败 DDR5 64GB (2x32GB) 6000MHz
+02:19:05 [WARNING]   ❌ 获取失败 DDR5 128GB (4x32GB) 6000MHz
+02:20:05 [WARNING]   ❌ 获取失败 DDR4 32GB (2x16GB) 3200MHz
+02:21:04 [WARNING]   ❌ 获取失败 DDR5 96GB (2x48GB) 6400MHz
+02:21:06 [INFO] 
+💿 正在爬取 SSD...
+02:22:04 [WARNING]   ❌ 获取失败 三星 990 Pro 2TB
+02:23:04 [WARNING]   ❌ 获取失败 三星 990 Pro 4TB
+02:24:04 [WARNING]   ❌ 获取失败 WD Black SN850X 2TB
+02:25:03 [WARNING]   ❌ 获取失败 致态 TiPlus7100 2TB
+02:26:04 [WARNING]   ❌ 获取失败 海力士 P41 2TB
+02:27:04 [WARNING]   ❌ 获取失败 三星 9100 Pro 2TB
+02:27:06 [INFO] 
+🔌 正在爬取 MB...
+02:28:04 [WARNING]   ❌ 获取失败 ROG MAXIMUS Z890 APEX
+02:29:04 [WARNING]   ❌ 获取失败 ROG STRIX Z890-E
+02:30:03 [WARNING]   ❌ 获取失败 MSI MEG Z890 ACE
+02:31:03 [WARNING]   ❌ 获取失败 ROG CROSSHAIR X870E HERO
+02:32:03 [WARNING]   ❌ 获取失败 MSI MAG X870 TOMAHAWK
+02:33:02 [WARNING]   ❌ 获取失败 华硕 B850M-K
+02:33:04 [INFO] 
+❄️ 正在爬取 COOL...
+02:34:02 [WARNING]   ❌ 获取失败 猫头鹰 NH-D15
+02:35:02 [WARNING]   ❌ 获取失败 猫头鹰 NH-U12A
+02:36:02 [WARNING]   ❌ 获取失败 利民 FC140
+02:37:02 [WARNING]   ❌ 获取失败 海盗船 H150i Elite
+02:38:02 [WARNING]   ❌ 获取失败 华硕 龙神3代 360
+02:38:05 [INFO] 
+📊 爬取完成: 0 成功, 38 失败
+02:38:05 [INFO] 💾 数据已保存: /home/drive/home/.openclaw/workspace/vue/data/price-history.json
+02:38:05 [INFO] ✅ 本轮爬取完成
+04:00:02 [INFO] ✅ Playwright 浏览器已启动（淘宝爬虫就绪）
+04:00:02 [INFO] 
+⚙️ 正在爬取 CPU...
+04:01:02 [WARNING]   ❌ 获取失败 Intel Core Ultra 9 285K
+04:02:03 [WARNING]   ❌ 获取失败 Intel Core Ultra 7 265K
+04:03:03 [WARNING]   ❌ 获取失败 Intel Core Ultra 5 245K
+04:04:03 [WARNING]   ❌ 获取失败 AMD Ryzen 9 9950X
+04:05:04 [WARNING]   ❌ 获取失败 AMD Ryzen 9 9900X
+04:06:03 [WARNING]   ❌ 获取失败 AMD Ryzen 7 9700X
+04:07:03 [WARNING]   ❌ 获取失败 AMD Ryzen 5 9600X
+04:08:03 [WARNING]   ❌ 获取失败 AMD Ryzen 7 9800X3D
+04:08:05 [INFO] 
+🎮 正在爬取 GPU...
+04:09:03 [WARNING]   ❌ 获取失败 NVIDIA RTX 5090 D
+04:10:03 [WARNING]   ❌ 获取失败 NVIDIA RTX 5080
+04:11:03 [WARNING]   ❌ 获取失败 NVIDIA RTX 5070 Ti
+04:12:04 [WARNING]   ❌ 获取失败 NVIDIA RTX 5070
+04:13:03 [WARNING]   ❌ 获取失败 AMD RX 9070 XT
+04:14:02 [WARNING]   ❌ 获取失败 AMD RX 9070
+04:15:02 [WARNING]   ❌ 获取失败 NVIDIA RTX 4090 D
+04:16:02 [WARNING]   ❌ 获取失败 AMD RX 7900 XTX
+04:16:04 [INFO] 
+💾 正在爬取 RAM...
+04:17:03 [WARNING]   ❌ 获取失败 DDR5 32GB (2x16GB) 6000MHz
+04:18:03 [WARNING]   ❌ 获取失败 DDR5 64GB (2x32GB) 6000MHz
+04:19:04 [WARNING]   ❌ 获取失败 DDR5 128GB (4x32GB) 6000MHz
+04:20:03 [WARNING]   ❌ 获取失败 DDR4 32GB (2x16GB) 3200MHz
+04:21:03 [WARNING]   ❌ 获取失败 DDR5 96GB (2x48GB) 6400MHz
+04:21:05 [INFO] 
+💿 正在爬取 SSD...
+04:22:03 [WARNING]   ❌ 获取失败 三星 990 Pro 2TB
+04:23:04 [WARNING]   ❌ 获取失败 三星 990 Pro 4TB
+04:24:03 [WARNING]   ❌ 获取失败 WD Black SN850X 2TB
+04:25:04 [WARNING]   ❌ 获取失败 致态 TiPlus7100 2TB
+04:26:04 [WARNING]   ❌ 获取失败 海力士 P41 2TB
+04:27:04 [WARNING]   ❌ 获取失败 三星 9100 Pro 2TB
+04:27:06 [INFO] 
+🔌 正在爬取 MB...
+04:28:04 [WARNING]   ❌ 获取失败 ROG MAXIMUS Z890 APEX
+04:29:04 [WARNING]   ❌ 获取失败 ROG STRIX Z890-E
+04:30:05 [WARNING]   ❌ 获取失败 MSI MEG Z890 ACE
+04:31:05 [WARNING]   ❌ 获取失败 ROG CROSSHAIR X870E HERO
+04:32:05 [WARNING]   ❌ 获取失败 MSI MAG X870 TOMAHAWK
+04:33:05 [WARNING]   ❌ 获取失败 华硕 B850M-K
+04:33:06 [INFO] 
+❄️ 正在爬取 COOL...
+04:34:04 [WARNING]   ❌ 获取失败 猫头鹰 NH-D15
+04:35:05 [WARNING]   ❌ 获取失败 猫头鹰 NH-U12A
+04:36:16 [WARNING]   ❌ 获取失败 利民 FC140
+04:37:28 [WARNING]   ❌ 获取失败 海盗船 H150i Elite
+04:38:28 [WARNING]   ❌ 获取失败 华硕 龙神3代 360
+04:38:30 [INFO] 
+📊 爬取完成: 0 成功, 38 失败
+04:38:30 [INFO] 💾 数据已保存: /home/drive/home/.openclaw/workspace/vue/data/price-history.json
+04:38:30 [INFO] ✅ 本轮爬取完成
+06:00:02 [INFO] ✅ Playwright 浏览器已启动（淘宝爬虫就绪）
+06:00:02 [INFO] 
+⚙️ 正在爬取 CPU...
+06:01:02 [WARNING]   ❌ 获取失败 Intel Core Ultra 9 285K
+06:02:03 [WARNING]   ❌ 获取失败 Intel Core Ultra 7 265K
+06:03:03 [WARNING]   ❌ 获取失败 Intel Core Ultra 5 245K
+06:04:03 [WARNING]   ❌ 获取失败 AMD Ryzen 9 9950X
+06:05:02 [WARNING]   ❌ 获取失败 AMD Ryzen 9 9900X
+06:06:03 [WARNING]   ❌ 获取失败 AMD Ryzen 7 9700X
+06:07:04 [WARNING]   ❌ 获取失败 AMD Ryzen 5 9600X
+06:08:03 [WARNING]   ❌ 获取失败 AMD Ryzen 7 9800X3D
+06:08:04 [INFO] 
+🎮 正在爬取 GPU...
+06:09:03 [WARNING]   ❌ 获取失败 NVIDIA RTX 5090 D
+06:10:03 [WARNING]   ❌ 获取失败 NVIDIA RTX 5080
+06:11:03 [WARNING]   ❌ 获取失败 NVIDIA RTX 5070 Ti
+06:12:03 [WARNING]   ❌ 获取失败 NVIDIA RTX 5070
+06:13:02 [WARNING]   ❌ 获取失败 AMD RX 9070 XT
+06:14:03 [WARNING]   ❌ 获取失败 AMD RX 9070
+06:15:03 [WARNING]   ❌ 获取失败 NVIDIA RTX 4090 D
+06:16:03 [WARNING]   ❌ 获取失败 AMD RX 7900 XTX
+06:16:05 [INFO] 
+💾 正在爬取 RAM...
+06:17:03 [WARNING]   ❌ 获取失败 DDR5 32GB (2x16GB) 6000MHz
+06:18:03 [WARNING]   ❌ 获取失败 DDR5 64GB (2x32GB) 6000MHz
+06:19:03 [WARNING]   ❌ 获取失败 DDR5 128GB (4x32GB) 6000MHz
+06:20:04 [WARNING]   ❌ 获取失败 DDR4 32GB (2x16GB) 3200MHz
+06:21:04 [WARNING]   ❌ 获取失败 DDR5 96GB (2x48GB) 6400MHz
+06:21:06 [INFO] 
+💿 正在爬取 SSD...
+06:22:04 [WARNING]   ❌ 获取失败 三星 990 Pro 2TB
+06:23:04 [WARNING]   ❌ 获取失败 三星 990 Pro 4TB
+06:24:05 [WARNING]   ❌ 获取失败 WD Black SN850X 2TB
+06:25:05 [WARNING]   ❌ 获取失败 致态 TiPlus7100 2TB
+06:26:06 [WARNING]   ❌ 获取失败 海力士 P41 2TB
+06:27:07 [WARNING]   ❌ 获取失败 三星 9100 Pro 2TB
+06:27:09 [INFO] 
+🔌 正在爬取 MB...
+06:28:07 [WARNING]   ❌ 获取失败 ROG MAXIMUS Z890 APEX
+06:29:07 [WARNING]   ❌ 获取失败 ROG STRIX Z890-E
+06:30:08 [WARNING]   ❌ 获取失败 MSI MEG Z890 ACE
+06:31:08 [WARNING]   ❌ 获取失败 ROG CROSSHAIR X870E HERO
+06:32:08 [WARNING]   ❌ 获取失败 MSI MAG X870 TOMAHAWK
+06:33:09 [WARNING]   ❌ 获取失败 华硕 B850M-K
+06:33:11 [INFO] 
+❄️ 正在爬取 COOL...
+06:34:09 [WARNING]   ❌ 获取失败 猫头鹰 NH-D15
+06:35:09 [WARNING]   ❌ 获取失败 猫头鹰 NH-U12A
+06:36:10 [WARNING]   ❌ 获取失败 利民 FC140
+06:37:10 [WARNING]   ❌ 获取失败 海盗船 H150i Elite
+06:38:10 [WARNING]   ❌ 获取失败 华硕 龙神3代 360
+06:38:11 [INFO] 
+📊 爬取完成: 0 成功, 38 失败
+06:38:11 [INFO] 💾 数据已保存: /home/drive/home/.openclaw/workspace/vue/data/price-history.json
+06:38:11 [INFO] ✅ 本轮爬取完成
+08:00:02 [INFO] ✅ Playwright 浏览器已启动（淘宝爬虫就绪）
+08:00:02 [INFO] 
+⚙️ 正在爬取 CPU...
+08:01:02 [WARNING]   ❌ 获取失败 Intel Core Ultra 9 285K
+08:02:04 [WARNING]   ❌ 获取失败 Intel Core Ultra 7 265K
+08:03:04 [WARNING]   ❌ 获取失败 Intel Core Ultra 5 245K
+08:04:03 [WARNING]   ❌ 获取失败 AMD Ryzen 9 9950X
+08:05:03 [WARNING]   ❌ 获取失败 AMD Ryzen 9 9900X
+08:06:03 [WARNING]   ❌ 获取失败 AMD Ryzen 7 9700X
+08:07:03 [WARNING]   ❌ 获取失败 AMD Ryzen 5 9600X
+08:08:03 [WARNING]   ❌ 获取失败 AMD Ryzen 7 9800X3D
+08:08:06 [INFO] 
+🎮 正在爬取 GPU...
+08:09:04 [WARNING]   ❌ 获取失败 NVIDIA RTX 5090 D
+08:10:04 [WARNING]   ❌ 获取失败 NVIDIA RTX 5080
+08:11:04 [WARNING]   ❌ 获取失败 NVIDIA RTX 5070 Ti
+08:12:03 [WARNING]   ❌ 获取失败 NVIDIA RTX 5070
+08:13:03 [WARNING]   ❌ 获取失败 AMD RX 9070 XT
+08:14:03 [WARNING]   ❌ 获取失败 AMD RX 9070
+08:15:03 [WARNING]   ❌ 获取失败 NVIDIA RTX 4090 D
+08:16:03 [WARNING]   ❌ 获取失败 AMD RX 7900 XTX
+08:16:05 [INFO] 
+💾 正在爬取 RAM...
+08:17:03 [WARNING]   ❌ 获取失败 DDR5 32GB (2x16GB) 6000MHz
+08:18:03 [WARNING]   ❌ 获取失败 DDR5 64GB (2x32GB) 6000MHz
+08:19:04 [WARNING]   ❌ 获取失败 DDR5 128GB (4x32GB) 6000MHz
+08:20:03 [WARNING]   ❌ 获取失败 DDR4 32GB (2x16GB) 3200MHz
+08:21:03 [WARNING]   ❌ 获取失败 DDR5 96GB (2x48GB) 6400MHz
+08:21:04 [INFO] 
+💿 正在爬取 SSD...
+08:22:02 [WARNING]   ❌ 获取失败 三星 990 Pro 2TB
+08:23:02 [WARNING]   ❌ 获取失败 三星 990 Pro 4TB
+08:24:01 [WARNING]   ❌ 获取失败 WD Black SN850X 2TB
+08:25:00 [WARNING]   ❌ 获取失败 致态 TiPlus7100 2TB
+08:25:59 [WARNING]   ❌ 获取失败 海力士 P41 2TB
+08:26:58 [WARNING]   ❌ 获取失败 三星 9100 Pro 2TB
+08:27:00 [INFO] 
+🔌 正在爬取 MB...
+08:27:58 [WARNING]   ❌ 获取失败 ROG MAXIMUS Z890 APEX
+08:28:58 [WARNING]   ❌ 获取失败 ROG STRIX Z890-E
+08:29:57 [WARNING]   ❌ 获取失败 MSI MEG Z890 ACE
+08:30:57 [WARNING]   ❌ 获取失败 ROG CROSSHAIR X870E HERO
+08:31:57 [WARNING]   ❌ 获取失败 MSI MAG X870 TOMAHAWK
+08:32:57 [WARNING]   ❌ 获取失败 华硕 B850M-K
+08:32:59 [INFO] 
+❄️ 正在爬取 COOL...
+08:33:57 [WARNING]   ❌ 获取失败 猫头鹰 NH-D15
+08:34:58 [WARNING]   ❌ 获取失败 猫头鹰 NH-U12A
+08:35:57 [WARNING]   ❌ 获取失败 利民 FC140
+08:36:58 [WARNING]   ❌ 获取失败 海盗船 H150i Elite
+08:37:57 [WARNING]   ❌ 获取失败 华硕 龙神3代 360
+08:38:00 [INFO] 
+📊 爬取完成: 0 成功, 38 失败
+08:38:00 [INFO] 💾 数据已保存: /home/drive/home/.openclaw/workspace/vue/data/price-history.json
+08:38:00 [INFO] ✅ 本轮爬取完成
+10:00:02 [INFO] ✅ Playwright 浏览器已启动（淘宝爬虫就绪）
+10:00:02 [INFO] 
+⚙️ 正在爬取 CPU...
+10:01:02 [WARNING]   ❌ 获取失败 Intel Core Ultra 9 285K
+10:02:04 [WARNING]   ❌ 获取失败 Intel Core Ultra 7 265K
+10:03:05 [WARNING]   ❌ 获取失败 Intel Core Ultra 5 245K
+10:04:04 [WARNING]   ❌ 获取失败 AMD Ryzen 9 9950X
+10:05:04 [WARNING]   ❌ 获取失败 AMD Ryzen 9 9900X
+10:06:03 [WARNING]   ❌ 获取失败 AMD Ryzen 7 9700X
+10:07:04 [WARNING]   ❌ 获取失败 AMD Ryzen 5 9600X
+10:08:04 [WARNING]   ❌ 获取失败 AMD Ryzen 7 9800X3D
+10:08:05 [INFO] 
+🎮 正在爬取 GPU...
+10:09:03 [WARNING]   ❌ 获取失败 NVIDIA RTX 5090 D
+10:10:03 [WARNING]   ❌ 获取失败 NVIDIA RTX 5080
+10:11:03 [WARNING]   ❌ 获取失败 NVIDIA RTX 5070 Ti
+10:12:04 [WARNING]   ❌ 获取失败 NVIDIA RTX 5070
+10:13:04 [WARNING]   ❌ 获取失败 AMD RX 9070 XT
+10:14:04 [WARNING]   ❌ 获取失败 AMD RX 9070
+10:15:04 [WARNING]   ❌ 获取失败 NVIDIA RTX 4090 D
+10:16:04 [WARNING]   ❌ 获取失败 AMD RX 7900 XTX
+10:16:06 [INFO] 
+💾 正在爬取 RAM...
+10:17:05 [WARNING]   ❌ 获取失败 DDR5 32GB (2x16GB) 6000MHz
+10:18:05 [WARNING]   ❌ 获取失败 DDR5 64GB (2x32GB) 6000MHz
+10:19:06 [WARNING]   ❌ 获取失败 DDR5 128GB (4x32GB) 6000MHz
+10:20:06 [WARNING]   ❌ 获取失败 DDR4 32GB (2x16GB) 3200MHz
+10:21:06 [WARNING]   ❌ 获取失败 DDR5 96GB (2x48GB) 6400MHz
+10:21:08 [INFO] 
+💿 正在爬取 SSD...
+10:22:06 [WARNING]   ❌ 获取失败 三星 990 Pro 2TB
+10:23:06 [WARNING]   ❌ 获取失败 三星 990 Pro 4TB
+10:24:06 [WARNING]   ❌ 获取失败 WD Black SN850X 2TB
+10:25:06 [WARNING]   ❌ 获取失败 致态 TiPlus7100 2TB
+10:26:05 [WARNING]   ❌ 获取失败 海力士 P41 2TB
+10:27:05 [WARNING]   ❌ 获取失败 三星 9100 Pro 2TB
+10:27:06 [INFO] 
+🔌 正在爬取 MB...
+10:28:04 [WARNING]   ❌ 获取失败 ROG MAXIMUS Z890 APEX
+10:29:05 [WARNING]   ❌ 获取失败 ROG STRIX Z890-E
+10:30:16 [WARNING]   ❌ 获取失败 MSI MEG Z890 ACE
+10:31:27 [WARNING]   ❌ 获取失败 ROG CROSSHAIR X870E HERO
+10:32:27 [WARNING]   ❌ 获取失败 MSI MAG X870 TOMAHAWK
+10:33:28 [WARNING]   ❌ 获取失败 华硕 B850M-K
+10:33:29 [INFO] 
+❄️ 正在爬取 COOL...
+10:34:27 [WARNING]   ❌ 获取失败 猫头鹰 NH-D15
+10:35:27 [WARNING]   ❌ 获取失败 猫头鹰 NH-U12A
+10:36:27 [WARNING]   ❌ 获取失败 利民 FC140
+10:37:27 [WARNING]   ❌ 获取失败 海盗船 H150i Elite
+10:38:28 [WARNING]   ❌ 获取失败 华硕 龙神3代 360
+10:38:29 [INFO] 
+📊 爬取完成: 0 成功, 38 失败
+10:38:29 [INFO] 💾 数据已保存: /home/drive/home/.openclaw/workspace/vue/data/price-history.json
+10:38:29 [INFO] ✅ 本轮爬取完成
+12:00:02 [INFO] ✅ Playwright 浏览器已启动（淘宝爬虫就绪）
+12:00:02 [INFO] 
+⚙️ 正在爬取 CPU...
+12:01:03 [WARNING]   ❌ 获取失败 Intel Core Ultra 9 285K
+12:02:04 [WARNING]   ❌ 获取失败 Intel Core Ultra 7 265K
+12:03:04 [WARNING]   ❌ 获取失败 Intel Core Ultra 5 245K
+12:04:05 [WARNING]   ❌ 获取失败 AMD Ryzen 9 9950X
+12:05:06 [WARNING]   ❌ 获取失败 AMD Ryzen 9 9900X
+12:06:06 [WARNING]   ❌ 获取失败 AMD Ryzen 7 9700X
+12:07:06 [WARNING]   ❌ 获取失败 AMD Ryzen 5 9600X
+12:08:06 [WARNING]   ❌ 获取失败 AMD Ryzen 7 9800X3D
+12:08:09 [INFO] 
+🎮 正在爬取 GPU...
+12:09:07 [WARNING]   ❌ 获取失败 NVIDIA RTX 5090 D
+12:10:07 [WARNING]   ❌ 获取失败 NVIDIA RTX 5080
+12:11:08 [WARNING]   ❌ 获取失败 NVIDIA RTX 5070 Ti
+12:12:08 [WARNING]   ❌ 获取失败 NVIDIA RTX 5070
+12:13:08 [WARNING]   ❌ 获取失败 AMD RX 9070 XT
+12:14:08 [WARNING]   ❌ 获取失败 AMD RX 9070
+12:15:08 [WARNING]   ❌ 获取失败 NVIDIA RTX 4090 D
+12:16:08 [WARNING]   ❌ 获取失败 AMD RX 7900 XTX
+12:16:10 [INFO] 
+💾 正在爬取 RAM...
+12:17:08 [WARNING]   ❌ 获取失败 DDR5 32GB (2x16GB) 6000MHz
+12:18:09 [WARNING]   ❌ 获取失败 DDR5 64GB (2x32GB) 6000MHz
+12:19:09 [WARNING]   ❌ 获取失败 DDR5 128GB (4x32GB) 6000MHz
+12:20:09 [WARNING]   ❌ 获取失败 DDR4 32GB (2x16GB) 3200MHz
+12:21:09 [WARNING]   ❌ 获取失败 DDR5 96GB (2x48GB) 6400MHz
+12:21:10 [INFO] 
+💿 正在爬取 SSD...
+12:22:09 [WARNING]   ❌ 获取失败 三星 990 Pro 2TB
+12:23:08 [WARNING]   ❌ 获取失败 三星 990 Pro 4TB
+12:24:09 [WARNING]   ❌ 获取失败 WD Black SN850X 2TB
+12:25:09 [WARNING]   ❌ 获取失败 致态 TiPlus7100 2TB
+12:26:10 [WARNING]   ❌ 获取失败 海力士 P41 2TB
+12:27:10 [WARNING]   ❌ 获取失败 三星 9100 Pro 2TB
+12:27:13 [INFO] 
+🔌 正在爬取 MB...
+12:28:11 [WARNING]   ❌ 获取失败 ROG MAXIMUS Z890 APEX
+12:29:11 [WARNING]   ❌ 获取失败 ROG STRIX Z890-E
+12:30:11 [WARNING]   ❌ 获取失败 MSI MEG Z890 ACE
+12:31:12 [WARNING]   ❌ 获取失败 ROG CROSSHAIR X870E HERO
+12:32:13 [WARNING]   ❌ 获取失败 MSI MAG X870 TOMAHAWK
+12:33:12 [WARNING]   ❌ 获取失败 华硕 B850M-K
+12:33:14 [INFO] 
+❄️ 正在爬取 COOL...
+12:34:13 [WARNING]   ❌ 获取失败 猫头鹰 NH-D15
+12:35:13 [WARNING]   ❌ 获取失败 猫头鹰 NH-U12A
+12:36:12 [WARNING]   ❌ 获取失败 利民 FC140
+12:37:12 [WARNING]   ❌ 获取失败 海盗船 H150i Elite
+12:38:12 [WARNING]   ❌ 获取失败 华硕 龙神3代 360
+12:38:15 [INFO] 
+📊 爬取完成: 0 成功, 38 失败
+12:38:15 [INFO] 💾 数据已保存: /home/drive/home/.openclaw/workspace/vue/data/price-history.json
+12:38:15 [INFO] ✅ 本轮爬取完成
+14:00:02 [INFO] ✅ Playwright 浏览器已启动（淘宝爬虫就绪）
+14:00:02 [INFO] 
+⚙️ 正在爬取 CPU...
+14:01:01 [WARNING]   ❌ 获取失败 Intel Core Ultra 9 285K
+14:02:02 [WARNING]   ❌ 获取失败 Intel Core Ultra 7 265K
+14:03:02 [WARNING]   ❌ 获取失败 Intel Core Ultra 5 245K
+14:04:01 [WARNING]   ❌ 获取失败 AMD Ryzen 9 9950X
+14:05:01 [WARNING]   ❌ 获取失败 AMD Ryzen 9 9900X
+14:06:01 [WARNING]   ❌ 获取失败 AMD Ryzen 7 9700X
+14:07:01 [WARNING]   ❌ 获取失败 AMD Ryzen 5 9600X
+14:08:01 [WARNING]   ❌ 获取失败 AMD Ryzen 7 9800X3D
+14:08:03 [INFO] 
+🎮 正在爬取 GPU...
+14:09:02 [WARNING]   ❌ 获取失败 NVIDIA RTX 5090 D
+14:10:02 [WARNING]   ❌ 获取失败 NVIDIA RTX 5080
+14:11:01 [WARNING]   ❌ 获取失败 NVIDIA RTX 5070 Ti
+14:12:01 [WARNING]   ❌ 获取失败 NVIDIA RTX 5070
+14:13:01 [WARNING]   ❌ 获取失败 AMD RX 9070 XT
+14:14:00 [WARNING]   ❌ 获取失败 AMD RX 9070
+14:14:59 [WARNING]   ❌ 获取失败 NVIDIA RTX 4090 D
+14:15:58 [WARNING]   ❌ 获取失败 AMD RX 7900 XTX
+14:15:59 [INFO] 
+💾 正在爬取 RAM...
+14:16:57 [WARNING]   ❌ 获取失败 DDR5 32GB (2x16GB) 6000MHz
+14:17:57 [WARNING]   ❌ 获取失败 DDR5 64GB (2x32GB) 6000MHz
+14:18:57 [WARNING]   ❌ 获取失败 DDR5 128GB (4x32GB) 6000MHz
+14:19:57 [WARNING]   ❌ 获取失败 DDR4 32GB (2x16GB) 3200MHz
+14:20:56 [WARNING]   ❌ 获取失败 DDR5 96GB (2x48GB) 6400MHz
+14:20:58 [INFO] 
+💿 正在爬取 SSD...
+14:21:56 [WARNING]   ❌ 获取失败 三星 990 Pro 2TB
+14:22:56 [WARNING]   ❌ 获取失败 三星 990 Pro 4TB
+14:23:56 [WARNING]   ❌ 获取失败 WD Black SN850X 2TB
+14:24:55 [WARNING]   ❌ 获取失败 致态 TiPlus7100 2TB
+14:25:54 [WARNING]   ❌ 获取失败 海力士 P41 2TB
+14:26:54 [WARNING]   ❌ 获取失败 三星 9100 Pro 2TB
+14:26:55 [INFO] 
+🔌 正在爬取 MB...
+14:27:53 [WARNING]   ❌ 获取失败 ROG MAXIMUS Z890 APEX
+14:28:54 [WARNING]   ❌ 获取失败 ROG STRIX Z890-E
+14:29:53 [WARNING]   ❌ 获取失败 MSI MEG Z890 ACE
+14:30:52 [WARNING]   ❌ 获取失败 ROG CROSSHAIR X870E HERO
+14:31:52 [WARNING]   ❌ 获取失败 MSI MAG X870 TOMAHAWK
+14:32:52 [WARNING]   ❌ 获取失败 华硕 B850M-K
+14:32:54 [INFO] 
+❄️ 正在爬取 COOL...
+14:33:52 [WARNING]   ❌ 获取失败 猫头鹰 NH-D15
+14:34:52 [WARNING]   ❌ 获取失败 猫头鹰 NH-U12A
+14:35:51 [WARNING]   ❌ 获取失败 利民 FC140
+14:36:51 [WARNING]   ❌ 获取失败 海盗船 H150i Elite
+14:37:50 [WARNING]   ❌ 获取失败 华硕 龙神3代 360
+14:37:53 [INFO] 
+📊 爬取完成: 0 成功, 38 失败
+14:37:53 [INFO] 💾 数据已保存: /home/drive/home/.openclaw/workspace/vue/data/price-history.json
+14:37:53 [INFO] ✅ 本轮爬取完成

@@ -3,6 +3,10 @@
     <HlsPlayer src="https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8" />
     <HelloWorld msg="👇👇👇"/>
     <SearchComponent />
+
+    <!-- 电脑配件价格趋势图 -->
+    <PriceTrendChart />
+
     <svg 
       class="icon-link" 
       @click="goToWebsite"
@@ -18,15 +22,17 @@
 <script>
 // 引入组件
 import HelloWorld from './components/HelloWorld.vue'
-import SearchComponent from './components/search.vue' // 确保路径正确
+import SearchComponent from './components/search.vue'
 import HlsPlayer from './components/HlsPlayer.vue'
+import PriceTrendChart from './components/PriceTrendChart.vue'
 
 export default {
   name: 'App',
   components: {
     HelloWorld,
     SearchComponent,
-    HlsPlayer
+    HlsPlayer,
+    PriceTrendChart
   },
   methods: {
     goToWebsite() {

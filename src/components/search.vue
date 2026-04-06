@@ -2,8 +2,7 @@
   <div id="search" class="s-search">
     <div id="search-list" class="hide-type-list">
       <div class="s-type">
-        <span></span>
-        <div class="s-type-list animated fadeInUp">
+        <div class="s-type-list">
           <label for="type-baidu">常用</label>
           <label for="type-search">搜索</label>
           <label for="type-br">工具</label>
@@ -23,7 +22,7 @@
               value="https://www.baidu.com/s?wd="
               data-placeholder="百度一下"
             />
-            <label for="type-baidu"><span style="color: #2100E0">百度</span></label>
+            <label for="type-baidu"><span class="engine-baidu">百度</span></label>
           </li>
           <li>
             <input
@@ -34,7 +33,7 @@
               value="https://www.google.com/search?q="
               data-placeholder="Google"
             />
-            <label for="type-google"><span style="color: #4285F4">Google</span></label>
+            <label for="type-google"><span class="engine-google">Google</span></label>
           </li>
         </ul>
       </div>
@@ -45,7 +44,7 @@
           placeholder="输入关键字搜索"
           style="outline: 0"
         />
-        <button type="submit"><i class="fa fa-search"></i></button>
+        <button type="submit"><i class="fa fa-search"></i> 搜索</button>
       </form>
     </div>
   </div>
@@ -66,17 +65,14 @@ export default {
 </script>
 
 <style scoped>
-#search {
-  margin: 20px auto;
-  max-width: 600px;
-}
-
 .s-search {
-  padding: 10px;
+  max-width: 600px;
+  margin: 32px auto;
+  padding: 0 20px;
 }
 
 .s-type {
-  margin-bottom: 10px;
+  margin-bottom: 16px;
 }
 
 .s-type-list {
@@ -87,14 +83,18 @@ export default {
 
 .s-type-list label {
   cursor: pointer;
-  padding: 5px 10px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-  color: #00ffe7;
+  padding: 6px 14px;
+  background: #e8e6dc;
+  border-radius: 20px;
+  color: #4d4c48;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s;
 }
 
 .s-type-list label:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: #c96442;
+  color: #faf9f5;
 }
 
 .search-type {
@@ -103,6 +103,7 @@ export default {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  margin: 12px 0;
 }
 
 .search-type li {
@@ -111,44 +112,62 @@ export default {
 
 .search-type label {
   cursor: pointer;
-  padding: 5px 15px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
+  padding: 6px 16px;
+  background: #e8e6dc;
+  border-radius: 20px;
+  transition: all 0.2s;
 }
 
 .search-type label:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: #d1cfc5;
 }
+
+.engine-baidu { color: #2100E0; font-weight: 500; }
+.engine-google { color: #4285F4; font-weight: 500; }
 
 #super-search-fm {
   display: flex;
-  gap: 5px;
-  margin-top: 15px;
+  gap: 8px;
+  margin-top: 16px;
 }
 
 #search-text {
   flex: 1;
-  padding: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #00ffe7;
+  padding: 12px 16px;
+  border: 1px solid #f0eee6;
+  border-radius: 12px;
+  background: #faf9f5;
+  color: #141413;
+  font-size: 15px;
+  font-family: Arial, sans-serif;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#search-text:focus {
+  outline: none;
+  border-color: #c96442;
+  box-shadow: 0 0 0 3px rgba(201, 100, 66, 0.12);
 }
 
 #search-text::placeholder {
-  color: rgba(0, 255, 231, 0.5);
+  color: #87867f;
 }
 
 button {
-  padding: 10px 20px;
-  background: #42b983;
+  padding: 12px 20px;
+  background: #c96442;
   border: none;
-  border-radius: 4px;
-  color: white;
+  border-radius: 12px;
+  color: #faf9f5;
+  font-size: 15px;
+  font-weight: 500;
   cursor: pointer;
+  font-family: Arial, sans-serif;
+  transition: background 0.2s;
+  box-shadow: #c96442 0px 0px 0px 0px, #c96442 0px 0px 0px 1px;
 }
 
 button:hover {
-  background: #359268;
+  background: #d97757;
 }
 </style>

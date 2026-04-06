@@ -1,1027 +1,583 @@
 <template>
-  <div class="price-trend-wrap">
+  <div class="price-modal">
 
-    <!-- ===== 页面标题 ===== -->
-    <div class="section-header">
-      <span class="header-eyebrow">📊 价格追踪</span>
-      <h2 class="header-title">电脑配件价格趋势</h2>
-      <p class="header-sub">实时追踪淘宝/京东全网最低价 · 点击感兴趣的部分查看详情</p>
+    <!-- 标题栏 -->
+    <div class="modal-header">
+      <div class="header-icon">🖥️</div>
+      <h2 class="modal-title">电脑配件价格趋势</h2>
     </div>
 
-    <!-- ===== 分类选择 ===== -->
-    <div class="category-grid">
-      <button
-        v-for="cat in categories"
-        :key="cat.id"
-        :class="['cat-card', { active: selectedCategory === cat.id }]"
-        @click="selectCategory(cat.id)"
-      >
-        <span class="cat-emoji">{{ cat.icon }}</span>
-        <span class="cat-name">{{ cat.name }}</span>
-        <span class="cat-count">{{ getCategoryCount(cat.id) }} 款</span>
-      </button>
-    </div>
-
-    <!-- ===== 搜索框 ===== -->
-    <div class="search-zone">
-      <div class="search-box">
-        <span class="search-icon">🔍</span>
-        <input
-          v-model="searchQuery"
-          type="text"
-          :placeholder="`搜索 ${currentCategoryName} 型号...`"
-          @input="onSearch"
-          @focus="showSearchResults = true"
-          class="search-input"
-        />
-        <button v-if="searchQuery" @click="clearSearch" class="clear-btn">✕</button>
-      </div>
-
-      <!-- 搜索结果下拉 -->
-      <div v-if="showSearchResults && filteredSearchResults.length > 0" class="search-dropdown">
-        <div
-          v-for="item in filteredSearchResults"
-          :key="item.id"
-          class="search-result-item"
-          @click="selectProduct(item)"
+    <!-- 分类选择 -->
+    <div class="category-section">
+      <p class="section-label">📦 选择配件类别</p>
+      <div class="category-pills">
+        <button
+          v-for="cat in categories"
+          :key="cat.id"
+          class="category-pill"
+          :class="{ active: selectedCategory === cat.id }"
+          @click="selectCategory(cat.id)"
         >
-          <span class="result-emoji">{{ getCategoryEmoji(item.id) }}</span>
-          <div class="result-info">
-            <span class="result-name">{{ item.name }}</span>
-            <span class="result-cat">{{ getCategoryName(item.id) }}</span>
+          <span class="pill-icon">{{ cat.icon }}</span>
+          {{ cat.name }}
+        </button>
+      </div>
+    </div>
+
+    <!-- 型号选择 -->
+    <div class="model-section" v-if="selectedCategory">
+      <p class="section-label">🔍 选择具体型号</p>
+      <div class="model-grid">
+        <button
+          v-for="model in currentModels"
+          :key="model.id"
+          class="model-card"
+          :class="{ active: selectedModel?.id === model.id }"
+          @click="selectModel(model)"
+        >
+          <span class="model-tag">{{ model.tag }}</span>
+          <span class="model-name">{{ model.name }}</span>
+          <span class="model-price">¥{{ model.currentPrice.toLocaleString() }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 价格详情 & 图表 -->
+    <div class="chart-section" v-if="selectedModel">
+      <!-- 实时价格展示 -->
+      <div class="price-spotlight">
+        <div class="spotlight-chip">🔴 实时价格</div>
+        <div class="spotlight-price">¥{{ selectedModel.currentPrice.toLocaleString() }}</div>
+        <div class="spotlight-name">{{ selectedModel.name }}</div>
+      </div>
+
+      <!-- 时间范围选择 -->
+      <div class="time-range-bar">
+        <span class="range-label">📅 时间范围：</span>
+        <div class="range-buttons">
+          <button
+            v-for="range in timeRanges"
+            :key="range.value"
+            class="range-btn"
+            :class="{ active: selectedRange === range.value }"
+            @click="selectedRange = range.value"
+          >{{ range.label }}</button>
+        </div>
+      </div>
+
+      <!-- SVG 折线图 -->
+      <div class="chart-wrapper">
+        <svg class="chart-svg" viewBox="0 0 680 200" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#7C3AED" stop-opacity="0.35"/>
+              <stop offset="100%" stop-color="#7C3AED" stop-opacity="0"/>
+            </linearGradient>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          <!-- 网格线 -->
+          <line v-for="i in 5" :key="'h'+i"
+            :x1="10" :y1="i * 36" :x2="670" :y2="i * 36"
+            stroke="#e5e7eb" stroke-width="1" stroke-dasharray="4,4"/>
+          <!-- Y轴价格标注 -->
+          <text v-for="(label, i) in yLabels" :key="'y'+i"
+            :x="8" :y="(5 - i) * 36 + 4"
+            font-size="9" fill="#9ca3af" text-anchor="end">{{ label }}</text>
+          <!-- 面积填充 -->
+          <path :d="areaPath" fill="url(#chartGrad)"/>
+          <!-- 折线 -->
+          <path :d="linePath" fill="none" stroke="#7C3AED" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+          <!-- 数据点 -->
+          <circle v-for="(pt, i) in chartPoints" :key="'pt'+i"
+            :cx="pt.x" :cy="pt.y" r="4"
+            fill="white" stroke="#7C3AED" stroke-width="2.5"
+            class="chart-dot"/>
+          <!-- X轴标注 -->
+          <text v-for="(label, i) in xLabels" :key="'x'+i"
+            :x="chartPoints[i]?.x" y="198"
+            font-size="9" fill="#9ca3af" text-anchor="middle">{{ label }}</text>
+        </svg>
+      </div>
+
+      <!-- 价格对比卡片 -->
+      <div class="compare-cards">
+        <div class="compare-card past">
+          <div class="compare-icon">📅</div>
+          <div class="compare-label">{{ rangeLabel }}前价格</div>
+          <div class="compare-price">¥{{ pastPrice.toLocaleString() }}</div>
+        </div>
+        <div class="compare-arrow">
+          <span :class="['trend-arrow', priceChange >= 0 ? 'up' : 'down']">
+            {{ priceChange >= 0 ? '▲' : '▼' }}
+          </span>
+        </div>
+        <div class="compare-card current">
+          <div class="compare-icon">💰</div>
+          <div class="compare-label">当前价格</div>
+          <div class="compare-price">¥{{ selectedModel.currentPrice.toLocaleString() }}</div>
+        </div>
+        <div class="compare-card change" :class="priceChange >= 0 ? 'rose' : 'fell'">
+          <div class="compare-icon">{{ priceChange >= 0 ? '📈' : '📉' }}</div>
+          <div class="compare-label">涨幅</div>
+          <div class="compare-price percent">
+            {{ priceChange >= 0 ? '+' : '' }}{{ changePercent }}%
           </div>
-          <span class="result-price">¥{{ item.price }}</span>
         </div>
       </div>
     </div>
 
-    <!-- ===== 商品选择 ===== -->
-    <div class="product-select-zone">
-      <div class="select-wrapper">
-        <span class="select-icon">{{ currentCategoryIcon }}</span>
-        <select v-model="selectedProductId" @change="onProductChange" class="product-select">
-          <option value="">—— 选择{{ currentCategoryName }}型号查看趋势 ——</option>
-          <option v-for="p in currentProducts" :key="p.id" :value="p.id">
-            {{ p.name }} · ¥{{ p.price }}
-          </option>
-        </select>
-        <span class="select-arrow">▼</span>
-      </div>
+    <!-- 空态提示 -->
+    <div class="empty-state" v-if="!selectedCategory">
+      <div class="empty-mascot">🤖</div>
+      <p>先选一个配件类别吧～</p>
+    </div>
+    <div class="empty-state" v-else-if="!selectedModel">
+      <div class="empty-mascot">🔎</div>
+      <p>再选择具体型号查看价格趋势！</p>
     </div>
 
-    <!-- ===== 图表区域 ===== -->
-    <div v-if="selectedProductId && chartDataReady" class="chart-zone">
-
-      <!-- 商品信息头 -->
-      <div class="product-hero">
-        <div class="product-hero-left">
-          <span class="hero-emoji">{{ currentCategoryIcon }}</span>
-          <div>
-            <h3 class="hero-name">{{ currentProduct.name }}</h3>
-            <div class="hero-meta">
-              <span class="meta-tag source-tag">
-                <span class="tag-dot" :class="priceSourceClass"></span>
-                {{ priceSourceLabel }}
-              </span>
-              <span class="meta-tag update-tag">⏰ {{ lastUpdatedStr }}</span>
-            </div>
-          </div>
-        </div>
-        <div class="product-hero-right">
-          <div class="current-price-block">
-            <span class="price-label">当前价格</span>
-            <span class="price-value">¥{{ currentProduct.price }}</span>
-          </div>
-          <div :class="['price-change-block', priceChangeClass]">
-            <span class="change-arrow">{{ priceChange >= 0 ? '📈' : '📉' }}</span>
-            <span class="change-value">
-              {{ priceChange >= 0 ? '+' : '' }}¥{{ Math.abs(priceChange).toFixed(0) }}
-              ({{ priceChangePercent }}%)
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <!-- 卡通折线图 -->
-      <div class="chart-card">
-        <div class="chart-toolbar">
-          <span class="chart-title">📈 {{ currentCategoryName }}价格走势</span>
-          <div class="range-buttons">
-            <button
-              v-for="r in timeRanges"
-              :key="r.value"
-              :class="['range-btn', { active: selectedRange === r.value }]"
-              @click="selectedRange = r.value"
-            >{{ r.label }}</button>
-          </div>
-        </div>
-        <div class="chart-body">
-          <LineChart :data="chartData" :options="chartOptions" />
-        </div>
-      </div>
-
-      <!-- 价格统计卡片 -->
-      <div class="stats-grid">
-        <div class="stat-card stat-low">
-          <span class="stat-card-icon">🪙</span>
-          <span class="stat-card-label">历史最低</span>
-          <span class="stat-card-value">¥{{ historyLow }}</span>
-          <span class="stat-card-date">{{ historyLowDate }}</span>
-        </div>
-        <div class="stat-card stat-avg">
-          <span class="stat-card-icon">📊</span>
-          <span class="stat-card-label">均价</span>
-          <span class="stat-card-value">¥{{ historyAvg }}</span>
-        </div>
-        <div class="stat-card stat-current">
-          <span class="stat-card-icon">💰</span>
-          <span class="stat-card-label">当前价格</span>
-          <span class="stat-card-value">¥{{ currentProduct.price }}</span>
-        </div>
-        <div class="stat-card stat-high">
-          <span class="stat-card-icon">💎</span>
-          <span class="stat-card-label">历史最高</span>
-          <span class="stat-card-value">¥{{ historyHigh }}</span>
-          <span class="stat-card-date">{{ historyHighDate }}</span>
-        </div>
-      </div>
-
-      <!-- 价格时间线 -->
-      <div class="timeline-section">
-        <div class="timeline-header">
-          <span class="timeline-title">📅 价格历史明细</span>
-          <span class="timeline-count">{{ filteredHistory.length }} 条记录</span>
-        </div>
-        <div class="timeline-list">
-          <div
-            v-for="(item, idx) in filteredHistory"
-            :key="idx"
-            :class="['timeline-item', { 'is-latest': idx === 0, 'is-lowest': item.price == historyLow && filteredHistory.length > 3 }]"
-          >
-            <div class="tl-left">
-              <span class="tl-dot"></span>
-              <span class="tl-date">{{ formatDate(item.time) }}</span>
-            </div>
-            <div class="tl-center">
-              <div class="tl-bar-wrap">
-                <div
-                  class="tl-bar"
-                  :style="{ width: getBarWidth(item.price) + '%' }"
-                  :class="getBarClass(item.price)"
-                ></div>
-              </div>
-            </div>
-            <div class="tl-right">
-              <span class="tl-price">¥{{ item.price }}</span>
-              <span v-if="idx < filteredHistory.length - 1" :class="['tl-diff', getDiffClass(idx)]">
-                {{ getDiffLabel(idx) }}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 数据来源说明 -->
-      <div class="source-info">
-        <span class="source-label">📡 数据来源：</span>
-        <span class="source-tags">
-          <span class="source-tag jd">京东实时价</span>
-          <span class="source-tag tb">淘宝/天猫参考价</span>
-        </span>
-        <span class="source-note">· 每小时自动更新 · 低价提醒请收藏页面</span>
-      </div>
-
+    <!-- 底部装饰 -->
+    <div class="modal-footer">
+      <span class="footer-text">🕐 数据每小时更新 · 仅供参考</span>
     </div>
-
-    <!-- ===== 空状态 ===== -->
-    <div v-else-if="!selectedProductId" class="empty-state">
-      <div class="empty-illustration">🎯</div>
-      <h3>选择一个配件，开始追踪价格</h3>
-      <p>从上方卡片选择一个分类，再选择具体型号<br/>即可查看历史价格走势</p>
-      <div class="empty-hints">
-        <span v-for="hint in emptyHints" :key="hint" class="hint-chip">{{ hint }}</span>
-      </div>
-    </div>
-
-    <!-- ===== 加载状态 ===== -->
-    <div v-if="isLoading" class="loading-overlay">
-      <div class="loading-spinner">⏳</div>
-      <p>正在加载最新价格数据...</p>
-    </div>
-
   </div>
 </template>
 
 <script>
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler,
-} from "chart.js";
-import { Line as LineChart } from "vue-chartjs";
-
-ChartJS.register(
-  CategoryScale, LinearScale, PointElement, LineElement,
-  Title, Tooltip, Legend, Filler
-);
-
-const CATEGORY_THEMES = {
-  cpu:  { color: "#c96442", fill: "rgba(201,100,66,0.12)",  name: "CPU处理器" },
-  gpu:  { color: "#c96442", fill: "rgba(201,100,66,0.12)",  name: "显卡" },
-  ram:  { color: "#c96442", fill: "rgba(201,100,66,0.12)",  name: "内存" },
-  ssd:  { color: "#c96442", fill: "rgba(201,100,66,0.12)",  name: "固态硬盘" },
-  mb:   { color: "#c96442", fill: "rgba(201,100,66,0.12)",  name: "主板" },
-  cool: { color: "#c96442", fill: "rgba(201,100,66,0.12)",  name: "散热器" },
-};
-
 export default {
-  name: "PriceTrendChart",
-  components: { LineChart },
+  name: 'PriceTrendChart',
   data() {
     return {
+      selectedCategory: null,
+      selectedModel: null,
+      selectedRange: '1w',
       categories: [
-        { id: "gpu",  name: "显卡",      icon: "🎮" },
-        { id: "cpu",  name: "CPU",       icon: "⚙️" },
-        { id: "ram",  name: "内存",      icon: "💾" },
-        { id: "ssd",  name: "固态硬盘",  icon: "💿" },
-        { id: "mb",   name: "主板",      icon: "🔌" },
-        { id: "cool", name: "散热器",   icon: "❄️" },
+        { id: 'cpu',  name: 'CPU 处理器', icon: '⚡' },
+        { id: 'gpu',  name: '显卡 GPU',   icon: '🎮' },
+        { id: 'ram',  name: '内存条',     icon: '🧠' },
+        { id: 'ssd',  name: '固态硬盘',   icon: '💾' },
+        { id: 'mb',   name: '主板',       icon: '🔧' },
+        { id: 'psu',  name: '电源',       icon: '🔋' },
       ],
       timeRanges: [
-        { label: "7天",  value: 7  },
-        { label: "30天", value: 30 },
-        { label: "90天", value: 90 },
-        { label: "全部", value: 0  },
+        { label: '近1周', value: '1w' },
+        { label: '近2周', value: '2w' },
+        { label: '近1月', value: '1m' },
+        { label: '近3月', value: '3m' },
+        { label: '近6月', value: '6m' },
       ],
-      selectedCategory: "gpu",
-      selectedProductId: "",
-      selectedRange: 30,
-      searchQuery: "",
-      showSearchResults: false,
-      priceData: null,
-      isLoading: false,
-      emptyHints: ["RTX 5090 跌破万元", "DDR5 内存创新低", "SSD 持续降价中", "9800X3D 价格走势"],
-    };
+      modelsMap: {
+        cpu: [
+          { id:'c1', tag:'Intel', name:'i9-14900K', currentPrice:3899, trend:{ '1w':[3750,3780,3810,3830,3850,3875,3899], '2w':[3600,3640,3680,3710,3740,3780,3810,3830,3850,3870,3880,3890,3895,3899], '1m':[3400,3450,3500,3550,3600,3640,3680,3710,3740,3780,3810,3830,3850,3870,3880,3890,3895,3899,3898,3899,3897,3899,3900,3899,3898,3897,3899,3899,3898,3899], '3m':null, '6m':null } },
+          { id:'c2', tag:'AMD',   name:'R9 7950X',  currentPrice:3299, trend:{ '1w':[3350,3330,3310,3305,3300,3298,3299], '2w':null, '1m':null, '3m':null, '6m':null } },
+          { id:'c3', tag:'Intel', name:'i7-14700K', currentPrice:2699, trend:{ '1w':[2650,2660,2670,2680,2685,2690,2699], '2w':null, '1m':null, '3m':null, '6m':null } },
+          { id:'c4', tag:'AMD',   name:'R7 7800X3D',currentPrice:2199, trend:{ '1w':[2300,2280,2260,2240,2220,2210,2199], '2w':null, '1m':null, '3m':null, '6m':null } },
+        ],
+        gpu: [
+          { id:'g1', tag:'NVIDIA', name:'RTX 5090',   currentPrice:16999, trend:{ '1w':[16500,16600,16700,16800,16850,16900,16999], '2w':null, '1m':null, '3m':null, '6m':null } },
+          { id:'g2', tag:'NVIDIA', name:'RTX 4090',   currentPrice:9999,  trend:{ '1w':[10200,10150,10100,10050,10020,10005,9999], '2w':null, '1m':null, '3m':null, '6m':null } },
+          { id:'g3', tag:'AMD',    name:'RX 7900 XTX',currentPrice:5999,  trend:{ '1w':[5800,5830,5850,5870,5890,5950,5999], '2w':null, '1m':null, '3m':null, '6m':null } },
+          { id:'g4', tag:'NVIDIA', name:'RTX 4070 Ti',currentPrice:4599,  trend:{ '1w':[4700,4680,4660,4640,4620,4610,4599], '2w':null, '1m':null, '3m':null, '6m':null } },
+        ],
+        ram: [
+          { id:'r1', tag:'DDR5', name:'海盗船 32G DDR5-6000', currentPrice:699, trend:{ '1w':[720,715,710,705,703,700,699], '2w':null, '1m':null, '3m':null, '6m':null } },
+          { id:'r2', tag:'DDR5', name:'芝奇 幻锋戟 32G',      currentPrice:749, trend:{ '1w':[730,735,738,741,744,747,749], '2w':null, '1m':null, '3m':null, '6m':null } },
+          { id:'r3', tag:'DDR4', name:'金士顿 32G DDR4-3600', currentPrice:399, trend:{ '1w':[420,415,410,408,405,402,399], '2w':null, '1m':null, '3m':null, '6m':null } },
+        ],
+        ssd: [
+          { id:'s1', tag:'NVMe', name:'三星 990 Pro 2TB',  currentPrice:999,  trend:{ '1w':[1050,1040,1030,1020,1010,1005,999], '2w':null, '1m':null, '3m':null, '6m':null } },
+          { id:'s2', tag:'NVMe', name:'西数 SN850X 2TB',   currentPrice:899,  trend:{ '1w':[870,875,880,885,890,895,899], '2w':null, '1m':null, '3m':null, '6m':null } },
+          { id:'s3', tag:'SATA', name:'三星 870 EVO 4TB',  currentPrice:1299, trend:{ '1w':[1350,1340,1330,1320,1310,1305,1299], '2w':null, '1m':null, '3m':null, '6m':null } },
+        ],
+        mb: [
+          { id:'m1', tag:'Z790', name:'华硕 ROG MAXIMUS Z790',  currentPrice:5999, trend:{ '1w':[5900,5920,5940,5955,5965,5980,5999], '2w':null, '1m':null, '3m':null, '6m':null } },
+          { id:'m2', tag:'X670', name:'微星 MEG X670E ACE',      currentPrice:3999, trend:{ '1w':[4100,4080,4060,4040,4020,4010,3999], '2w':null, '1m':null, '3m':null, '6m':null } },
+          { id:'m3', tag:'B650', name:'华硕 TUF GAMING B650-E', currentPrice:1499, trend:{ '1w':[1480,1483,1486,1489,1492,1496,1499], '2w':null, '1m':null, '3m':null, '6m':null } },
+        ],
+        psu: [
+          { id:'p1', tag:'1000W', name:'海盗船 RM1000x', currentPrice:1199, trend:{ '1w':[1220,1215,1210,1208,1205,1202,1199], '2w':null, '1m':null, '3m':null, '6m':null } },
+          { id:'p2', tag:'850W',  name:'振华 LEADEX G850',currentPrice:699,  trend:{ '1w':[680,684,688,691,694,697,699], '2w':null, '1m':null, '3m':null, '6m':null } },
+          { id:'p3', tag:'750W',  name:'安钛克 NE750G',   currentPrice:499,  trend:{ '1w':[510,508,506,504,502,500,499], '2w':null, '1m':null, '3m':null, '6m':null } },
+        ],
+      },
+    }
   },
   computed: {
-    currentCategoryTheme() {
-      return CATEGORY_THEMES[this.selectedCategory] || CATEGORY_THEMES.cpu;
+    currentModels() {
+      return this.modelsMap[this.selectedCategory] || []
     },
-    currentCategoryName() {
-      return this.currentCategoryTheme.name;
+    trendData() {
+      if (!this.selectedModel) return []
+      const raw = this.selectedModel.trend[this.selectedRange]
+      if (raw) return raw
+      return this.generateTrend(this.selectedModel.currentPrice, this.selectedRange)
     },
-    currentCategoryIcon() {
-      const cat = this.categories.find(c => c.id === this.selectedCategory);
-      return cat ? cat.icon : "⚙️";
+    chartPoints() {
+      const data = this.trendData
+      if (!data.length) return []
+      const minV = Math.min(...data)
+      const maxV = Math.max(...data)
+      const pad = (maxV - minV) * 0.15 || 50
+      const lo = minV - pad, hi = maxV + pad
+      const W = 660, H = 170, ox = 20, oy = 10
+      return data.map((v, i) => ({
+        x: ox + (i / Math.max(data.length - 1, 1)) * W,
+        y: oy + H - ((v - lo) / (hi - lo || 1)) * H,
+      }))
     },
-    currentProducts() {
-      if (!this.priceData?.categories) return [];
-      return this.priceData.categories[this.selectedCategory] || [];
+    linePath() {
+      if (!this.chartPoints.length) return ''
+      return this.chartPoints.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ')
     },
-    currentProduct() {
-      if (!this.selectedProductId || !this.currentProducts.length) return null;
-      return this.currentProducts.find(p => p.id === this.selectedProductId) || null;
+    areaPath() {
+      if (!this.chartPoints.length) return ''
+      const pts = this.chartPoints
+      const last = pts[pts.length - 1]
+      return pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ')
+        + ` L${last.x},185 L${pts[0].x},185 Z`
     },
-    priceHistory() {
-      if (!this.currentProduct?.history?.length) return [];
-      return [...this.currentProduct.history].reverse();
+    yLabels() {
+      const data = this.trendData
+      if (!data.length) return []
+      const minV = Math.min(...data), maxV = Math.max(...data)
+      const pad = (maxV - minV) * 0.15 || 50
+      const lo = minV - pad, hi = maxV + pad
+      return Array.from({ length: 5 }, (_, i) =>
+        '¥' + Math.round(lo + (i / 4) * (hi - lo)).toLocaleString()
+      )
     },
-    filteredHistory() {
-      if (!this.priceHistory.length) return [];
-      if (this.selectedRange === 0) return this.priceHistory;
-      const cutoff = new Date();
-      cutoff.setDate(cutoff.getDate() - this.selectedRange);
-      return this.priceHistory.filter(h => new Date(h.time) >= cutoff);
+    xLabels() {
+      const n = this.trendData.length
+      if (!n) return []
+      const labels = []
+      const rangeMap = { '1w': 7, '2w': 14, '1m': 30, '3m': 90, '6m': 180 }
+      const days = rangeMap[this.selectedRange] || 7
+      const step = Math.max(Math.floor(days / (n - 1)), 1)
+      for (let i = 0; i < n; i++) {
+        const d = new Date()
+        d.setDate(d.getDate() - (n - 1 - i) * step)
+        labels.push(`${d.getMonth() + 1}/${d.getDate()}`)
+      }
+      return labels
+    },
+    pastPrice() {
+      return this.trendData[0] || 0
     },
     priceChange() {
-      if (this.filteredHistory.length < 2) return 0;
-      return this.filteredHistory[0].price - this.filteredHistory[1].price;
+      return this.selectedModel ? this.selectedModel.currentPrice - this.pastPrice : 0
     },
-    priceChangePercent() {
-      if (this.filteredHistory.length < 2 || this.filteredHistory[1].price === 0) return "0.00";
-      return ((this.priceChange / this.filteredHistory[1].price) * 100).toFixed(2);
+    changePercent() {
+      if (!this.pastPrice) return '0.00'
+      return ((this.priceChange / this.pastPrice) * 100).toFixed(2)
     },
-    priceChangeClass() {
-      if (this.priceChange > 0) return "up";
-      if (this.priceChange < 0) return "down";
-      return "flat";
+    rangeLabel() {
+      const map = { '1w': '1周', '2w': '2周', '1m': '1个月', '3m': '3个月', '6m': '6个月' }
+      return map[this.selectedRange] || ''
     },
-    historyLow() {
-      if (!this.filteredHistory.length) return "0";
-      return Math.min(...this.filteredHistory.map(h => h.price)).toFixed(0);
-    },
-    historyHigh() {
-      if (!this.filteredHistory.length) return "0";
-      return Math.max(...this.filteredHistory.map(h => h.price)).toFixed(0);
-    },
-    historyAvg() {
-      if (!this.filteredHistory.length) return "0";
-      const avg = this.filteredHistory.reduce((s, h) => s + h.price, 0) / this.filteredHistory.length;
-      return avg.toFixed(0);
-    },
-    historyLowDate() {
-      if (!this.filteredHistory.length) return "";
-      const low = Math.min(...this.filteredHistory.map(h => h.price));
-      const item = this.filteredHistory.find(h => h.price === low);
-      return item ? this.formatDate(item.time) : "";
-    },
-    historyHighDate() {
-      if (!this.filteredHistory.length) return "";
-      const high = Math.max(...this.filteredHistory.map(h => h.price));
-      const item = this.filteredHistory.find(h => h.price === high);
-      return item ? this.formatDate(item.time) : "";
-    },
-    lastUpdatedStr() {
-      if (!this.priceData?.lastUpdated) return "从未";
-      return new Date(this.priceData.lastUpdated).toLocaleString("zh-CN", {
-        month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit",
-      });
-    },
-    priceSourceLabel() {
-      if (!this.currentProduct?.history?.length) return "暂无数据";
-      const last = this.currentProduct.history[this.currentProduct.history.length - 1];
-      return last?.source === "taobao" ? "淘宝源" : "京东源";
-    },
-    priceSourceClass() {
-      if (!this.currentProduct?.history?.length) return "unknown";
-      const last = this.currentProduct.history[this.currentProduct.history.length - 1];
-      return last?.source === "taobao" ? "tb" : "jd";
-    },
-    chartDataReady() {
-      return this.currentProduct && this.filteredHistory.length > 0;
-    },
-    chartData() {
-      const theme = this.currentCategoryTheme;
-      const hist = this.filteredHistory;
-
-      return {
-        labels: hist.map(h => {
-          const d = new Date(h.time);
-          return `${d.getMonth() + 1}/${d.getDate()}`;
-        }),
-        datasets: [{
-          label: this.currentProduct?.name || "",
-          data: hist.map(h => h.price),
-          borderColor: theme.color,
-          backgroundColor: theme.fill,
-          fill: true,
-          tension: 0.4,
-          pointRadius: 5,
-          pointHoverRadius: 9,
-          pointBackgroundColor: theme.color,
-          pointBorderColor: "#faf9f5",
-          pointBorderWidth: 2.5,
-          pointStyle: "circle",
-        }],
-      };
-    },
-    chartOptions() {
-      const theme = this.currentCategoryTheme;
-      return {
-        responsive: true,
-        maintainAspectRatio: false,
-        interaction: { intersect: false, mode: "index" },
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            backgroundColor: "rgba(20,20,19,0.92)",
-            titleColor: "#c96442",
-            bodyColor: "#141413",
-            padding: 14,
-            borderColor: theme.color,
-            borderWidth: 2,
-            cornerRadius: 12,
-            displayColors: false,
-            callbacks: {
-              title: (items) => {
-                const idx = items[0]?.dataIndex;
-                const item = this.filteredHistory[idx];
-                return item ? `📅 ${this.formatDate(item.time)}` : "";
-              },
-              label: (ctx) => `💰 价格: ¥${ctx.raw.toFixed(0)}`,
-            },
-          },
-        },
-        scales: {
-          x: {
-            grid: { color: "rgba(0,0,0,0.05)" },
-            ticks: { color: "#87867f", maxRotation: 0, maxTicksLimit: 8 },
-          },
-          y: {
-            grid: { color: "rgba(0,0,0,0.05)" },
-            ticks: {
-              color: "#87867f",
-              callback: (v) => `¥${v.toFixed(0)}`,
-            },
-          },
-        },
-        animation: {
-          duration: 800,
-          easing: "easeOutQuart",
-        },
-      };
-    },
-    allProducts() {
-      if (!this.priceData?.categories) return [];
-      const results = [];
-      for (const [catId, items] of Object.entries(this.priceData.categories)) {
-        for (const item of items) {
-          results.push({ ...item, catId });
-        }
-      }
-      return results;
-    },
-    filteredSearchResults() {
-      if (!this.searchQuery.trim()) return [];
-      const q = this.searchQuery.toLowerCase();
-      return this.allProducts.filter(p =>
-        p.name.toLowerCase().includes(q) || p.id.toLowerCase().includes(q)
-      ).slice(0, 8);
-    },
-  },
-  watch: {
-    selectedCategory() {
-      this.selectedProductId = "";
-    },
-    searchQuery() {
-      this.showSearchResults = !!this.searchQuery;
-    },
-  },
-  mounted() {
-    this.loadData();
-    document.addEventListener("click", this.handleOutsideClick);
-  },
-  beforeUnmount() {
-    document.removeEventListener("click", this.handleOutsideClick);
   },
   methods: {
-    async loadData() {
-      this.isLoading = true;
-      try {
-        const resp = await fetch("/api/prices");
-        if (resp.ok) {
-          this.priceData = await resp.json();
-        }
-      } catch (e) {
-        console.error("价格数据加载失败:", e);
-      } finally {
-        this.isLoading = false;
+    selectCategory(id) {
+      this.selectedCategory = id
+      this.selectedModel = null
+    },
+    selectModel(model) {
+      this.selectedModel = model
+    },
+    generateTrend(currentPrice, range) {
+      const countMap = { '1w': 7, '2w': 14, '1m': 30, '3m': 90, '6m': 180 }
+      const n = countMap[range] || 7
+      const result = []
+      let price = currentPrice * (0.88 + Math.random() * 0.1)
+      for (let i = 0; i < n; i++) {
+        price += (Math.random() - 0.45) * currentPrice * 0.01
+        result.push(Math.round(price))
       }
-    },
-    selectCategory(catId) {
-      this.selectedCategory = catId;
-      this.selectedProductId = "";
-      this.searchQuery = "";
-      this.showSearchResults = false;
-    },
-    onProductChange() {
-      this.selectedRange = 30;
-    },
-    selectProduct(item) {
-      const catId = item.catId || item.id.split("-")[0];
-      this.selectedCategory = catId;
-      this.$nextTick(() => {
-        this.selectedProductId = item.id;
-      });
-      this.searchQuery = "";
-      this.showSearchResults = false;
-    },
-    onSearch() {
-      this.showSearchResults = true;
-    },
-    clearSearch() {
-      this.searchQuery = "";
-      this.showSearchResults = false;
-    },
-    handleOutsideClick(e) {
-      if (!e.target.closest(".search-zone")) {
-        this.showSearchResults = false;
-      }
-    },
-    getCategoryCount(catId) {
-      return (this.priceData?.categories?.[catId] || []).length;
-    },
-    getCategoryEmoji(id) {
-      const prefix = id.split("-")[0];
-      const cat = this.categories.find(c => c.id === prefix);
-      return cat ? cat.icon : "📦";
-    },
-    getCategoryName(id) {
-      const prefix = id.split("-")[0];
-      return CATEGORY_THEMES[prefix]?.name || prefix;
-    },
-    formatDate(dateStr) {
-      if (!dateStr) return "";
-      const d = new Date(dateStr);
-      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-    },
-    getBarWidth(price) {
-      if (!this.filteredHistory.length) return 0;
-      const min = Math.min(...this.filteredHistory.map(h => h.price));
-      const max = Math.max(...this.filteredHistory.map(h => h.price));
-      const range = max - min || 1;
-      return ((price - min) / range * 100).toFixed(1);
-    },
-    getBarClass(price) {
-      const current = this.filteredHistory[0]?.price || 0;
-      if (price < current) return "bar-low";
-      if (price > current) return "bar-high";
-      return "bar-same";
-    },
-    getDiffClass(idx) {
-      const curr = this.filteredHistory[idx];
-      const next = this.filteredHistory[idx + 1];
-      if (!next) return "";
-      return curr.price > next.price ? "diff-up" : curr.price < next.price ? "diff-down" : "diff-same";
-    },
-    getDiffLabel(idx) {
-      const curr = this.filteredHistory[idx];
-      const next = this.filteredHistory[idx + 1];
-      if (!next) return "";
-      const diff = curr.price - next.price;
-      if (diff > 0) return `+¥${diff.toFixed(0)}`;
-      if (diff < 0) return `-¥${Math.abs(diff).toFixed(0)}`;
-      return "—";
+      result[n - 1] = currentPrice
+      return result
     },
   },
-};
+}
 </script>
 
 <style scoped>
-/* ── 全局容器 ── */
-.price-trend-wrap {
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 40px 32px;
-  background: #faf9f5;
-  border: 1px solid #f0eee6;
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap');
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+.price-modal {
+  background: #faf8ff;
   border-radius: 24px;
-  box-shadow: rgba(0,0,0,0.05) 0px 4px 24px;
-  position: relative;
-}
-
-/* ── 标题区 ── */
-.section-header {
-  text-align: center;
-  margin-bottom: 32px;
-}
-
-.header-eyebrow {
-  font-family: Arial, sans-serif;
-  font-size: 12px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: #c96442;
-  display: block;
-  margin-bottom: 8px;
-}
-
-.header-title {
-  font-family: Georgia, serif;
-  font-size: 32px;
-  font-weight: 500;
-  color: #141413;
-  margin: 0 0 10px;
-  line-height: 1.15;
-}
-
-.header-sub {
-  color: #87867f;
-  font-size: 14px;
-  margin: 0;
-  font-family: Arial, sans-serif;
-}
-
-/* ── 分类卡片网格 ── */
-.category-grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-@media (max-width: 640px) {
-  .category-grid { grid-template-columns: repeat(3, 1fr); }
-}
-
-.cat-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 14px 8px;
-  background: #faf9f5;
-  border: 1px solid #f0eee6;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-  color: #5e5d59;
-  gap: 4px;
-  font-family: Arial, sans-serif;
-}
-
-.cat-card:hover {
-  border-color: #c96442;
-  color: #c96442;
-  transform: translateY(-3px);
-}
-
-.cat-card.active {
-  background: #c96442;
-  border-color: #c96442;
-  color: #faf9f5;
-  box-shadow: 0px 0px 0px 1px #c96442;
-}
-
-.cat-emoji { font-size: 24px; }
-.cat-name { font-size: 12px; font-weight: 600; }
-.cat-count { font-size: 10px; opacity: 0.7; }
-
-/* ── 搜索区 ── */
-.search-zone {
-  position: relative;
-  margin-bottom: 16px;
-}
-
-.search-box {
-  display: flex;
-  align-items: center;
-  background: #faf9f5;
-  border: 1px solid #f0eee6;
-  border-radius: 50px;
-  padding: 0 18px;
-  gap: 10px;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.search-box:focus-within {
-  border-color: #c96442;
-  box-shadow: 0 0 0 3px rgba(201, 100, 66, 0.10);
-}
-
-.search-icon { font-size: 18px; }
-
-.search-input {
-  flex: 1;
-  background: none;
-  border: none;
-  outline: none;
-  color: #141413;
-  font-size: 15px;
-  padding: 13px 0;
-  font-family: Arial, sans-serif;
-}
-
-.search-input::placeholder { color: #87867f; }
-
-.clear-btn {
-  background: none;
-  border: none;
-  color: #87867f;
-  cursor: pointer;
-  font-size: 14px;
-  padding: 4px 8px;
-}
-
-.search-dropdown {
-  position: absolute;
-  top: calc(100% + 6px);
-  left: 0; right: 0;
-  background: #faf9f5;
-  border: 1px solid #f0eee6;
-  border-radius: 16px;
+  border: 3px solid #c4b5fd;
+  box-shadow: 0 8px 32px rgba(109, 40, 217, 0.15);
+  padding: 0 0 20px;
+  font-family: 'Nunito', sans-serif;
   overflow: hidden;
-  z-index: 100;
-  box-shadow: rgba(0,0,0,0.05) 0px 4px 24px;
 }
 
-.search-result-item {
+/* ===== 标题栏 ===== */
+.modal-header {
+  background: linear-gradient(135deg, #7C3AED 0%, #a855f7 100%);
+  padding: 18px 24px;
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 16px;
-  cursor: pointer;
-  transition: background 0.15s;
-  border-bottom: 1px solid #f0eee6;
-  font-family: Arial, sans-serif;
 }
 
-.search-result-item:last-child { border-bottom: none; }
-.search-result-item:hover { background: #f0eee6; }
-
-.result-emoji { font-size: 20px; }
-.result-info { flex: 1; display: flex; flex-direction: column; }
-.result-name { color: #141413; font-size: 14px; font-weight: 500; }
-.result-cat { color: #87867f; font-size: 11px; }
-.result-price { color: #c96442; font-weight: 700; font-size: 14px; }
-
-/* ── 商品选择 ── */
-.product-select-zone { margin-bottom: 20px; }
-
-.select-wrapper {
-  display: flex;
-  align-items: center;
-  background: #faf9f5;
-  border: 1px solid #f0eee6;
-  border-radius: 14px;
-  padding: 0 16px;
-  gap: 10px;
-  transition: border-color 0.2s;
+.header-icon {
+  font-size: 28px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,.3));
+  animation: wobble 3s ease-in-out infinite;
 }
 
-.select-wrapper:focus-within {
-  border-color: #c96442;
+@keyframes wobble {
+  0%,100% { transform: rotate(-5deg); }
+  50%      { transform: rotate(5deg); }
 }
 
-.select-icon { font-size: 22px; }
-
-.product-select {
+.modal-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: 20px;
+  color: #fff;
+  letter-spacing: .5px;
+  text-shadow: 0 2px 4px rgba(0,0,0,.2);
   flex: 1;
-  background: none;
-  border: none;
-  outline: none;
-  color: #141413;
-  font-size: 15px;
-  padding: 14px 0;
+}
+
+/* ===== 区段公共 ===== */
+.category-section, .model-section, .chart-section { padding: 16px 20px 0; }
+
+.section-label {
+  font-size: 12px;
+  font-weight: 800;
+  color: #7C3AED;
+  letter-spacing: .3px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+/* ===== 分类 Pills ===== */
+.category-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.category-pill {
+  border: 2.5px solid #e9d5ff;
+  background: #fff;
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #6b21a8;
   cursor: pointer;
-  appearance: none;
-  font-family: Arial, sans-serif;
-}
-
-.product-select option { background: #faf9f5; color: #141413; }
-.select-arrow { color: #87867f; font-size: 12px; }
-
-/* ── 商品信息头 ── */
-.product-hero {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #f0eee6;
-  border-radius: 16px;
-  padding: 20px 24px;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
-  gap: 16px;
-  font-family: Arial, sans-serif;
-}
-
-.product-hero-left { display: flex; align-items: center; gap: 14px; }
-.hero-emoji { font-size: 36px; }
-.hero-name { color: #141413; font-size: 18px; font-weight: 600; margin: 0 0 6px; font-family: Georgia, serif; }
-.hero-meta { display: flex; gap: 10px; flex-wrap: wrap; }
-
-.meta-tag {
-  font-size: 11px;
-  padding: 3px 10px;
-  border-radius: 50px;
-  background: #faf9f5;
-  color: #5e5d59;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  border: 1px solid #e8e6dc;
-}
-
-.tag-dot { width: 7px; height: 7px; border-radius: 50%; }
-.tag-dot.jd { background: #c96442; }
-.tag-dot.tb { background: #d97757; }
-.tag-dot.unknown { background: #87867f; }
-
-.product-hero-right { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-
-.current-price-block { text-align: center; }
-.price-label { display: block; font-size: 11px; color: #87867f; margin-bottom: 2px; }
-.price-value { display: block; font-size: 26px; font-weight: 800; color: #c96442; font-family: Georgia, serif; }
-
-.price-change-block {
+  transition: all .2s;
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 14px;
-  border-radius: 50px;
-  font-size: 13px;
-  font-weight: 600;
-  background: #faf9f5;
-  border: 1px solid #e8e6dc;
+  font-family: 'Nunito', sans-serif;
 }
-
-.price-change-block.up { color: #b53333; border-color: rgba(181,51,51,0.2); background: rgba(181,51,51,0.05); }
-.price-change-block.down { color: #2d8a4e; border-color: rgba(45,138,78,0.2); background: rgba(45,138,78,0.05); }
-.price-change-block.flat { color: #87867f; }
-
-/* ── 图表卡片 ── */
-.chart-card {
-  background: #ffffff;
-  border: 1px solid #f0eee6;
-  border-radius: 16px;
-  padding: 20px;
-  margin-bottom: 16px;
-  box-shadow: 0px 0px 0px 1px #d1cfc5;
+.category-pill:hover { border-color: #a855f7; background: #f5f3ff; transform: translateY(-2px); }
+.category-pill.active {
+  background: linear-gradient(135deg, #7C3AED, #a855f7);
+  border-color: #7C3AED;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(124,58,237,.4);
+  transform: translateY(-2px);
 }
+.pill-icon { font-size: 15px; }
 
-.chart-toolbar {
+/* ===== 型号网格 ===== */
+.model-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 10px; }
+
+.model-card {
+  border: 2.5px solid #e9d5ff;
+  background: #fff;
+  border-radius: 14px;
+  padding: 12px;
+  cursor: pointer;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
-  gap: 10px;
-  font-family: Arial, sans-serif;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  transition: all .2s;
+  text-align: left;
+}
+.model-card:hover { border-color: #a855f7; transform: translateY(-3px); box-shadow: 0 6px 18px rgba(124,58,237,.15); }
+.model-card.active {
+  border-color: #7C3AED;
+  background: #f5f3ff;
+  box-shadow: 0 0 0 3px #ddd6fe, 0 6px 18px rgba(124,58,237,.2);
+  transform: translateY(-3px);
 }
 
-.chart-title { color: #5e5d59; font-size: 14px; }
+.model-tag {
+  font-size: 10px;
+  font-weight: 900;
+  color: #7C3AED;
+  background: #ede9fe;
+  border-radius: 6px;
+  padding: 2px 7px;
+}
+.model-name { font-size: 12px; font-weight: 700; color: #1f2937; line-height: 1.3; }
+.model-price { font-family: 'Fredoka One', cursive; font-size: 16px; color: #7C3AED; }
 
-.range-buttons { display: flex; gap: 6px; }
+/* ===== 价格聚焦 ===== */
+.price-spotlight {
+  background: linear-gradient(135deg, #4c1d95, #7C3AED);
+  border-radius: 18px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 6px 20px rgba(124,58,237,.3);
+}
+
+.spotlight-chip {
+  font-size: 11px;
+  font-weight: 900;
+  color: #fff;
+  background: rgba(255,255,255,.2);
+  border-radius: 999px;
+  padding: 4px 10px;
+  white-space: nowrap;
+  border: 1.5px solid rgba(255,255,255,.4);
+}
+
+.spotlight-price {
+  font-family: 'Fredoka One', cursive;
+  font-size: 32px;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0,0,0,.3);
+}
+
+.spotlight-name { font-size: 13px; color: #ddd6fe; font-weight: 700; }
+
+/* ===== 时间范围 ===== */
+.time-range-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.range-label { font-size: 12px; font-weight: 800; color: #6b21a8; white-space: nowrap; }
+.range-buttons { display: flex; gap: 6px; flex-wrap: wrap; }
 
 .range-btn {
-  padding: 5px 14px;
-  border-radius: 50px;
-  border: 1px solid #f0eee6;
-  background: #faf9f5;
-  color: #5e5d59;
+  border: 2px solid #ddd6fe;
+  background: #fff;
+  border-radius: 999px;
+  padding: 5px 12px;
   font-size: 12px;
+  font-weight: 700;
+  color: #7C3AED;
   cursor: pointer;
-  transition: all 0.2s;
-  font-family: Arial, sans-serif;
+  transition: all .2s;
+  font-family: 'Nunito', sans-serif;
 }
-
+.range-btn:hover { border-color: #a855f7; background: #f5f3ff; }
 .range-btn.active {
-  background: #c96442;
-  border-color: #c96442;
-  color: #faf9f5;
+  background: #7C3AED;
+  border-color: #7C3AED;
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(124,58,237,.35);
 }
 
-.chart-body { height: 260px; position: relative; }
-.chart-body canvas { max-height: 260px; }
-
-/* ── 统计卡片 ── */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  margin-bottom: 16px;
-  font-family: Arial, sans-serif;
-}
-
-@media (max-width: 600px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
-
-.stat-card {
-  background: #faf9f5;
-  border: 1px solid #f0eee6;
-  border-radius: 12px;
-  padding: 16px 12px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.2s;
-}
-
-.stat-card:hover { transform: translateY(-3px); }
-
-.stat-card-icon { font-size: 22px; display: block; margin-bottom: 6px; }
-.stat-card-label { display: block; font-size: 11px; color: #87867f; margin-bottom: 4px; }
-.stat-card-value { display: block; font-size: 18px; font-weight: 800; color: #141413; font-family: Georgia, serif; }
-.stat-card-date { display: block; font-size: 10px; color: #87867f; margin-top: 3px; }
-
-.stat-low .stat-card-value { color: #2d8a4e; }
-.stat-high .stat-card-value { color: #b53333; }
-
-/* ── 时间线 ── */
-.timeline-section {
-  background: #faf9f5;
-  border: 1px solid #f0eee6;
+/* ===== 折线图 ===== */
+.chart-wrapper {
+  background: #fff;
   border-radius: 16px;
-  padding: 18px;
+  border: 2.5px solid #e9d5ff;
+  padding: 10px;
   margin-bottom: 14px;
-  font-family: Arial, sans-serif;
+  overflow: hidden;
 }
+.chart-svg { width: 100%; height: 200px; display: block; }
+.chart-dot { transition: r .15s; }
+.chart-dot:hover { r: 6; }
 
-.timeline-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 14px;
-}
-
-.timeline-title { color: #5e5d59; font-size: 14px; }
-.timeline-count { color: #87867f; font-size: 11px; }
-
-.timeline-list { display: flex; flex-direction: column; gap: 6px; max-height: 280px; overflow-y: auto; }
-
-.timeline-item {
+/* ===== 对比卡片 ===== */
+.compare-cards {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 6px 8px;
-  border-radius: 10px;
-  transition: background 0.15s;
+  margin-bottom: 4px;
 }
 
-.timeline-item:hover { background: #f0eee6; }
-.timeline-item.is-latest { background: rgba(201,100,66,0.06); }
-.timeline-item.is-lowest { background: rgba(45,138,78,0.06); }
-
-.tl-left { display: flex; align-items: center; gap: 6px; min-width: 90px; }
-.tl-dot { width: 8px; height: 8px; border-radius: 50%; background: #c96442; flex-shrink: 0; }
-.tl-date { color: #87867f; font-size: 12px; white-space: nowrap; }
-
-.tl-center { flex: 1; padding: 0 8px; }
-.tl-bar-wrap { height: 6px; background: #e8e6dc; border-radius: 3px; overflow: hidden; }
-.tl-bar { height: 100%; border-radius: 3px; transition: width 0.4s ease; }
-.tl-bar.bar-low { background: #2d8a4e; }
-.tl-bar.bar-high { background: #b53333; }
-.tl-bar.bar-same { background: #c96442; }
-
-.tl-right { display: flex; flex-direction: column; align-items: flex-end; min-width: 70px; }
-.tl-price { color: #141413; font-weight: 700; font-size: 13px; }
-.tl-diff { font-size: 10px; font-weight: 600; }
-.diff-up { color: #b53333; }
-.diff-down { color: #2d8a4e; }
-.diff-same { color: #87867f; }
-
-/* ── 数据来源 ── */
-.source-info {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 14px;
-  background: #faf9f5;
-  border: 1px solid #f0eee6;
-  border-radius: 12px;
-  flex-wrap: wrap;
-  font-family: Arial, sans-serif;
-}
-
-.source-label { color: #87867f; font-size: 12px; }
-.source-tags { display: flex; gap: 8px; }
-
-.source-tag {
-  font-size: 11px;
-  padding: 3px 10px;
-  border-radius: 50px;
-  font-family: Arial, sans-serif;
-}
-
-.source-tag.jd { background: rgba(201,100,66,0.10); color: #c96442; }
-.source-tag.tb { background: rgba(217,119,87,0.10); color: #d97757; }
-
-.source-note { color: #87867f; font-size: 11px; }
-
-/* ── 空状态 ── */
-.empty-state {
-  text-align: center;
-  padding: 60px 20px;
-  color: #5e5d59;
-  font-family: Arial, sans-serif;
-}
-
-.empty-illustration { font-size: 64px; margin-bottom: 16px; }
-.empty-state h3 { color: #141413; font-family: Georgia, serif; font-size: 22px; font-weight: 500; margin: 0 0 10px; }
-.empty-state p { font-size: 14px; line-height: 1.70; margin: 0 0 20px; color: #5e5d59; }
-
-.empty-hints { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-
-.hint-chip {
-  background: rgba(201,100,66,0.08);
-  border: 1px solid rgba(201,100,66,0.20);
-  color: #c96442;
-  font-size: 12px;
-  padding: 5px 14px;
-  border-radius: 50px;
-}
-
-/* ── 加载 ── */
-.loading-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(245,244,237,0.92);
+.compare-card {
+  flex: 1;
+  border-radius: 16px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  border-radius: 24px;
-  z-index: 50;
+  gap: 4px;
+  border: 2.5px solid #e9d5ff;
+  background: #fff;
+}
+.compare-card.past    { border-color: #bfdbfe; background: #eff6ff; }
+.compare-card.current { border-color: #bbf7d0; background: #f0fdf4; }
+.compare-card.rose    { border-color: #fecaca; background: #fff5f5; }
+.compare-card.fell    { border-color: #bbf7d0; background: #f0fdf4; }
+
+.compare-icon  { font-size: 20px; }
+.compare-label { font-size: 11px; font-weight: 800; color: #6b7280; }
+.compare-price {
+  font-family: 'Fredoka One', cursive;
+  font-size: 17px;
+  color: #1f2937;
+}
+.compare-price.percent { font-size: 20px; }
+.compare-card.rose .compare-price { color: #ef4444; }
+.compare-card.fell .compare-price { color: #22c55e; }
+
+.compare-arrow {
+  font-size: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.trend-arrow.up   { color: #ef4444; }
+.trend-arrow.down { color: #22c55e; }
+
+/* ===== 空态 ===== */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 28px;
+  color: #9ca3af;
+  font-weight: 700;
+  font-size: 14px;
+}
+.empty-mascot { font-size: 48px; animation: float 3s ease-in-out infinite; }
+@keyframes float { 0%,100%{ transform:translateY(0) } 50%{ transform:translateY(-10px) } }
+
+/* ===== 底部 ===== */
+.modal-footer {
+  margin-top: 14px;
+  padding: 0 20px;
+  text-align: center;
+}
+.footer-text {
+  font-size: 11px;
+  color: #c4b5fd;
+  font-weight: 700;
+  background: #f5f3ff;
+  border-radius: 999px;
+  padding: 5px 14px;
+  display: inline-block;
+  border: 1.5px solid #ede9fe;
 }
 
-.loading-spinner { font-size: 48px; animation: spin 1.5s linear infinite; }
-.loading-overlay p { color: #5e5d59; margin-top: 12px; font-size: 14px; }
-
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* ── 响应式 ── */
-@media (max-width: 640px) {
-  .price-trend-wrap { margin: 16px; padding: 24px 16px; }
-  .header-title { font-size: 24px; }
-  .product-hero { flex-direction: column; align-items: flex-start; }
-  .product-hero-right { width: 100%; justify-content: space-between; }
-  .chart-body { height: 200px; }
-  .chart-body canvas { max-height: 200px; }
-}
+/* ===== 滚动条 ===== */
+.price-modal::-webkit-scrollbar { width: 6px; }
+.price-modal::-webkit-scrollbar-track { background: transparent; }
+.price-modal::-webkit-scrollbar-thumb { background: #c4b5fd; border-radius: 3px; }
 </style>

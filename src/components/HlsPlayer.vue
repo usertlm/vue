@@ -92,7 +92,7 @@ export default {
       }
     },
 
-    handleNativeError(e) {
+    handleNativeError(_e) {
       this.error = '原生播放失败'
       if (Hls.isSupported()) {
         this.hls = new Hls()

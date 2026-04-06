@@ -1,7 +1,7 @@
 <template>
   <div class="hls-player">
     <div class="section-header">
-      <h2 class="section-heading">🎬 直播测试</h2>
+      <h2 class="section-heading">🎬 直播</h2>
     </div>
     <div v-if="error" class="error-msg">{{ error }}</div>
     <div class="video-wrapper">

@@ -63,8 +63,8 @@ export default {
         this.hls.loadSource(this.src)
         this.hls.attachMedia(video)
 
-        this.hls.on(Hls.Events.MANIFEST_PARSED, (event, data) => {
-          video.play().catch(e => console.log('Play error:', e))
+        this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          video.play().catch(() => {})
         })
 
         this.hls.on(Hls.Events.ERROR, (event, data) => {

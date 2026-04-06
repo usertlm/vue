@@ -116,7 +116,7 @@
           </div>
         </div>
         <div class="chart-body">
-          <Line :data="chartData" :options="chartOptions" />
+          <LineChart :data="chartData" :options="chartOptions" />
         </div>
       </div>
 
@@ -224,7 +224,7 @@ import {
   Legend,
   Filler,
 } from "chart.js";
-import { Line } from "vue-chartjs";
+import { Line as LineChart } from "vue-chartjs";
 
 ChartJS.register(
   CategoryScale, LinearScale, PointElement, LineElement,
@@ -242,7 +242,7 @@ const CATEGORY_THEMES = {
 
 export default {
   name: "PriceTrendChart",
-  components: { Line },
+  components: { LineChart },
   data() {
     return {
       categories: [

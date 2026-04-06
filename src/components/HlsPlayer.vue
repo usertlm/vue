@@ -67,7 +67,7 @@ export default {
           video.play().catch(() => {})
         })
 
-        this.hls.on(Hls.Events.ERROR, (event, data) => {
+        this.hls.on(Hls.Events.ERROR, (_event, data) => {
           if (data.fatal) {
             switch (data.type) {
               case Hls.ErrorTypes.NETWORK_ERROR:
@@ -92,7 +92,7 @@ export default {
       }
     },
 
-    handleNativeError(_e) {
+    handleNativeError() {
       this.error = '原生播放失败'
       if (Hls.isSupported()) {
         this.hls = new Hls()

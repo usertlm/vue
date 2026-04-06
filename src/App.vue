@@ -17,7 +17,6 @@
       <HlsPlayer src="https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8" />
 
       <HelloWorld msg="👇👇👇" />
-      <PriceTrendChart />
       <SearchComponent />
 
       <svg class="icon-link" @click="goToWebsite" width="24" height="24" viewBox="0 0 24 24">
@@ -31,15 +30,13 @@
 import HelloWorld from './components/HelloWorld.vue'
 import SearchComponent from './components/search.vue'
 import HlsPlayer from './components/HlsPlayer.vue'
-import PriceTrendChart from './components/PriceTrendChart.vue'
 
 export default {
   name: 'App',
   components: {
     HelloWorld,
     SearchComponent,
-    HlsPlayer,
-    PriceTrendChart
+    HlsPlayer
   },
   methods: {
     goToWebsite() {

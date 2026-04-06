@@ -20,6 +20,9 @@
     <!-- Google AdSense -->
     <AdSense />
 
+    <!-- 电脑配件价格趋势 -->
+    <PriceTrendChart />
+
     <!-- 今日热闻 -->
     <section class="section-block">
       <h3 class="section-heading">📰 今日科技要闻</h3>
@@ -190,12 +193,14 @@
 <script>
 import AdSense from './AdSense.vue';
 import ChatBox from './ChatBox.vue';
+import PriceTrendChart from './PriceTrendChart.vue';
 
 export default {
   name: 'HelloWorld',
   components: {
     AdSense,
-    ChatBox
+    ChatBox,
+    PriceTrendChart
   },
   props: {
     msg: String,

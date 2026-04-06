@@ -1024,3 +1024,4 @@ export default {
   .chart-body { height: 200px; }
   .chart-body canvas { max-height: 200px; }
 }
+</style>

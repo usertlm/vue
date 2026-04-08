@@ -28,25 +28,52 @@
       <h3 class="section-heading">📰 今日科技要闻</h3>
       <div class="news-list">
         <article class="news-item">
-          <h4 class="news-title">AI 编程工具持续进化，Claude 3.7 成为开发者首选助手</h4>
+          <h4 class="news-title">GPT-5 发布：OpenAI 新模型在复杂推理上超越人类专家平均水平</h4>
           <p class="news-body">
-            Anthropic 最新发布的 Claude 3.7 在编程辅助领域取得了显著突破，其超长思维链（extended thinking）能力让复杂代码问题的解决率提升了近 40%。与此同时，Cursor 和 GitHub Copilot 也相继推出重大更新，AI 代码助手赛道竞争愈发激烈。对于开发者而言，2026 年是工具变革最大的一年，建议持续关注各平台的功能迭代，选取最适合自己的工作流。
+            OpenAI 于本周正式发布 GPT-5，在 MMLU、GPQA Diamond 等权威基准上超越人类专家平均水平，尤其在数学证明和代码生成任务上表现突出。GPT-5 采用全新架构，训练数据量是 GPT-4 的约 8 倍，推理效率却仅增加 30%。目前已向 ChatGPT Plus 用户开放，API 将于本月底开放付费调用。
           </p>
         </article>
         <article class="news-item">
-          <h4 class="news-title">DDR5 内存价格回落，4 月中旬或为最佳入手窗口</h4>
+          <h4 class="news-title">苹果 M4 Ultra 登场：Mac Pro 性能飙升，功耗下降 25%</h4>
           <p class="news-body">
-            据 CFM 闪存市场最新报价，DDR5 32GB 6000MHz 渠道价本周下跌约 9%，回到 $300 美元区间。
-            华强北商户表示此轮下跌属于前期暴涨后的短期调整，业内预计 4 月中旬将企稳回升。
-            如有装机或升级需求，当前的价格水位已具备一定吸引力，建议结合自身预算择机入手。
+            苹果在春季发布会上正式推出 M4 Ultra 芯片，采用 3nm 工艺制造，拥有 32 核 CPU 和 128 核 GPU，机器学习性能是 M3 Ultra 的 2.3 倍。更关键的是能效比大幅提升，在相同负载下功耗降低约 25%。搭载该芯片的新款 Mac Pro 起步价 $6,999，将于 4 月底正式发货。
           </p>
         </article>
         <article class="news-item">
-          <h4 class="news-title">存储芯片缺货潮持续，NAND Flash 合约价再涨 15%</h4>
+          <h4 class="news-title">国产芯片突破：华为昇腾 910C 开始向大厂出货</h4>
           <p class="news-body">
-            TrendForce 报告指出，受 AI 服务器需求爆发影响，2026 年 Q1 PC DRAM 合约价飙升幅度较前期显著扩大。
-            三星、SK 海力士、美光三大原厂均表示产能优先供应数据中心领域，消费级市场现货价格上涨已成定局。
-            这一趋势预计将持续至下半年，建议有大量存储需求的用户提前规划采购。
+            知情人士透露，华为昇腾 910C 已开始向国内头部云厂商和 AI 企业批量出货，7nm 制程，FP16 算力接近英伟达 H100 的 90%。在中美科技战持续背景下，昇腾系列正成为国内大模型训练的重要选择，订单已排期至 2026 年底。
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- 游戏资讯 -->
+    <section class="section-block">
+      <h3 class="section-heading">🎮 近期游戏资讯</h3>
+      <div class="news-list">
+        <article class="news-item">
+          <h4 class="news-title">《GTA VI》正式官宣 2026 年秋季发售，预告片 48 小时破 2 亿播放</h4>
+          <p class="news-body">
+            Rockstar Games 正式宣布《GTA VI》将于 2026 年秋季发售，平台首发为 PlayStation 5 和 Xbox Series X|S，PC 版稍后推出。官方预告片在 YouTube 上线 48 小时内突破 2 亿播放，创下游戏预告片新纪录。游戏设定在 Vice City 及其周边地区，支持男女双主角。
+          </p>
+        </article>
+        <article class="news-item">
+          <h4 class="news-title">《黑神话：悟空》DLC「再起西行」公布，今夏免费更新</h4>
+          <p class="news-body">
+            游戏科学在 GDC 2026 上正式公布《黑神话：悟空》首个 DLC「再起西行」，将于今年夏季免费向所有玩家推送。官方同步放出 8 分钟实机演示，新区域火焰山、白骨岭首次亮相，Boss 数量比本体增加 40%。此外还将在今年晚些时候推出付费大型资料片「天竺」。
+          </p>
+        </article>
+        <article class="news-item">
+          <h4 class="news-title">Switch 2 正式发布：4K 输出、DLSS 级升频，定价 $449</h4>
+          <p class="news-body">
+            任天堂正式发布 Switch 2，搭载英伟达 T239 定制芯片，支持 4K 60fps 输出和 AI 升频技术。配备 7.9 英寸 1080P 触控屏，电池续航提升至 6-9 小时。向下兼容全部 Switch 游戏，首发护航大作包括《马里奥赛车：世界》《塞尔达传说：梦境岛》重制版。官方建议零售价 $449，今夏全球同步发售。
+          </p>
+        </article>
+        <article class="news-item">
+          <h4 class="news-title">《赛博朋克2077》Steam 在线人数突破 15 万，创历史新高</h4>
+          <p class="news-body">
+            得益于 3.0 重大更新和 4 月促销，《赛博朋克2077》Steam 同时在线人数突破 15 万，创下发售以来的历史峰值。CDPR 同期宣布游戏累计销量已超过 3000 万份，救赎之路终于画上圆满句号。官方透露《赛博朋克2078》已在早期开发中。
           </p>
         </article>
       </div>
@@ -71,11 +98,18 @@
           <span class="article-tag">前端</span>
         </div>
         <div class="article-item">
-          <h4 class="article-title">如何选择合适的云服务器：AWS / GCP / 阿里云对比</h4>
+          <h4 class="article-title">国产大模型选型指南：通义 / 混元 / 智谱 / DeepSeek 对比</h4>
           <p class="article-desc">
-            选云服务器不能只看价格，要结合业务场景、网络质量、备案要求和长期成本综合考量。本文从技术选型角度对比了三大主流云厂商的优劣势，并给出不同场景下的推荐选择。
+            2026 年国内大模型竞争进入白热化阶段，本文从推理能力、API 定价、上下文长度、生态成熟度四个维度对通义千问、腾讯混元、智谱 GLM-4 和 DeepSeek V3 进行实测对比，并给出不同场景下的选型建议。
           </p>
-          <span class="article-tag">云计算</span>
+          <span class="article-tag">AI</span>
+        </div>
+        <div class="article-item">
+          <h4 class="article-title">TypeScript 6.0 重大更新：独立类型声明与更好用的范型推导</h4>
+          <p class="article-desc">
+            TypeScript 6.0 正式发布，最大亮点是终于支持独立 .d.ts 类型声明文件（无需对应源文件），同时泛型推导能力大幅增强，能处理更复杂的条件类型。本文详解新特性对大型项目的影响，以及迁移到 TS6 的实战步骤。
+          </p>
+          <span class="article-tag">前端</span>
         </div>
       </div>
     </section>

@@ -26,7 +26,7 @@
     <section class="hero-section">
       <div class="hero-inner">
         <div class="hero-badge">🧭 实用导航 + AI 助手</div>
-        <h1 class="hero-headline">你的网络导航站</h1>
+        <h1 class="hero-headline">欢迎来到你的网络导航站</h1>
         <p class="hero-sub">
           整合常用资源、AI 工具与电脑配件价格追踪。<br>
           在这里找到你需要的一切。

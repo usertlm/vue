@@ -475,10 +475,16 @@ export default {
 </script>
 
 <style scoped>
-/* ── Google Fonts ── */
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&display=swap');
+/* Claude Design System — PriceTrendChart */
+:host {
+  display: block;
+  font-family: Arial, system-ui, -apple-system, sans-serif;
+  color: #141413;
+}
 
+/* ── Google Fonts ── */
 .price-wrap {
+  font-family: Arial, system-ui, sans-serif;
   font-family: 'Noto Sans SC', 'Noto Sans', Arial, sans-serif;
   color: var(--color-near-black, #141413);
 }
@@ -501,7 +507,7 @@ export default {
   background: rgba(201,100,66,0.10);
   border: 1px solid rgba(201,100,66,0.20);
   padding: 4px 12px;
-  border-radius: 20px;
+  border-radius: 12px;
   margin-bottom: 10px;
   letter-spacing: 0.3px;
 }
@@ -531,7 +537,7 @@ export default {
 .stat-card {
   background: #fff;
   border: 1.5px solid #f0eee6;
-  border-radius: 16px;
+  border-radius: 12px;
   padding: 14px 18px;
   text-align: center;
   min-width: 80px;
@@ -540,7 +546,7 @@ export default {
 
 .stat-num {
   display: block;
-  font-family: 'Fredoka', sans-serif;
+  font-family: Georgia, 'Times New Roman', serif;
   font-size: 22px;
   font-weight: 600;
   color: #c96442;
@@ -566,7 +572,7 @@ export default {
   gap: 10px;
   background: #fff;
   border: 2px solid #f0eee6;
-  border-radius: 16px;
+  border-radius: 12px;
   padding: 10px 16px;
   margin-bottom: 14px;
   transition: border-color 0.2s, box-shadow 0.2s;
@@ -586,7 +592,7 @@ export default {
   font-size: 15px;
   color: #141413;
   background: transparent;
-  font-family: 'Noto Sans SC', Arial, sans-serif;
+  font-family: Arial, system-ui, sans-serif;
 }
 
 .search-input::placeholder { color: #b0aea5; }
@@ -622,7 +628,7 @@ export default {
   color: #5e5d59;
   cursor: pointer;
   transition: all 0.15s;
-  font-family: 'Noto Sans SC', Arial, sans-serif;
+  font-family: Arial, system-ui, sans-serif;
 }
 
 .cat-pill:hover { border-color: #c96442; color: #c96442; }
@@ -640,7 +646,7 @@ export default {
 .compare-zone {
   background: #fff;
   border: 1.5px solid #f0eee6;
-  border-radius: 20px;
+  border-radius: 12px;
   padding: 24px;
   margin-bottom: 24px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.06);
@@ -656,7 +662,7 @@ export default {
 }
 
 .compare-title {
-  font-family: 'Fredoka', sans-serif;
+  font-family: Georgia, 'Times New Roman', serif;
   font-size: 18px;
   font-weight: 600;
   color: #141413;
@@ -669,7 +675,7 @@ export default {
   font-size: 12px;
   font-weight: 400;
   color: #87867f;
-  font-family: 'Noto Sans SC', Arial, sans-serif;
+  font-family: Arial, system-ui, sans-serif;
   margin-left: 4px;
 }
 
@@ -683,13 +689,13 @@ export default {
   padding: 5px 14px;
   border: 1.5px solid #f0eee6;
   background: #faf9f5;
-  border-radius: 20px;
+  border-radius: 12px;
   font-size: 12px;
   font-weight: 500;
   color: #87867f;
   cursor: pointer;
   transition: all 0.15s;
-  font-family: 'Noto Sans SC', Arial, sans-serif;
+  font-family: Arial, system-ui, sans-serif;
 }
 
 .range-btn.active {
@@ -704,12 +710,12 @@ export default {
   padding: 5px 12px;
   border: none;
   background: #faf9f5;
-  border-radius: 20px;
+  border-radius: 12px;
   font-size: 12px;
   color: #b0aea5;
   cursor: pointer;
   transition: color 0.15s;
-  font-family: 'Noto Sans SC', Arial, sans-serif;
+  font-family: Arial, system-ui, sans-serif;
 }
 .deselect-btn:hover { color: #c62828; }
 
@@ -717,7 +723,7 @@ export default {
 .chart-card {
   background: #faf9f5;
   border: 1px solid #f0eee6;
-  border-radius: 16px;
+  border-radius: 12px;
   padding: 16px;
   margin-bottom: 16px;
 }
@@ -734,9 +740,9 @@ export default {
   align-items: center;
   gap: 5px;
   padding: 4px 10px 4px 6px;
-  background: var(--chip-color) + '22';
-  border: 1px solid var(--chip-color) + '55';
-  border-radius: 20px;
+  background: 'rgba(255,155,155,0.13)' /* chip color 22% */;
+  border: 1px solid 'rgba(255,155,155,0.33)' /* chip color 55% */;
+  border-radius: 12px;
   font-size: 12px;
   font-weight: 500;
   color: #4d4c48;
@@ -778,7 +784,7 @@ export default {
   background: #faf9f5;
   border: 1.5px solid #f0eee6;
   border-top: 3px solid var(--card-accent, #c96442);
-  border-radius: 14px;
+  border-radius: 12px;
   padding: 14px;
 }
 
@@ -800,7 +806,7 @@ export default {
 .detail-trend { font-size: 14px; }
 
 .detail-price {
-  font-family: 'Fredoka', sans-serif;
+  font-family: Georgia, 'Times New Roman', serif;
   font-size: 22px;
   font-weight: 600;
   color: #141413;
@@ -873,13 +879,13 @@ export default {
 .product-card {
   background: #fff;
   border: 1.5px solid #f0eee6;
-  border-radius: 16px;
+  border-radius: 12px;
   padding: 16px;
   text-align: left;
   cursor: pointer;
   transition: all 0.2s;
   position: relative;
-  font-family: 'Noto Sans SC', Arial, sans-serif;
+  font-family: Arial, system-ui, sans-serif;
 }
 
 .product-card:hover {
@@ -925,7 +931,7 @@ export default {
 }
 
 .card-price {
-  font-family: 'Fredoka', sans-serif;
+  font-family: Georgia, 'Times New Roman', serif;
   font-size: 18px;
   font-weight: 600;
   color: #141413;
@@ -954,7 +960,7 @@ export default {
   padding: 48px 24px;
   background: #fff;
   border: 1.5px dashed #e8e6dc;
-  border-radius: 16px;
+  border-radius: 12px;
 }
 
 .empty-emoji { font-size: 40px; margin-bottom: 12px; }
@@ -973,7 +979,7 @@ export default {
   display: flex;
   gap: 12px;
   padding: 16px;
-  border-radius: 14px;
+  border-radius: 12px;
   border: 1px solid;
 }
 

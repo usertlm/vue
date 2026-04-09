@@ -387,7 +387,6 @@ import ChatBox from './components/ChatBox.vue'
 import AdSense from './components/AdSense.vue'
 import PriceTrendChart from './components/PriceTrendChart.vue'
 import HlsPlayer from './components/HlsPlayer.vue'
-import BotVerificationModal from './components/BotVerificationModal.vue'
 
 export default {
   name: 'App',
@@ -397,7 +396,6 @@ export default {
     AdSense,
     PriceTrendChart,
     HlsPlayer,
-    BotVerificationModal
   },
   data() {
     return {

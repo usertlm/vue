@@ -1,5 +1,7 @@
 <template>
   <div class="chat-container">
+    
+    <div class="chat-container">
     <!-- Cloudflare-style Attack Verification Overlay -->
     <div v-if="!isUnlocked" class="attack-overlay">
       <div class="attack-inner">
@@ -108,8 +110,7 @@ export default {
       this.isUnlocked = true;
     } else {
       this.rayId = this.generateRayId();
-      this.startVerification();
-    }
+      this.
   },
 
   methods: {
@@ -117,26 +118,7 @@ export default {
       return Array.from({ length: 16 }, () =>
         Math.floor(Math.random() * 16).toString(16)
       ).join('').toUpperCase();
-    },
-
-    startVerification() {
-      const steps = [
-        { progress: 20, text: 'Verifying your browser...', duration: 800 },
-        { progress: 45, text: 'Checking your connection...', duration: 800 },
-        { progress: 65, text: 'Evaluating your session...', duration: 800 },
-        { progress: 80, text: 'Almost there...', duration: 800 },
-        { progress: 100, text: 'Verifying...', duration: 500 },
-      ];
-
-      let step = 0;
-      const run = () => {
-        if (step < steps.length) {
-          const s = steps[step];
-          this.verifyProgress = s.progress;
-          this.verifyText = s.text;
-          step++;
-          setTimeout(run, s.duration);
-        } else {
+    }, else {
           this.verifyText = 'Verification complete';
           this.canVerify = true;
         }

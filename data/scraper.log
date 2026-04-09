@@ -900,3 +900,423 @@
 ⚠️ API不可用，使用模拟价格变动更新了全部配件
 
 💾 数据已保存: /home/drive/home/vue/data/price-history.json
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:186: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today_str = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:248: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  data['lastUpdated'] = datetime.utcnow().isoformat() + '+00:00'
+🔍 开始抓取价格... (2026-04-09 18:00:02)
+
+📦 处理 cpu: 8 个配件
+
+📦 处理 gpu: 10 个配件
+
+📦 处理 ram: 8 个配件
+
+📦 处理 ssd: 10 个配件
+
+📦 处理 mb: 8 个配件
+
+📦 处理 cool: 8 个配件
+
+⚠️ API不可用，使用模拟价格变动更新了全部配件
+
+💾 数据已保存: /home/drive/home/vue/data/price-history.json
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:186: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today_str = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:248: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  data['lastUpdated'] = datetime.utcnow().isoformat() + '+00:00'
+🔍 开始抓取价格... (2026-04-09 18:10:02)
+
+📦 处理 cpu: 8 个配件
+
+📦 处理 gpu: 10 个配件
+
+📦 处理 ram: 8 个配件
+
+📦 处理 ssd: 10 个配件
+
+📦 处理 mb: 8 个配件
+
+📦 处理 cool: 8 个配件
+
+⚠️ API不可用，使用模拟价格变动更新了全部配件
+
+💾 数据已保存: /home/drive/home/vue/data/price-history.json
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:186: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today_str = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:248: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  data['lastUpdated'] = datetime.utcnow().isoformat() + '+00:00'
+🔍 开始抓取价格... (2026-04-09 18:20:02)
+
+📦 处理 cpu: 8 个配件
+
+📦 处理 gpu: 10 个配件
+
+📦 处理 ram: 8 个配件
+
+📦 处理 ssd: 10 个配件
+
+📦 处理 mb: 8 个配件
+
+📦 处理 cool: 8 个配件
+
+⚠️ API不可用，使用模拟价格变动更新了全部配件
+
+💾 数据已保存: /home/drive/home/vue/data/price-history.json
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:186: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today_str = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:248: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  data['lastUpdated'] = datetime.utcnow().isoformat() + '+00:00'
+🔍 开始抓取价格... (2026-04-09 18:30:05)
+
+📦 处理 cpu: 8 个配件
+
+📦 处理 gpu: 10 个配件
+
+📦 处理 ram: 8 个配件
+
+📦 处理 ssd: 10 个配件
+
+📦 处理 mb: 8 个配件
+
+📦 处理 cool: 8 个配件
+
+⚠️ API不可用，使用模拟价格变动更新了全部配件
+
+💾 数据已保存: /home/drive/home/vue/data/price-history.json
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:186: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today_str = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:248: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  data['lastUpdated'] = datetime.utcnow().isoformat() + '+00:00'
+🔍 开始抓取价格... (2026-04-09 18:40:02)
+
+📦 处理 cpu: 8 个配件
+
+📦 处理 gpu: 10 个配件
+
+📦 处理 ram: 8 个配件
+
+📦 处理 ssd: 10 个配件
+
+📦 处理 mb: 8 个配件
+
+📦 处理 cool: 8 个配件
+
+⚠️ API不可用，使用模拟价格变动更新了全部配件
+
+💾 数据已保存: /home/drive/home/vue/data/price-history.json
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:186: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today_str = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:248: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  data['lastUpdated'] = datetime.utcnow().isoformat() + '+00:00'
+🔍 开始抓取价格... (2026-04-09 18:50:02)
+
+📦 处理 cpu: 8 个配件
+
+📦 处理 gpu: 10 个配件
+
+📦 处理 ram: 8 个配件
+
+📦 处理 ssd: 10 个配件
+
+📦 处理 mb: 8 个配件
+
+📦 处理 cool: 8 个配件
+
+⚠️ API不可用，使用模拟价格变动更新了全部配件
+
+💾 数据已保存: /home/drive/home/vue/data/price-history.json
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:186: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today_str = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:248: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  data['lastUpdated'] = datetime.utcnow().isoformat() + '+00:00'
+🔍 开始抓取价格... (2026-04-09 19:00:01)
+
+📦 处理 cpu: 8 个配件
+
+📦 处理 gpu: 10 个配件
+
+📦 处理 ram: 8 个配件
+
+📦 处理 ssd: 10 个配件
+
+📦 处理 mb: 8 个配件
+
+📦 处理 cool: 8 个配件
+
+⚠️ API不可用，使用模拟价格变动更新了全部配件
+
+💾 数据已保存: /home/drive/home/vue/data/price-history.json
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:186: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today_str = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:248: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  data['lastUpdated'] = datetime.utcnow().isoformat() + '+00:00'
+🔍 开始抓取价格... (2026-04-09 19:10:01)
+
+📦 处理 cpu: 8 个配件
+
+📦 处理 gpu: 10 个配件
+
+📦 处理 ram: 8 个配件
+
+📦 处理 ssd: 10 个配件
+
+📦 处理 mb: 8 个配件
+
+📦 处理 cool: 8 个配件
+
+⚠️ API不可用，使用模拟价格变动更新了全部配件
+
+💾 数据已保存: /home/drive/home/vue/data/price-history.json
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:186: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today_str = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:248: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  data['lastUpdated'] = datetime.utcnow().isoformat() + '+00:00'
+🔍 开始抓取价格... (2026-04-09 19:20:02)
+
+📦 处理 cpu: 8 个配件
+
+📦 处理 gpu: 10 个配件
+
+📦 处理 ram: 8 个配件
+
+📦 处理 ssd: 10 个配件
+
+📦 处理 mb: 8 个配件
+
+📦 处理 cool: 8 个配件
+
+⚠️ API不可用，使用模拟价格变动更新了全部配件
+
+💾 数据已保存: /home/drive/home/vue/data/price-history.json
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:186: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today_str = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:248: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  data['lastUpdated'] = datetime.utcnow().isoformat() + '+00:00'
+🔍 开始抓取价格... (2026-04-09 19:30:01)
+
+📦 处理 cpu: 8 个配件
+
+📦 处理 gpu: 10 个配件
+
+📦 处理 ram: 8 个配件
+
+📦 处理 ssd: 10 个配件
+
+📦 处理 mb: 8 个配件
+
+📦 处理 cool: 8 个配件
+
+⚠️ API不可用，使用模拟价格变动更新了全部配件
+
+💾 数据已保存: /home/drive/home/vue/data/price-history.json
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:186: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today_str = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:248: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  data['lastUpdated'] = datetime.utcnow().isoformat() + '+00:00'
+🔍 开始抓取价格... (2026-04-09 19:40:01)
+
+📦 处理 cpu: 8 个配件
+
+📦 处理 gpu: 10 个配件
+
+📦 处理 ram: 8 个配件
+
+📦 处理 ssd: 10 个配件
+
+📦 处理 mb: 8 个配件
+
+📦 处理 cool: 8 个配件
+
+⚠️ API不可用，使用模拟价格变动更新了全部配件
+
+💾 数据已保存: /home/drive/home/vue/data/price-history.json
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:186: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today_str = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:248: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  data['lastUpdated'] = datetime.utcnow().isoformat() + '+00:00'
+🔍 开始抓取价格... (2026-04-09 19:50:01)
+
+📦 处理 cpu: 8 个配件
+
+📦 处理 gpu: 10 个配件
+
+📦 处理 ram: 8 个配件
+
+📦 处理 ssd: 10 个配件
+
+📦 处理 mb: 8 个配件
+
+📦 处理 cool: 8 个配件
+
+⚠️ API不可用，使用模拟价格变动更新了全部配件
+
+💾 数据已保存: /home/drive/home/vue/data/price-history.json
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:186: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today_str = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:248: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  data['lastUpdated'] = datetime.utcnow().isoformat() + '+00:00'
+🔍 开始抓取价格... (2026-04-09 20:00:01)
+
+📦 处理 cpu: 8 个配件
+
+📦 处理 gpu: 10 个配件
+
+📦 处理 ram: 8 个配件
+
+📦 处理 ssd: 10 个配件
+
+📦 处理 mb: 8 个配件
+
+📦 处理 cool: 8 个配件
+
+⚠️ API不可用，使用模拟价格变动更新了全部配件
+
+💾 数据已保存: /home/drive/home/vue/data/price-history.json
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:186: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today_str = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:248: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  data['lastUpdated'] = datetime.utcnow().isoformat() + '+00:00'
+🔍 开始抓取价格... (2026-04-09 20:10:01)
+
+📦 处理 cpu: 8 个配件
+
+📦 处理 gpu: 10 个配件
+
+📦 处理 ram: 8 个配件
+
+📦 处理 ssd: 10 个配件
+
+📦 处理 mb: 8 个配件
+
+📦 处理 cool: 8 个配件
+
+⚠️ API不可用，使用模拟价格变动更新了全部配件
+
+💾 数据已保存: /home/drive/home/vue/data/price-history.json
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:186: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today_str = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:248: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  data['lastUpdated'] = datetime.utcnow().isoformat() + '+00:00'
+🔍 开始抓取价格... (2026-04-09 20:20:01)
+
+📦 处理 cpu: 8 个配件
+
+📦 处理 gpu: 10 个配件
+
+📦 处理 ram: 8 个配件
+
+📦 处理 ssd: 10 个配件
+
+📦 处理 mb: 8 个配件
+
+📦 处理 cool: 8 个配件
+
+⚠️ API不可用，使用模拟价格变动更新了全部配件
+
+💾 数据已保存: /home/drive/home/vue/data/price-history.json
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:186: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today_str = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:248: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  data['lastUpdated'] = datetime.utcnow().isoformat() + '+00:00'
+🔍 开始抓取价格... (2026-04-09 20:30:01)
+
+📦 处理 cpu: 8 个配件
+
+📦 处理 gpu: 10 个配件
+
+📦 处理 ram: 8 个配件
+
+📦 处理 ssd: 10 个配件
+
+📦 处理 mb: 8 个配件
+
+📦 处理 cool: 8 个配件
+
+⚠️ API不可用，使用模拟价格变动更新了全部配件
+
+💾 数据已保存: /home/drive/home/vue/data/price-history.json
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:186: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today_str = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:248: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  data['lastUpdated'] = datetime.utcnow().isoformat() + '+00:00'
+🔍 开始抓取价格... (2026-04-09 20:40:01)
+
+📦 处理 cpu: 8 个配件
+
+📦 处理 gpu: 10 个配件
+
+📦 处理 ram: 8 个配件
+
+📦 处理 ssd: 10 个配件
+
+📦 处理 mb: 8 个配件
+
+📦 处理 cool: 8 个配件
+
+⚠️ API不可用，使用模拟价格变动更新了全部配件
+
+💾 数据已保存: /home/drive/home/vue/data/price-history.json
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:186: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today_str = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:248: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  data['lastUpdated'] = datetime.utcnow().isoformat() + '+00:00'
+🔍 开始抓取价格... (2026-04-09 20:50:01)
+
+📦 处理 cpu: 8 个配件
+
+📦 处理 gpu: 10 个配件
+
+📦 处理 ram: 8 个配件
+
+📦 处理 ssd: 10 个配件
+
+📦 处理 mb: 8 个配件
+
+📦 处理 cool: 8 个配件
+
+⚠️ API不可用，使用模拟价格变动更新了全部配件
+
+💾 数据已保存: /home/drive/home/vue/data/price-history.json
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:186: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today_str = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:248: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  data['lastUpdated'] = datetime.utcnow().isoformat() + '+00:00'
+🔍 开始抓取价格... (2026-04-09 21:00:01)
+
+📦 处理 cpu: 8 个配件
+
+📦 处理 gpu: 10 个配件
+
+📦 处理 ram: 8 个配件
+
+📦 处理 ssd: 10 个配件
+
+📦 处理 mb: 8 个配件
+
+📦 处理 cool: 8 个配件
+
+⚠️ API不可用，使用模拟价格变动更新了全部配件
+
+💾 数据已保存: /home/drive/home/vue/data/price-history.json
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:186: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today_str = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+/home/usertim/.agents/skills/price-scraper/scripts/scrape.py:248: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  data['lastUpdated'] = datetime.utcnow().isoformat() + '+00:00'
+🔍 开始抓取价格... (2026-04-09 21:10:01)
+
+📦 处理 cpu: 8 个配件
+
+📦 处理 gpu: 10 个配件
+
+📦 处理 ram: 8 个配件
+
+📦 处理 ssd: 10 个配件
+
+📦 处理 mb: 8 个配件
+
+📦 处理 cool: 8 个配件
+
+⚠️ API不可用，使用模拟价格变动更新了全部配件
+
+💾 数据已保存: /home/drive/home/vue/data/price-history.json

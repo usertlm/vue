@@ -4,7 +4,11 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "build:obfuscate": "javascript-obfuscator ./dist --output ./dist --compact true --self-defending true --control-flow-flattening true",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "server": "cd server && npm start",
+    "server:dev": "cd server && npm run dev",
+    "dev": "concurrently \"npm run serve\" \"npm run server:dev\"",
+    "start:prod": "concurrently \"npm run build && npm run server\" \"npm run serve\""
   },
   "engines": {
     "node": "24.x"
@@ -13,18 +17,20 @@
     "@achrinza/node-ipc": "10.1.11"
   },
   "dependencies": {
-    "chart.js": "^4.4.0",
+    "@vueuse/core": "^10.11.1",
+    "chart.js": "^4.5.1",
     "core-js": "^3.49.0",
     "hls.js": "^1.5.0",
     "vue": "^3.5.30",
-    "vue-chartjs": "^5.3.0"
+    "vue-chartjs": "^5.3.3"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.26.10",
     "@vue/cli-plugin-babel": "~5.0.8",
     "@vue/cli-plugin-eslint": "~5.0.8",
     "@vue/cli-service": "~5.0.8",
     "@vue/compiler-sfc": "^3.5.30",
-    "@babel/eslint-parser": "^7.26.10",
+    "concurrently": "^9.2.1",
     "eslint": "^8.57.1",
     "eslint-plugin-vue": "^9.31.0"
   },

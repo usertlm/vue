@@ -96,42 +96,108 @@ function writeHistory(data) {
 
 /** 组装客户端响应格式 */
 function buildResponse(data, itemId) {
- if (itemId) {
- for (const items of Object.values(data.categories)) {
- const found = items.find(i => i.id === itemId);
- if (found) {
- return {
- id: found.id,
- name: found.name,
- currentPrice: found.price,
- history: found.history.slice(-100),
- };
- }
- }
- return null;
- }
-
- const result = { lastUpdated: data.lastUpdated, categories: {} };
- for (const [cat, items] of Object.entries(data.categories)) {
- result.categories[cat] = items.map(item => ({
- id: item.id,
- name: item.name,
- price: item.price,
- trend: (item.history || []).slice(-30).map(h => ({
- time: h.time,
- price: h.price,
- })),
- historyLow: item.history && item.history.length > 0 
- ? Math.min(...item.history.map(h => h.price)) 
- : item.price,
- historyHigh: item.history && item.history.length > 0 
- ? Math.max(...item.history.map(h => h.price)) 
- : item.price,
- }));
- }
- return result;
+	if (itemId) {
+		for (const items of Object.values(data.categories)) {
+			const found = items.find(i => i.id === itemId);
+			if (found) {
+				const historyLast30 = (found.history || []).slice(-30);
+				return {
+					id: found.id,
+					name: found.name,
+					currentPrice: found.price,
+					history: found.history.slice(-100),
+					trend: calculateTrend(historyLast30),
+					minPrice: Math.min(...historyLast30.map(h => h.price)),
+					maxPrice: Math.max(...historyLast30.map(h => h.price)),
+					avgPrice: calculateAverage(historyLast30),
+				};
+			}
+		}
+		return null;
+	}
+  
+	const result = { lastUpdated: data.lastUpdated, categories: {} };
+	for (const [cat, items] of Object.entries(data.categories)) {
+		result.categories[cat] = items.map(item => {
+			const historyLast30 = (item.history || []).slice(-30);
+			return {
+				id: item.id,
+				name: item.name,
+				price: item.price,
+				trend: calculateTrend(historyLast30),
+				historyLow: historyLast30.length > 0 ? Math.min(...historyLast30.map(h => h.price)) : item.price,
+				historyHigh: historyLast30.length > 0 ? Math.max(...historyLast30.map(h => h.price)) : item.price,
+				avgPrice: calculateAverage(historyLast30),
+			};
+		});
+	}
+	return result;
 }
 
+/** 计算价格趋势百分比 */
+function calculateTrend(history) {
+	if (!history || history.length < 2) return 0;
+	const first = history[0].price;
+	const last = history[history.length - 1].price;
+	return ((last - first) / first) * 100;
+}
+
+/** 计算平均价格 */
+function calculateAverage(history) {
+	if (!history || history.length === 0) return 0;
+	const sum = history.reduce((acc, h) => acc + h.price, 0);
+	return Math.round((sum / history.length) * 100) / 100;
+}
+
+/** 搜索配件 */
+function searchComponents(data, query) {
+	const results = [];
+	for (const [cat, items] of Object.entries(data.categories)) {
+		items.forEach(item => {
+			if (item.name.toLowerCase().includes(query.toLowerCase())) {
+				results.push({
+					id: item.id,
+					name: item.name,
+					category: cat,
+					price: item.price,
+					trend: calculateTrend((item.history || []).slice(-30)),
+				});
+			}
+		});
+	}
+	return results;
+}
+
+/** 获取价格统计 */
+function getPricingStats(data) {
+	const stats = {
+		mostExpensive: null,
+		cheapest: null,
+		averageByCategory: {},
+		categoryCount: {},
+	};
+  
+	let maxPrice = 0, minPrice = Infinity;
+  
+	for (const [cat, items] of Object.entries(data.categories)) {
+		const prices = items.map(i => i.price);
+		stats.categoryCount[cat] = items.length;
+		stats.averageByCategory[cat] = Math.round((prices.reduce((a, b) => a + b, 0) / prices.length) * 100) / 100;
+    
+		items.forEach(item => {
+			if (item.price > maxPrice) {
+				maxPrice = item.price;
+				stats.mostExpensive = { id: item.id, name: item.name, price: item.price, category: cat };
+			}
+			if (item.price < minPrice) {
+				minPrice = item.price;
+				stats.cheapest = { id: item.id, name: item.name, price: item.price, category: cat };
+			}
+		});
+	}
+  
+	return stats;
+}
 module.exports = async (req, res) => {
  res.setHeader('Access-Control-Allow-Origin', '*');
  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -139,12 +205,39 @@ module.exports = async (req, res) => {
  if (req.method === 'OPTIONS') return res.status(200).end();
 
  if (req.method === 'GET') {
- const { id } = req.query;
+		const { id, action, query, category } = req.query;
  const data = readHistory();
- const payload = buildResponse(data, id);
+    
+		// 搜索功能
+		if (action === 'search' && query) {
+			const results = searchComponents(data, query);
+			return res.status(200).json({ success: true, results, count: results.length });
+		}
+    
+		// 统计功能
+		if (action === 'stats') {
+			const stats = getPricingStats(data);
+			return res.status(200).json({ success: true, ...stats });
+		}
+    
+		// 按分类获取
+		if (action === 'category' && category) {
+			if (!data.categories[category]) {
+				return res.status(404).json({ error: '分类不存在' });
+			}
+			const categoryData = data.categories[category].map(item => ({
+				id: item.id,
+				name: item.name,
+				price: item.price,
+				trend: calculateTrend((item.history || []).slice(-30)),
+			}));
+			return res.status(200).json({ success: true, category, data: categoryData });
+		}
+    
+		const payload = id ? buildResponse(data, id) : buildResponse(data, null);
 
  if (id && !payload) {
- return res.status(404).json({ error: '商品不存在', id });
+	return res.status(404).json({ error: '商品不存在', id, success: false });
  }
 
  res.setHeader('Cache-Control', 'no-store');

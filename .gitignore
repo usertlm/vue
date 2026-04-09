@@ -6,6 +6,7 @@ node_modules
 # local env files
 .env.local
 .env.*.local
+.env
 
 # Log files
 npm-debug.log*
@@ -23,3 +24,8 @@ pnpm-debug.log*
 *.sw?
 
 .vercel
+
+# Server specific
+server/node_modules
+server/npm-debug.log*
+

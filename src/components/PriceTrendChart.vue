@@ -216,7 +216,6 @@
 
 <script>
 import { Chart, registerables } from 'chart.js';
-import priceData from('../data/price-history.json');
 Chart.register(...registerables);
 
 const RANGES = [
@@ -226,6 +225,32 @@ const RANGES = [
 ];
 
 const CHIPC = ['#FF9B9B', '#FFD93D', '#6BCB77', '#4D96FF', '#C77DFF', '#FF9F43', '#a8dadc'];
+
+// Inline price data
+const priceData = {
+  lastUpdated: new Date().toISOString(),
+  categories: {
+    cpu: [
+      { id: 'cpu-1', name: 'Intel i9-14900K', price: 5299, history: [{"time": "2026-04-02T10:00:00Z", "price": 5599}, {"time": "2026-04-03T10:00:00Z", "price": 5499}, {"time": "2026-04-04T10:00:00Z", "price": 5399}, {"time": "2026-04-05T10:00:00Z", "price": 5349}, {"time": "2026-04-06T10:00:00Z", "price": 5299}, {"time": "2026-04-07T10:00:00Z", "price": 5299}, {"time": "2026-04-08T10:00:00Z", "price": 5299}, {"time": "2026-04-09T10:00:00Z", "price": 5299}] },
+      { id: 'cpu-2', name: 'AMD Ryzen 9 9900X', price: 3899, history: [{"time": "2026-04-02T10:00:00Z", "price": 4199}, {"time": "2026-04-03T10:00:00Z", "price": 4099}, {"time": "2026-04-04T10:00:00Z", "price": 3999}, {"time": "2026-04-05T10:00:00Z", "price": 3949}, {"time": "2026-04-06T10:00:00Z", "price": 3899}, {"time": "2026-04-07T10:00:00Z", "price": 3899}, {"time": "2026-04-08T10:00:00Z", "price": 3899}, {"time": "2026-04-09T10:00:00Z", "price": 3899}] }
+    ],
+    gpu: [
+      { id: 'gpu-1', name: 'NVIDIA RTX 5090', price: 12999, history: [{"time": "2026-04-02T10:00:00Z", "price": 13499}, {"time": "2026-04-03T10:00:00Z", "price": 13299}, {"time": "2026-04-04T10:00:00Z", "price": 13199}, {"time": "2026-04-05T10:00:00Z", "price": 13099}, {"time": "2026-04-06T10:00:00Z", "price": 12999}, {"time": "2026-04-07T10:00:00Z", "price": 12999}, {"time": "2026-04-08T10:00:00Z", "price": 12999}, {"time": "2026-04-09T10:00:00Z", "price": 12999}] }
+    ],
+    ram: [
+      { id: 'ram-1', name: 'DDR5 32GB', price: 899, history: [{"time": "2026-04-02T10:00:00Z", "price": 999}, {"time": "2026-04-03T10:00:00Z", "price": 949}, {"time": "2026-04-04T10:00:00Z", "price": 929}, {"time": "2026-04-05T10:00:00Z", "price": 909}, {"time": "2026-04-06T10:00:00Z", "price": 899}, {"time": "2026-04-07T10:00:00Z", "price": 899}, {"time": "2026-04-08T10:00:00Z", "price": 899}, {"time": "2026-04-09T10:00:00Z", "price": 899}] }
+    ],
+    ssd: [
+      { id: 'ssd-1', name: 'NVMe 2TB', price: 1099, history: [{"time": "2026-04-02T10:00:00Z", "price": 1299}, {"time": "2026-04-03T10:00:00Z", "price": 1199}, {"time": "2026-04-04T10:00:00Z", "price": 1149}, {"time": "2026-04-05T10:00:00Z", "price": 1129}, {"time": "2026-04-06T10:00:00Z", "price": 1099}, {"time": "2026-04-07T10:00:00Z", "price": 1099}, {"time": "2026-04-08T10:00:00Z", "price": 1099}, {"time": "2026-04-09T10:00:00Z", "price": 1099}] }
+    ],
+    mb: [
+      { id: 'mb-1', name: 'Intel Z890 Pro', price: 2499, history: [{"time": "2026-04-02T10:00:00Z", "price": 2799}, {"time": "2026-04-03T10:00:00Z", "price": 2699}, {"time": "2026-04-04T10:00:00Z", "price": 2599}, {"time": "2026-04-05T10:00:00Z", "price": 2549}, {"time": "2026-04-06T10:00:00Z", "price": 2499}, {"time": "2026-04-07T10:00:00Z", "price": 2499}, {"time": "2026-04-08T10:00:00Z", "price": 2499}, {"time": "2026-04-09T10:00:00Z", "price": 2499}] }
+    ],
+    cool: [
+      { id: 'cool-1', name: 'Arctic Liquid Cooler', price: 599, history: [{"time": "2026-04-02T10:00:00Z", "price": 699}, {"time": "2026-04-03T10:00:00Z", "price": 649}, {"time": "2026-04-04T10:00:00Z", "price": 629}, {"time": "2026-04-05T10:00:00Z", "price": 609}, {"time": "2026-04-06T10:00:00Z", "price": 599}, {"time": "2026-04-07T10:00:00Z", "price": 599}, {"time": "2026-04-08T10:00:00Z", "price": 599}, {"time": "2026-04-09T10:00:00Z", "price": 599}] }
+    ]
+  }
+};
 
 export default {
   name: 'PriceTrendChart',
@@ -238,7 +263,7 @@ export default {
       range: '30d',
       chart: null,
       compareCanvas: null,
-      lastUpdated: priceData.lastUpdated || null,
+      lastUpdated: priceData.lastUpdated,
       chipColors: CHIPC,
       ranges: RANGES,
       categories: [
@@ -282,13 +307,12 @@ export default {
   },
   methods: {
     setCat(cat) { this.activeCat = cat; },
-    onSearch() { /* driven by computed */ },
-
+    onSearch() { },
     toggleSelect(item) {
       if (this.selected.has(item.id)) {
         this.selected.delete(item.id);
       } else {
-        if (this.selected.size >= 6) return; // max 6 for readability
+        if (this.selected.size >= 6) return;
         this.selected.add(item.id);
       }
       this.selectedObjs = this.allItems.filter(i => this.selected.has(i.id));
@@ -299,8 +323,6 @@ export default {
       this.selectedObjs = this.allItems.filter(i => this.selected.has(i.id));
       this.buildChart();
     },
-
-    // ── 历史数据 helpers ──
     historySlice(item, days) {
       const cutoff = Date.now() - days * 86400000;
       return (item.history || []).filter(h => new Date(h.time).getTime() >= cutoff);
@@ -368,18 +390,14 @@ export default {
       const d = new Date(iso);
       return d.toLocaleString('zh-CN', { month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' });
     },
-
-    // ── Chart ──
     buildChart() {
       if (!this.$refs.compareCanvas) return;
       const canvas = this.$refs.compareCanvas;
       const ctx = canvas.getContext('2d');
-
       if (!this.selectedObjs.length) {
         if (this.chart) { this.chart.destroy(); this.chart = null; }
         return;
       }
-
       const datasets = this.selectedObjs.map((obj, idx) => {
         const h = this.historySlice(obj, this.activeDays);
         const labels = h.map(p => {
@@ -387,8 +405,6 @@ export default {
           return `${d.getMonth()+1}/${d.getDate()}`;
         });
         const prices = h.map(p => p.price);
-
-        // Sync labels across all datasets
         if (!this.chart) {
           this.chart = new Chart(ctx, {
             type: 'line',
@@ -397,12 +413,10 @@ export default {
           });
         }
         this.chart.data.labels = labels;
-
         const color = CHIPC[idx % CHIPC.length];
         const gradient = ctx.createLinearGradient(0, 0, 0, 260);
         gradient.addColorStop(0, color + '55');
         gradient.addColorStop(1, color + '00');
-
         return {
           label: obj.name,
           data: prices,
@@ -418,7 +432,6 @@ export default {
           fill: true,
         };
       });
-
       if (!this.chart) {
         this.chart = new Chart(ctx, {
           type: 'line',
@@ -734,8 +747,8 @@ export default {
   align-items: center;
   gap: 5px;
   padding: 4px 10px 4px 6px;
-  background: var(--chip-color) + '22';
-  border: 1px solid var(--chip-color) + '55';
+  background: rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 20px;
   font-size: 12px;
   font-weight: 500;

@@ -53,7 +53,8 @@
 
       <!-- AI Chat -->
       <section id="ai-chat" class="content-section">
-        <ChatBox />
+        <BotVerificationModal @verified="chatVerified = $event" />
+        <ChatBox v-if="chatVerified" />
       </section>
 
       <!-- Price Trend -->
@@ -386,6 +387,7 @@ import ChatBox from './components/ChatBox.vue'
 import AdSense from './components/AdSense.vue'
 import PriceTrendChart from './components/PriceTrendChart.vue'
 import HlsPlayer from './components/HlsPlayer.vue'
+import BotVerificationModal from './components/BotVerificationModal.vue'
 
 export default {
   name: 'App',
@@ -394,10 +396,12 @@ export default {
     ChatBox,
     AdSense,
     PriceTrendChart,
-    HlsPlayer
+    HlsPlayer,
+    BotVerificationModal
   },
   data() {
     return {
+      chatVerified: false,
       activeResourceTab: 'community',
       resourceTabs: [
         {

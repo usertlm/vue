@@ -162,6 +162,66 @@ app.get('/api/prices', (req, res) => {
 });
 
 /**
+ * POST /api/verify-bot
+ * 验证 Cloudflare Turnstile token
+ */
+app.post('/api/verify-bot', async (req, res) => {
+  try {
+    const { token } = req.body;
+
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        error: 'Token required'
+      });
+    }
+
+    const secretKey = process.env.TURNSTILE_SECRET_KEY;
+
+    // 如果没有配置 secret key，在开发环境下接受任何 token
+    if (!secretKey) {
+      console.warn('⚠️ TURNSTILE_SECRET_KEY 未配置，开发模式下跳过验证');
+      return res.json({
+        success: true,
+        message: 'Verified in development mode'
+      });
+    }
+
+    // 向 Cloudflare 验证 token
+    const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        secret: secretKey,
+        response: token
+      })
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      res.json({
+        success: true,
+        message: 'Bot verification passed',
+        timestamp: new Date().toISOString()
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        error: 'Verification failed',
+        details: data['error-codes']
+      });
+    }
+  } catch (error) {
+    console.error('Bot verification error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Verification service error'
+    });
+  }
+});
+
+/**
  * GET /api/health
  * 健康检查端点
  */

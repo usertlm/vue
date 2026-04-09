@@ -53,8 +53,7 @@
 
       <!-- AI Chat -->
       <section id="ai-chat" class="content-section">
-        <BotVerificationModal @verified="chatVerified = $event" />
-        <ChatBox v-if="chatVerified" />
+        <ChatBox />
       </section>
 
       <!-- Price Trend -->
@@ -399,7 +398,6 @@ export default {
   },
   data() {
     return {
-      chatVerified: false,
       activeResourceTab: 'community',
       resourceTabs: [
         {

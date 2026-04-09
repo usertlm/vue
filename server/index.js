@@ -1,11 +1,17 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const schedule = require('node-schedule');
 const dataManager = require('./scrapers/dataManager');
+const authRoutes = require('./routes/auth');
+const { initializeMailer } = require('./services/emailService');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+// 初始化邮件服务
+initializeMailer();
 
 // 中间件
 app.use(cors());
@@ -18,6 +24,9 @@ app.use((req, res, next) => {
 });
 
 // ============ API 路由 ============
+
+// 认证路由
+app.use('/api/auth', authRoutes);
 
 /**
  * GET /api/components
@@ -202,6 +211,14 @@ app.listen(PORT, () => {
 ╰━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
 
 📊 API 端点:
+  # 认证相关
+  POST /api/auth/register              - 用户注册
+  POST /api/auth/login                 - 用户登录
+  POST /api/auth/verify-email          - 邮箱验证
+  POST /api/auth/resend-code           - 重新发送验证码
+  GET  /api/auth/verify-token          - 验证令牌
+
+  # 配件相关
   GET  /api/components              - 获取所有配件
   GET  /api/components/category/:cat - 按分类获取配件
   GET  /api/prices                  - 获取所有配件价格
@@ -211,6 +228,7 @@ app.listen(PORT, () => {
 
 ⏰ 定时任务: 每小时更新一次价格
 🔄 开发模式: npm run dev
+🔐 认证: JWT令牌（Bearer token）
   `);
 });
 

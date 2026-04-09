@@ -221,6 +221,252 @@
       </div>
     </section>
 
+    <!-- 网站使用指南 -->
+    <section class="section-block">
+      <h3 class="section-heading">📖 网站使用指南</h3>
+      <p class="section-intro">
+        欢迎来到本站！下面是各项功能的详细说明，帮助你充分利用网站的所有功能。
+      </p>
+      <div class="guide-list">
+        <div class="guide-item">
+          <h4 class="guide-title">🤖 AI聊天助手</h4>
+          <p class="guide-desc">
+            网站顶部的AI聊天框支持多轮对话。你可以提出任何技术问题、获取编程建议、咨询资源推荐，甚至讨论最新的行业动态。AI助手基于最新的大语言模型训练，能够理解上下文并提供高质量的回答。为了获得最佳体验，建议使用清晰、具体的问题描述，这样AI能更准确地理解你的需求。
+          </p>
+        </div>
+        <div class="guide-item">
+          <h4 class="guide-title">💰 电脑配件价格追踪</h4>
+          <p class="guide-desc">
+            本站集成了实时的电脑配件价格数据库，覆盖CPU、GPU、RAM、SSD等主流硬件。系统每小时自动更新价格数据，并展示过去30天的价格趋势图。通过配件选择器，你可以快速对比不同产品的价格变化，帮助你捕捉降价机会。价格数据来自主流电商平台，确保信息的时效性和准确性。
+          </p>
+        </div>
+        <div class="guide-item">
+          <h4 class="guide-title">📰 热点资讯推送</h4>
+          <p class="guide-desc">
+            "今日科技要闻"和"近期游戏资讯"板块每日更新，精选来自行业权威媒体的最新报道。我们关注AI大模型进展、芯片技术突破、云计算创新等热点话题，并将复杂的技术信息用通俗易懂的语言呈现。同时我们也不遗漏游戏行业的精彩资讯，包括新游发售、大作更新动态等。
+          </p>
+        </div>
+        <div class="guide-item">
+          <h4 class="guide-title">📚 精选技术文章</h4>
+          <p class="guide-desc">
+            精选技术文章板块整理了来自一线开发者和技术博主的深度分享。这些文章涵盖前端框架、后端架构、DevOps工程、数据科学等多个领域，每一篇都经过精心挑选，确保质量和实用价值。无论你是初学者还是资深工程师，都能在这里找到对你有帮助的内容。
+          </p>
+        </div>
+        <div class="guide-item">
+          <h4 class="guide-title">🔗 资源导航</h4>
+          <p class="guide-desc">
+            本站提供了分类清晰的资源链接导航，包括视频平台、设计素材、开源工具等。每个资源都配有简要说明，让你快速判断是否符合需求。这些资源大多经过我个人的长期使用验证，质量可靠。点击链接即可跳转，建议收藏以便日常快速访问。
+          </p>
+        </div>
+        <div class="guide-item">
+          <h4 class="guide-title">🔍 搜索功能</h4>
+          <p class="guide-desc">
+            网站集成了全局搜索功能，可以快速找到特定的内容、资源或工具。搜索支持关键词匹配和模糊查询，输入你感兴趣的话题即可看到相关内容的聚合结果。搜索结果按相关性排序，最相关的内容会首先出现。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 深度技术分析 -->
+    <section class="section-block">
+      <h3 class="section-heading">🔬 深度技术分析</h3>
+      <p class="section-intro">
+        本板块深入探讨当下最热门的技术话题，分析其原理、应用场景和未来趋势。
+      </p>
+      <div class="analysis-list">
+        <article class="analysis-item">
+          <h4 class="analysis-title">大语言模型（LLM）工程化应用浅析</h4>
+          <p class="analysis-body">
+            2025-2026年，大语言模型已经从研究阶段进入产业化阶段。企业不再只是使用现成的API，而是开始探索如何将LLM集成到自己的业务流程中。这包括微调（Fine-tuning）、检索增强生成（RAG）、提示工程（Prompt Engineering）等多个维度。RAG技术尤为重要，它通过为模型提供外部知识库，显著提升了回答的准确性和时效性，已经成为企业级应用的标准配置。本文将分析这些技术方案的选型原则、成本考量，以及未来的发展方向。
+          </p>
+        </article>
+        <article class="analysis-item">
+          <h4 class="analysis-title">云原生后时代：Kubernetes生态的演进</h4>
+          <p class="analysis-body">
+            Kubernetes已经成为容器编排的事实标准，但社区的热情似乎开始转向更高层的抽象。Serverless、Service Mesh、GitOps 等新概念层出不穷。这背后的原因是什么？Kubernetes降低了基础设施管理的复杂性，但引入了新的学习成本。新兴技术试图进一步提升开发效率，让开发者能专注于应用逻辑而非基础设施细节。本文分析这一演进的必然性，以及各技术路线的优缺点。
+          </p>
+        </article>
+        <article class="analysis-item">
+          <h4 class="analysis-title">AI芯片竞争格局：从英伟达垄断到百花齐放</h4>
+          <p class="analysis-body">
+            英伟达GPU一度垄断AI计算市场，但2026年局面已然改变。AMD、Intel、以及众多初创公司推出了各具特色的AI芯片。中国企业如华为昇腾、高通、阿里含光也在快速迭代。这场竞争的本质是什么？首先是应用差异化——不同的模型和任务对芯片的需求不同，专用芯片往往性价比更高。其次是生态壁垒逐渐松动，业界对开放标准（如OpenXLA）的重视程度提高了。未来的市场格局将更加多元，硬件选型将根据具体场景而定。
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- 编程学习路线 -->
+    <section class="section-block">
+      <h3 class="section-heading">🎓 编程学习路线建议</h3>
+      <p class="section-intro">
+        无论你是编程初学者还是准备转向新领域，这里提供了系统的学习建议和资源指引。
+      </p>
+      <div class="roadmap-list">
+        <div class="roadmap-item">
+          <h4 class="roadmap-title">🌱 零基础入门（0-3个月）</h4>
+          <p class="roadmap-desc">
+            首先掌握编程的核心概念：变量、控制流、函数、数据结构等。推荐从Python开始，因为它语法简洁、社区活跃。学习资源可以选择 Codecademy、freeCodeCamp 等互动平台，这样可以边学边练。每天坚持1-2小时，完成课程附带的小项目。目标是写出简单的脚本程序，理解编程的基本思维方式。
+          </p>
+        </div>
+        <div class="roadmap-item">
+          <h4 class="roadmap-title">🚴 初级进阶（3-6个月）</h4>
+          <p class="roadmap-desc">
+            开始学习面向对象编程（OOP）、数据库、Web框架。可以选择学习 Django 或 Flask，制作一个完整的Web应用（例如博客系统）。同时深入理解HTML、CSS、JavaScript的运作原理。参与开源项目，找一个活跃的开源仓库提交PR（从修复typo、改进文档开始）。这个阶段关键是做出实际项目，让抽象的知识具体化。
+          </p>
+        </div>
+        <div class="roadmap-item">
+          <h4 class="roadmap-title">🎯 中级深化（6-12个月）</h4>
+          <p class="roadmap-desc">
+            学习系统设计基础、算法与数据结构、数据库优化。刷题网站如 LeetCode、HackerRank 可以帮助你打牢算法基础。阅读业界经典书籍，如《设计模式》《代码大全》《系统设计面试》。开始关注架构设计，学习如何设计可扩展的系统。这个阶段应该能够独立完成中等规模的项目，能理解和改进他人的代码。
+          </p>
+        </div>
+        <div class="roadmap-item">
+          <h4 class="roadmap-title">🏆 高级精进（12个月以上）</h4>
+          <p class="roadmap-desc">
+            此时应该选择一个专业方向深钻，如Web后端、移动应用、Data Science、DevOps等。阅读源码是提升的最快方式——选择一个日常使用的开源库，深入理解其实现原理。开始写技术博客、参与技术讨论，分享你的学习心得，这既能巩固知识也能建立个人品牌。考虑为感兴趣的开源项目做出有意义的贡献，或者启动自己的开源项目。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 开源项目推荐 -->
+    <section class="section-block">
+      <h3 class="section-heading">⭐ 必读开源项目</h3>
+      <p class="section-intro">
+        这些项目代表了当下软件工程的最佳实践，值得深入学习其架构和代码质量。
+      </p>
+      <div class="project-grid">
+        <div class="project-item">
+          <div class="project-header">
+            <h4 class="project-name">Vue.js</h4>
+            <span class="project-stars">⭐ 220k+</span>
+          </div>
+          <p class="project-desc">现代前端框架的典范。如果你想学习组件化架构、响应式系统设计、模块化打包，Vue的源码是最佳教材。代码注释详细，易于理解，特别适合初中级开发者学习高效的框架架构。</p>
+        </div>
+        <div class="project-item">
+          <div class="project-header">
+            <h4 class="project-name">Redis</h4>
+            <span class="project-stars">⭐ 67k+</span>
+          </div>
+          <p class="project-desc">用C语言实现的高性能内存数据库。代码简洁高效，其事件驱动、单线程非阻塞设计思想对后端开发者有极高的教学价值。深入理解Redis能让你写出性能更优的应用。</p>
+        </div>
+        <div class="project-item">
+          <div class="project-header">
+            <h4 class="project-name">TensorFlow</h4>
+            <span class="project-stars">⭐ 185k+</span>
+          </div>
+          <p class="project-desc">Google开源的机器学习框架。虽然代码规模庞大，但文档完善，生态成熟。适合有ML基础的开发者学习如何构建企业级的AI系统，理解张量计算、自动求导等核心概念。</p>
+        </div>
+        <div class="project-item">
+          <div class="project-header">
+            <h4 class="project-name">Kubernetes</h4>
+            <span class="project-stars">⭐ 112k+</span>
+          </div>
+          <p class="project-desc">云原生时代的基础设施。学习K8s源码能理解分布式系统的设计理念、控制器模式、API设计等。对想成为高级DevOps或基础设施工程师的人来说是必读项目。</p>
+        </div>
+        <div class="project-item">
+          <div class="project-header">
+            <h4 class="project-name">Prometheus</h4>
+            <span class="project-stars">⭐ 58k+</span>
+          </div>
+          <p class="project-desc">Go语言实现的监控系统。代码质量一流，优雅地演示了如何设计可观测系统、时间序列数据库、推送机制等。对后端工程师深化系统设计能力帮助巨大。</p>
+        </div>
+        <div class="project-item">
+          <div class="project-header">
+            <h4 class="project-name">freeCodeCamp</h4>
+            <span class="project-stars">⭐ 430k+</span>
+          </div>
+          <p class="project-desc">全球最大的免费编程教育资源库。虽然主要是教学内容而非核心库，但维护者对教学质量的把控、对多语言支持的完善程度都值得学习。贡献者众多，生态活跃。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 技术Newsletter推荐 -->
+    <section class="section-block">
+      <h3 class="section-heading">📬 值得订阅的技术Newsletter</h3>
+      <p class="section-intro">
+        订阅精选的技术周刊，每周用15-30分钟获取行业最新动态、技术见解和资源推荐，是保持学习动力的好方式。
+      </p>
+      <div class="newsletter-list">
+        <div class="newsletter-item">
+          <h4 class="newsletter-title">The Pragmatic Engineer</h4>
+          <p class="newsletter-desc">由系统设计专家Gergely Orosz主持，深入讨论大厂技术趋势、职业发展、远程工作等话题。每期约15-20分钟阅读量，内容深度和实用性兼具。特别推荐给想了解大厂技术栈和工程文化的人。</p>
+        </div>
+        <div class="newsletter-item">
+          <h4 class="newsletter-title">Hacker News Weekly</h4>
+          <p class="newsletter-desc">精选Hacker News上最受欢迎的技术故事和讨论。如果你没有时间每天浏览HN，这个周刊可以让你快速抓住本周的技术热点。涵盖编程、系统设计、AI、安全等全领域。</p>
+        </div>
+        <div class="newsletter-item">
+          <h4 class="newsletter-title">JavaScript Weekly</h4>
+          <p class="newsletter-desc">前端开发者必读。从新框架发布到npm生态动向，从TypeScript最佳实践到浏览器API更新，从工具链优化到性能调优，应有尽有。保持订阅能让你及时掌握前端技术演进方向。</p>
+        </div>
+        <div class="newsletter-item">
+          <h4 class="newsletter-title">Refactoring.Guru Newsletter</h4>
+          <p class="newsletter-desc">定期分享设计模式、代码重构、SOLID原则等深度内容。内容质量稳定，每篇都配有优质示例代码。特别适合想提升代码质量、设计能力的工程师订阅。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 常见问题 -->
+    <section class="section-block">
+      <h3 class="section-heading">❓ 常见问题解答</h3>
+      <p class="section-intro">
+        这里整理了用户常见的问题，希望能为你答疑解惑。如有未涉及的问题，欢迎通过AI聊天提问。
+      </p>
+      <div class="faq-list">
+        <div class="faq-item">
+          <h4 class="faq-question">Q: 网站会收集我的个人信息吗？</h4>
+          <p class="faq-answer">A: 我们尊重用户隐私。AI聊天功能需要用户注册以便保存对话历史，但仅限必要信息（邮箱、用户名）。不会收集浏览行为或设备信息用于跟踪。所有数据都存储在安全的数据库中，不会第三方共享。详见隐私声明。</p>
+        </div>
+        <div class="faq-item">
+          <h4 class="faq-question">Q: AI助手的回答为什么有时不准确？</h4>
+          <p class="faq-answer">A: AI模型的训练存在知识截止日期，对最新信息的理解可能滞后。此外，AI偶尔会出现"幻觉"（生成看似合理但实际错误的内容）。建议使用前交叉验证重要信息，特别是技术细节涉及。未来我们会集成RAG技术提升准确性。</p>
+        </div>
+        <div class="faq-item">
+          <h4 class="faq-question">Q: 价格数据的更新频率是多少？</h4>
+          <p class="faq-answer">A: 后端定时任务每小时抓取一次价格数据，确保数据相对实时。但由于网络延迟和数据源更新不同步，实际价格可能略有差异。建议在做购买决策时再次访问电商平台确认最新价格。</p>
+        </div>
+        <div class="faq-item">
+          <h4 class="faq-question">Q: 我能否在其他地方转载网站内容？</h4>
+          <p class="faq-answer">A: 可以。本站内容采用CC BY 4.0许可，允许个人和商业使用，只需在转载时注明出处和链接。我们希望优质内容能被更多人看到，但也希望能获得合适的传播渠道审视。</p>
+        </div>
+        <div class="faq-item">
+          <h4 class="faq-question">Q: 如何举报不当内容或提出改进建议？</h4>
+          <p class="faq-answer">A: 欢迎通过多种方式反馈。你可以直接从导航栏的GitHub链接访问项目仓库提Issue，也可以通过邮件联系我们，还可以使用网站内的反馈表单。我们重视每一个用户的意见，并会定期审核反馈并做出改进。</p>
+        </div>
+        <div class="faq-item">
+          <h4 class="faq-question">Q: 网站是否有移动版本？</h4>
+          <p class="faq-answer">A: 网站已进行响应式设计，在手机、平板、电脑上都能正常浏览。但某些功能（如高度交互的图表）在手机上的体验可能不如桌面版。我们在积极开发专门的移动应用，敬请期待。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 关于我们 -->
+    <section class="section-block">
+      <h3 class="section-heading">🙋 关于网站和创作者</h3>
+      <div class="about-content">
+        <p>
+          本导航站创办于2024年，初衷很简单——为自己积累常用的资源和工具链接，逐渐演变成一个集资讯、工具、学习资源于一体的知识平台。随着功能的不断完善，我们希望能为更多开发者、设计师和科技爱好者提供价值。
+        </p>
+        <p>
+          网站的核心特性包括：实时的电脑配件价格追踪，帮助硬件爱好者把握购机时机；AI驱动的聊天助手，为你答疑解惑；精选的资讯和资源导航，让你快速获取行业动态和优质工具；深度的技术文章和分析，探讨行业趋势和最佳实践。
+        </p>
+        <p>
+          我们坚信优质内容应该免费提供。网站的所有核心功能都是免费的，不设付费墙。我们通过轻量级的广告支持运营成本。如果你想支持我们的工作，除了关闭广告拦截器，也可以分享网站给你的朋友，或在GitHub上为项目点星。
+        </p>
+        <p>
+          网站代码完全开源，托管在GitHub上。如果你有想法、发现bug、或想贡献代码，都欢迎参与项目。这是一个由社区驱动的项目，每一个想法都可能被纳入考虑。
+        </p>
+        <p>
+          <strong>联系方式：</strong><br>
+          📧 Email: 通过GitHub Issues联系我们<br>
+          🐦 Twitter: 关注更新动态<br>
+          💻 GitHub: 提Issue或贡献代码<br>
+          💬 Discord: 加入社区讨论
+        </p>
+      </div>
+    </section>
+
   </div>
 </template>
 
@@ -417,5 +663,277 @@ export default {
   .section-block { padding: 24px 18px; }
   .section-heading { font-size: 20px; }
   .resource-grid { grid-template-columns: 1fr; }
+}
+
+/* ── 使用指南样式 ── */
+.guide-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.guide-item {
+  padding: 20px;
+  background: #ffffff;
+  border-left: 4px solid #c96442;
+  border-radius: 8px;
+  transition: box-shadow 0.2s;
+}
+
+.guide-item:hover {
+  box-shadow: 0px 4px 16px rgba(0,0,0,0.06);
+}
+
+.guide-title {
+  font-family: Georgia, serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #c96442;
+  margin: 0 0 10px 0;
+  line-height: 1.40;
+}
+
+.guide-desc {
+  color: #5e5d59;
+  font-size: 14px;
+  line-height: 1.80;
+  margin: 0;
+}
+
+/* ── 深度分析样式 ── */
+.analysis-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.analysis-item {
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #f0eee6;
+  border-radius: 12px;
+  transition: all 0.2s;
+}
+
+.analysis-item:hover {
+  box-shadow: 0px 4px 16px rgba(0,0,0,0.06);
+  border-color: #d97757;
+}
+
+.analysis-title {
+  font-family: Georgia, serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #141413;
+  margin: 0 0 12px 0;
+  line-height: 1.40;
+}
+
+.analysis-body {
+  color: #5e5d59;
+  font-size: 14px;
+  line-height: 1.85;
+  margin: 0;
+}
+
+/* ── 学习路线图样式 ── */
+.roadmap-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.roadmap-item {
+  padding: 20px;
+  background: linear-gradient(135deg, #faf9f5 0%, #ffffff 100%);
+  border: 1px solid #f0eee6;
+  border-radius: 12px;
+  position: relative;
+}
+
+.roadmap-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, #c96442 0%, #d97757 100%);
+  border-radius: 12px 0 0 12px;
+}
+
+.roadmap-title {
+  font-family: Georgia, serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #141413;
+  margin: 0 0 10px 0;
+  padding-left: 0;
+}
+
+.roadmap-desc {
+  color: #5e5d59;
+  font-size: 14px;
+  line-height: 1.80;
+  margin: 0;
+}
+
+/* ── 项目网格样式 ── */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.project-item {
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #f0eee6;
+  border-radius: 12px;
+  transition: all 0.2s;
+}
+
+.project-item:hover {
+  box-shadow: 0px 8px 24px rgba(201,100,66,0.12);
+  transform: translateY(-4px);
+  border-color: #d97757;
+}
+
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.project-name {
+  font-family: Georgia, serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #141413;
+  margin: 0;
+}
+
+.project-stars {
+  font-size: 12px;
+  color: #c96442;
+  font-weight: 500;
+}
+
+.project-desc {
+  color: #5e5d59;
+  font-size: 13px;
+  line-height: 1.75;
+  margin: 0;
+}
+
+/* ── Newsletter 列表样式 ── */
+.newsletter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.newsletter-item {
+  padding: 18px;
+  background: #ffffff;
+  border-left: 3px solid #c96442;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.newsletter-item:hover {
+  box-shadow: 0px 4px 16px rgba(0,0,0,0.06);
+  padding-left: 22px;
+}
+
+.newsletter-title {
+  font-family: Georgia, serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #141413;
+  margin: 0 0 8px 0;
+  line-height: 1.40;
+}
+
+.newsletter-item .newsletter-desc {
+  color: #5e5d59;
+  font-size: 13px;
+  line-height: 1.75;
+  margin: 0;
+}
+
+/* ── FAQ 列表样式 ── */
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.faq-item {
+  padding: 18px;
+  background: #ffffff;
+  border: 1px solid #f0eee6;
+  border-radius: 12px;
+  transition: all 0.2s;
+}
+
+.faq-item:hover {
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.05);
+  border-color: #e8e6dc;
+}
+
+.faq-question {
+  font-family: Georgia, serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #c96442;
+  margin: 0 0 10px 0;
+  line-height: 1.40;
+}
+
+.faq-answer {
+  color: #5e5d59;
+  font-size: 14px;
+  line-height: 1.80;
+  margin: 0;
+}
+
+/* ── 关于我们样式 ── */
+.about-content {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 12px;
+  border: 1px solid #f0eee6;
+}
+
+.about-content p {
+  color: #5e5d59;
+  font-size: 15px;
+  line-height: 1.90;
+  margin: 0 0 18px 0;
+}
+
+.about-content p:last-child {
+  margin-bottom: 0;
+}
+
+.about-content strong {
+  color: #141413;
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .project-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .roadmap-item::before {
+    width: 3px;
+  }
+
+  .guide-item {
+    border-left-width: 3px;
+  }
 }
 </style>

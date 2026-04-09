@@ -1,5 +1,76 @@
 <template>
   <div class="chat-container">
+    <!-- Cloudflare-style Attack Verification Overlay -->
+    <div v-if="!isUnlocked" class="attack-overlay">
+      <div class="attack-inner">
+        <div class="cf-logo">
+          <svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#f6821f" d="M120 12.5L12.5 75v90l107.5 62.5 107.5-62.5V75L120 12.5zm60 77.5L120 115 60 90l60-25 60 25-60 25z"/>
+          </svg>
+        </div>
+        <h1 class="attack-title">Just a moment...</h1>
+        <p class="attack-subtitle">Checking your browser before allowing access to this site</p>
+        <div class="cf-bouncer">
+          <div class="bouncer-dots">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="verifying-bar">
+          <div class="verifying-progress" :style="{ width: verifyProgress + '%' }"></div>
+        </div>
+        <p class="verifying-text">{{ verifyText }}</p>
+        <div class="countdown-text">
+          <span v-if="countdown > 0">Redirecting in {{ countdown }}s...</span>
+          <span v-else-if="canVerify" class="verify-btn-label">Complete verification to continue</span>
+        </div>
+        <button
+          v-if="canVerify"
+          class="verify-btn"
+          @click="unlock"
+        >
+          Verify and Unlock
+        </button>
+        <p class="attack-footer">
+          Cloudflare Ray ID: <span class="ray-id">{{ rayId }}</span>
+        </p>
+      </div>
+    </div>
+    <!-- Cloudflare-style Attack Verification Overlay -->
+    <div v-if="!isUnlocked" class="attack-overlay">
+      <div class="attack-inner">
+        <div class="cf-logo">
+          <svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#f6821f" d="M120 12.5L12.5 75v90l107.5 62.5 107.5-62.5V75L120 12.5zm60 77.5L120 115 60 90l60-25 60 25-60 25z"/>
+          </svg>
+        </div>
+        <h1 class="attack-title">Just a moment...</h1>
+        <p class="attack-subtitle">Checking your browser before allowing access to this site</p>
+        <div class="cf-bouncer">
+          <div class="bouncer-dots">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="verifying-bar">
+          <div class="verifying-progress" :style="{ width: verifyProgress + '%' }"></div>
+        </div>
+        <p class="verifying-text">{{ verifyText }}</p>
+        <div class="countdown-text">
+          <span v-if="countdown > 0">Redirecting in {{ countdown }}s...</span>
+          <span v-else-if="canVerify" class="verify-btn-label">Complete verification to continue</span>
+        </div>
+        <button
+          v-if="canVerify"
+          class="verify-btn"
+          @click="unlock"
+        >
+          Verify and Unlock
+        </button>
+        <p class="attack-footer">
+          Cloudflare Ray ID: <span class="ray-id">{{ rayId }}</span>
+        </p>
+      </div>
+    </div>
+
     <div class="chat-header">
       <h3 class="chat-title">💬 AI 聊天</h3>
     </div>
@@ -57,11 +128,75 @@ export default {
       userInput: '',
       messages: [],
       isLoading: false,
+      isUnlocked: false,
+      countdown: 5,
+      verifyProgress: 0,
+      verifyText: 'Verifying your browser...',
+      canVerify: false,
+      rayId: '',
     };
   },
+
+  mounted() {
+    // Check if already verified this session
+    if (sessionStorage.getItem('chatVerified') === '1') {
+      this.isUnlocked = true;
+    } else {
+      this.rayId = this.generateRayId();
+      this.startVerification();
+    }
+  },
+
+  methods: {
+    generateRayId() {
+      return Array.from({ length: 16 }, () =>
+        Math.floor(Math.random() * 16).toString(16)
+      ).join('').toUpperCase();
+    },
+
+    startVerification() {
+      const steps = [
+        { progress: 20, text: 'Verifying your browser...', duration: 800 },
+        { progress: 45, text: 'Checking your connection...', duration: 800 },
+        { progress: 65, text: 'Evaluating your session...', duration: 800 },
+        { progress: 80, text: 'Almost there...', duration: 800 },
+        { progress: 100, text: 'Verifying...', duration: 500 },
+      ];
+
+      let step = 0;
+      const run = () => {
+        if (step < steps.length) {
+          const s = steps[step];
+          this.verifyProgress = s.progress;
+          this.verifyText = s.text;
+          step++;
+          setTimeout(run, s.duration);
+        } else {
+          this.verifyText = 'Verification complete';
+          this.canVerify = true;
+        }
+      };
+
+      // Countdown timer
+      const countTimer = setInterval(() => {
+        if (this.countdown > 0) {
+          this.countdown--;
+        } else {
+          clearInterval(countTimer);
+        }
+      }, 1000);
+
+      run();
+    },
+
+    unlock() {
+      this.isUnlocked = true;
+      sessionStorage.setItem('chatVerified', '1');
+    },
+
   methods: {
     async sendMessage() {
-      if (!this.userInput.trim() || this.isLoading) return;
+      if (!this.isUnlocked || !this.userInput.trim() || this.isLoading) return;
 
       const userMessage = this.userInput.trim();
       this.userInput = '';
@@ -194,6 +329,7 @@ export default {
   border-radius: 16px;
   box-shadow: rgba(0,0,0,0.05) 0px 4px 24px;
   overflow: hidden;
+  position: relative;
 }
 
 .chat-header {
@@ -373,4 +509,162 @@ code {
 
 strong { font-weight: 600; color: #141413; }
 em { font-style: italic; color: #5e5d59; }
+
+/* ── Cloudflare Attack Overlay ── */
+.attack-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 200;
+  background: #0a0a0a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.attack-inner {
+  text-align: center;
+  padding: 40px 32px;
+  max-width: 480px;
+  width: 100%;
+}
+
+.cf-logo {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 24px;
+  animation: cfPulse 2s ease-in-out infinite;
+}
+
+.cf-logo svg {
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes cfPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.95); }
+}
+
+.attack-title {
+  font-family: Georgia, serif;
+  font-size: 28px;
+  font-weight: 500;
+  color: #ffffff;
+  margin: 0 0 12px 0;
+  letter-spacing: -0.3px;
+}
+
+.attack-subtitle {
+  font-size: 15px;
+  color: #9ca3af;
+  margin: 0 0 28px 0;
+  line-height: 1.5;
+}
+
+/* Bouncing dots */
+.cf-bouncer {
+  margin-bottom: 24px;
+}
+
+.bouncer-dots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  height: 32px;
+}
+
+.bouncer-dots span {
+  display: block;
+  width: 10px;
+  height: 10px;
+  background: #f6821f;
+  border-radius: 50%;
+  animation: bounce 1.4s ease-in-out infinite;
+}
+
+.bouncer-dots span:nth-child(1) { animation-delay: 0s; }
+.bouncer-dots span:nth-child(2) { animation-delay: 0.2s; }
+.bouncer-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes bounce {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+  40% { transform: translateY(-14px); opacity: 1; }
+}
+
+/* Progress bar */
+.verifying-bar {
+  width: 100%;
+  height: 4px;
+  background: #1f2937;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+
+.verifying-progress {
+  height: 100%;
+  background: linear-gradient(90deg, #f6821f, #ff9f4a);
+  border-radius: 4px;
+  transition: width 0.6s ease;
+}
+
+.verifying-text {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0 0 16px 0;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.5px;
+}
+
+.countdown-text {
+  font-size: 14px;
+  color: #4b5563;
+  margin-bottom: 20px;
+  min-height: 20px;
+}
+
+.verify-btn-label {
+  color: #f6821f;
+  font-weight: 500;
+}
+
+/* Verify button */
+.verify-btn {
+  display: inline-block;
+  padding: 13px 32px;
+  background: #f6821f;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 24px;
+  transition: background 0.2s, transform 0.15s;
+  font-family: Arial, sans-serif;
+  letter-spacing: 0.3px;
+}
+
+.verify-btn:hover {
+  background: #ff9f4a;
+  transform: translateY(-1px);
+}
+
+.verify-btn:active {
+  transform: translateY(0);
+}
+
+.attack-footer {
+  font-size: 12px;
+  color: #374151;
+  margin: 0;
+  font-family: 'Courier New', monospace;
+}
+
+.ray-id {
+  color: #6b7280;
+}
 </style>

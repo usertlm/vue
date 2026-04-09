@@ -53,8 +53,7 @@
 
       <!-- AI Chat -->
       <section id="ai-chat" class="content-section">
-        <BotVerificationModal @verified="chatVerified = $event" />
-        <ChatBox v-if="chatVerified" />
+        <ChatBox />
       </section>
 
       <!-- Price Trend -->
@@ -383,7 +382,6 @@
 
 <script>
 import SearchComponent from './components/search.vue'
-import BotVerificationModal from './components/BotVerificationModal.vue'
 import ChatBox from './components/ChatBox.vue'
 import AdSense from './components/AdSense.vue'
 import PriceTrendChart from './components/PriceTrendChart.vue'
@@ -393,7 +391,6 @@ export default {
   name: 'App',
   components: {
     SearchComponent,
-    BotVerificationModal,
     ChatBox,
     AdSense,
     PriceTrendChart,
@@ -401,7 +398,6 @@ export default {
   },
   data() {
     return {
-      chatVerified: false,
       activeResourceTab: 'community',
       resourceTabs: [
         {

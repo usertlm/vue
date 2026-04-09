@@ -36,16 +36,26 @@
     </div>
 
     <div class="input-area">
-      <input
-        v-model="userInput"
-        type="text"
-        placeholder="输入消息..."
-        :disabled="isLoading"
-        @keyup.enter="sendMessage"
-      />
-      <button @click="sendMessage" :disabled="isLoading">
-        {{ isLoading ? '思考中...' : '发送' }}
-      </button>
+      <!-- Per-message Turnstile verification -->
+      <div v-if="showVerifier" class="verifier-overlay">
+        <div class="verifier-box">
+          <p class="verifier-hint">🤖 完成验证以发送消息</p>
+          <div id="chat-turnstile"></div>
+          <button v-if="turnstileToken" @click="verifyAndSend" class="verifier-btn">✓ 验证并发送</button>
+        </div>
+      </div>
+      <template v-else>
+        <input
+          v-model="userInput"
+          type="text"
+          placeholder="输入消息..."
+          :disabled="isLoading"
+          @keyup.enter="sendMessage"
+        />
+        <button @click="sendMessage" :disabled="isLoading">
+          {{ isLoading ? '思考中...' : '发送' }}
+        </button>
+      </template>
     </div>
   </div>
 </template>
@@ -58,12 +68,12 @@ export default {
       userInput: '',
       messages: [],
       isLoading: false,
-      isUnlocked: true,
-      countdown: 5,
-      verifyProgress: 0,
-      verifyText: 'Verifying your browser...',
-      canVerify: false,
-      rayId: '',
+      // Per-message Turnstile verification
+      showVerifier: false,
+      pendingMessage: '',
+      turnstileToken: '',
+      turnstileWidgetId: null,
+      siteKey: '0x4AAAAAAC20_D7AekIRll2z',
     };
   },
 
@@ -72,11 +82,62 @@ export default {
 
   methods: {
 
+    // Load Turnstile script
+    loadTurnstile() {
+      return new Promise((resolve) => {
+        if (window.turnstile) { resolve(); return; }
+        const s = document.createElement('script');
+        s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+        s.async = true;
+        s.onload = resolve;
+        document.head.appendChild(s);
+      });
+    },
+
     async sendMessage() {
       if (!this.userInput.trim() || this.isLoading) return;
 
-      const userMessage = this.userInput.trim();
+      // Show Turnstile verification before sending
+      this.pendingMessage = this.userInput.trim();
+      this.showVerifier = true;
       this.userInput = '';
+      await this.loadTurnstile();
+      this.renderTurnstile();
+    },
+
+    renderTurnstile() {
+      if (this.turnstileWidgetId) {
+        window.turnstile.remove(this.turnstileWidgetId);
+      }
+      this.turnstileWidgetId = window.turnstile.render('#chat-turnstile', {
+        sitekey: this.siteKey,
+        theme: 'dark',
+        size: 'normal',
+        callback: (token) => {
+          this.turnstileToken = token;
+          this.verifyAndSend();
+        },
+        'error-callback': () => {
+          this.turnstileToken = '';
+        },
+      });
+    },
+
+    async verifyAndSend() {
+      if (!this.turnstileToken) return;
+      this.showVerifier = false;
+      const userMessage = this.pendingMessage;
+      this.pendingMessage = '';
+      this.turnstileToken = '';
+      if (this.turnstileWidgetId) {
+        window.turnstile.remove(this.turnstileWidgetId);
+        this.turnstileWidgetId = null;
+      }
+      await this.doSendMessage(userMessage);
+    },
+
+    async doSendMessage(userMessage) {
+
       this.isLoading = true;
 
       this.messages.push({
@@ -544,4 +605,46 @@ em { font-style: italic; color: #5e5d59; }
 .ray-id {
   color: #6b7280;
 }
+/* Per-message Turnstile verification */
+.verifier-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  background: rgba(0,0,0,0.3);
+  border-radius: 8px;
+  border: 1px solid rgba(124,58,237,0.3);
+}
+
+.verifier-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.verifier-hint {
+  color: #ccc;
+  font-size: 14px;
+  margin: 0;
+}
+
+.verifier-btn {
+  padding: 8px 20px;
+  background: linear-gradient(135deg, #7C3AED, #a855f7);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.verifier-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(124,58,237,0.4);
+}
+
 </style>

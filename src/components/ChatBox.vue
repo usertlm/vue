@@ -35,41 +35,6 @@
         </p>
       </div>
     </div>
-    <!-- Cloudflare-style Attack Verification Overlay -->
-    <div v-if="!isUnlocked" class="attack-overlay">
-      <div class="attack-inner">
-        <div class="cf-logo">
-          <svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
-            <path fill="#f6821f" d="M120 12.5L12.5 75v90l107.5 62.5 107.5-62.5V75L120 12.5zm60 77.5L120 115 60 90l60-25 60 25-60 25z"/>
-          </svg>
-        </div>
-        <h1 class="attack-title">Just a moment...</h1>
-        <p class="attack-subtitle">Checking your browser before allowing access to this site</p>
-        <div class="cf-bouncer">
-          <div class="bouncer-dots">
-            <span></span><span></span><span></span>
-          </div>
-        </div>
-        <div class="verifying-bar">
-          <div class="verifying-progress" :style="{ width: verifyProgress + '%' }"></div>
-        </div>
-        <p class="verifying-text">{{ verifyText }}</p>
-        <div class="countdown-text">
-          <span v-if="countdown > 0">Redirecting in {{ countdown }}s...</span>
-          <span v-else-if="canVerify" class="verify-btn-label">Complete verification to continue</span>
-        </div>
-        <button
-          v-if="canVerify"
-          class="verify-btn"
-          @click="unlock"
-        >
-          Verify and Unlock
-        </button>
-        <p class="attack-footer">
-          Cloudflare Ray ID: <span class="ray-id">{{ rayId }}</span>
-        </p>
-      </div>
-    </div>
 
     <div class="chat-header">
       <h3 class="chat-title">💬 AI 聊天</h3>
@@ -194,7 +159,6 @@ export default {
       sessionStorage.setItem('chatVerified', '1');
     },
 
-  methods: {
     async sendMessage() {
       if (!this.isUnlocked || !this.userInput.trim() || this.isLoading) return;
 

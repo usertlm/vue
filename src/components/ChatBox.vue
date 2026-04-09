@@ -58,7 +58,7 @@ export default {
       userInput: '',
       messages: [],
       isLoading: false,
-      isUnlocked: false,
+      isUnlocked: true,
       countdown: 5,
       verifyProgress: 0,
       verifyText: 'Verifying your browser...',
@@ -68,64 +68,12 @@ export default {
   },
 
   mounted() {
-    // Check if already verified this session
-    if (sessionStorage.getItem('chatVerified') === '1') {
-      this.isUnlocked = true;
-    } else {
-      this.rayId = this.generateRayId();
-      this.startVerification();
-    }
   },
 
   methods: {
-    generateRayId() {
-      return Array.from({ length: 16 }, () =>
-        Math.floor(Math.random() * 16).toString(16)
-      ).join('').toUpperCase();
-    },
-
-    startVerification() {
-      const steps = [
-        { progress: 20, text: 'Verifying your browser...', duration: 800 },
-        { progress: 45, text: 'Checking your connection...', duration: 800 },
-        { progress: 65, text: 'Evaluating your session...', duration: 800 },
-        { progress: 80, text: 'Almost there...', duration: 800 },
-        { progress: 100, text: 'Verifying...', duration: 500 },
-      ];
-
-      let step = 0;
-      const run = () => {
-        if (step < steps.length) {
-          const s = steps[step];
-          this.verifyProgress = s.progress;
-          this.verifyText = s.text;
-          step++;
-          setTimeout(run, s.duration);
-        } else {
-          this.verifyText = 'Verification complete';
-          this.canVerify = true;
-        }
-      };
-
-      // Countdown timer
-      const countTimer = setInterval(() => {
-        if (this.countdown > 0) {
-          this.countdown--;
-        } else {
-          clearInterval(countTimer);
-        }
-      }, 1000);
-
-      run();
-    },
-
-    unlock() {
-      this.isUnlocked = true;
-      sessionStorage.setItem('chatVerified', '1');
-    },
 
     async sendMessage() {
-      if (!this.isUnlocked || !this.userInput.trim() || this.isLoading) return;
+      if (!this.userInput.trim() || this.isLoading) return;
 
       const userMessage = this.userInput.trim();
       this.userInput = '';

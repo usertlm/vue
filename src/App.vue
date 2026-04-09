@@ -43,6 +43,11 @@
       </div>
     </section>
 
+    <!-- Live Stream -->
+    <section class="stream-section">
+      <HlsPlayer src="https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8" />
+    </section>
+
     <!-- Main Content -->
     <main class="main-content">
 
@@ -51,14 +56,14 @@
         <ChatBox />
       </section>
 
-      <!-- AdSense -->
-      <section class="content-section">
-        <AdSense />
-      </section>
-
       <!-- Price Trend -->
       <section id="price" class="content-section">
         <PriceTrendChart />
+      </section>
+
+      <!-- AdSense -->
+      <section class="content-section">
+        <AdSense />
       </section>
 
       <!-- News Section -->
@@ -194,6 +199,7 @@ import SearchComponent from './components/search.vue'
 import ChatBox from './components/ChatBox.vue'
 import AdSense from './components/AdSense.vue'
 import PriceTrendChart from './components/PriceTrendChart.vue'
+import HlsPlayer from './components/HlsPlayer.vue'
 
 export default {
   name: 'App',
@@ -201,7 +207,8 @@ export default {
     SearchComponent,
     ChatBox,
     AdSense,
-    PriceTrendChart
+    PriceTrendChart,
+    HlsPlayer
   },
   data() {
     return {
@@ -368,6 +375,13 @@ a:hover { color: var(--color-coral); }
 .nav-link:hover {
   background: var(--color-warm-sand);
   color: var(--color-near-black);
+}
+
+/* ── Stream ── */
+.stream-section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 32px 60px;
 }
 
 /* ── Hero ── */

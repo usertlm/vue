@@ -99,8 +99,12 @@ export default {
 
 <style scoped>
 .adsense-container {
-  margin: 20px 0;
+  margin: 32px 0;
   text-align: center;
   min-height: 100px;
+  padding: 20px;
+  background: #faf9f5;
+  border: 1px solid #f0eee6;
+  border-radius: 12px;
 }
 </style>

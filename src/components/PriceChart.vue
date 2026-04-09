@@ -1,7 +1,9 @@
 <template>
   <div class="price-tracker">
-    <h3>🎮 电脑配件价格趋势 📊</h3>
-    
+    <div class="section-header">
+      <h3 class="section-title">🎮 电脑配件价格趋势</h3>
+    </div>
+
     <!-- Search Bar -->
     <div class="search-bar">
       <input
@@ -15,16 +17,21 @@
 
     <!-- Search Results -->
     <div v-if="searchResults.length > 0" class="search-results">
-      <div class="result-item" v-for="item in searchResults" :key="item.id" @click="selectSearchResult(item)">
+      <div
+        class="result-item"
+        v-for="item in searchResults"
+        :key="item.id"
+        @click="selectSearchResult(item)"
+      >
         <span class="result-name">{{ item.name }}</span>
-        <span class="result-price">💰 ¥{{ item.price }}</span>
+        <span class="result-price">¥{{ item.price }}</span>
       </div>
     </div>
 
     <!-- Category Tabs -->
     <div class="category-tabs">
-      <button 
-        v-for="cat in categories" 
+      <button
+        v-for="cat in categories"
         :key="cat.id"
         :class="['tab-btn', { active: selectedCategory === cat.id }]"
         @click="selectedCategory = cat.id"
@@ -38,42 +45,41 @@
       <select v-model="selectedProduct" @change="loadProductData">
         <option value="">📦 选择配件型号...</option>
         <option v-for="p in currentProducts" :key="p.id" :value="p.id">
-          {{ p.name }} - 💵 ¥{{ p.price }}
+          {{ p.name }} - ¥{{ p.price }}
         </option>
       </select>
     </div>
 
     <!-- Price Chart -->
-    <div class="chart-container" v-if="selectedProduct && chartData.datasets && chartData.datasets.length">
+    <div v-if="selectedProduct && chartData.datasets && chartData.datasets.length" class="chart-container">
       <div class="chart-header">
-        <span class="product-emoji">📈</span>
         <span class="product-title">{{ currentProductData?.name }}</span>
       </div>
-      
+
       <div class="chart-wrapper">
         <PriceLineChart :data="chartData" :options="chartOptions" />
       </div>
-      
+
       <!-- Price Stats -->
       <div class="price-stats">
-        <div class="stat current">
+        <div class="stat">
           <span class="stat-icon">💴</span>
           <span class="stat-label">当前价格</span>
           <span class="stat-value">¥{{ currentPrice }}</span>
         </div>
-        <div class="stat change" :class="priceChangeClass">
+        <div class="stat" :class="priceChangeClass">
           <span class="stat-icon">{{ priceChange >= 0 ? '📈' : '📉' }}</span>
           <span class="stat-label">相比昨日</span>
           <span class="stat-value">
             {{ priceChange >= 0 ? '↑' : '↓' }} ¥{{ Math.abs(priceChange).toFixed(0) }} ({{ priceChangePercent }}%)
           </span>
         </div>
-        <div class="stat lowest">
+        <div class="stat">
           <span class="stat-icon">🪙</span>
           <span class="stat-label">历史最低</span>
           <span class="stat-value">¥{{ historyLow }}</span>
         </div>
-        <div class="stat highest">
+        <div class="stat">
           <span class="stat-icon">💎</span>
           <span class="stat-label">历史最高</span>
           <span class="stat-value">¥{{ historyHigh }}</span>
@@ -81,13 +87,13 @@
       </div>
 
       <!-- Price History Timeline -->
-      <div class="history-section" v-if="priceHistory.length > 0">
+      <div v-if="priceHistory.length > 0" class="history-section">
         <div class="history-header">
           <span class="history-title">📅 价格历史</span>
         </div>
         <div class="history-filter">
-          <button 
-            v-for="range in timeRanges" 
+          <button
+            v-for="range in timeRanges"
             :key="range.value"
             :class="['range-btn', { active: selectedRange === range.value }]"
             @click="selectedRange = range.value"
@@ -97,8 +103,8 @@
         </div>
         <div class="history-list">
           <div v-for="(item, index) in filteredHistory" :key="index" class="history-item">
-            <span class="history-date">🗓️ {{ formatDate(item.time) }}</span>
-            <span class="history-price">💰 ¥{{ item.price }}</span>
+            <span class="history-date">{{ formatDate(item.time) }}</span>
+            <span class="history-price">¥{{ item.price }}</span>
             <span class="history-change" :class="getChangeClass(item)">
               {{ getChangeLabel(item) }}
             </span>
@@ -108,10 +114,9 @@
 
       <!-- Last Update Time -->
       <div class="update-time">
-        <span class="update-icon">⏰</span>
-        最后更新: {{ lastUpdateTime }}
+        <span>⏰ 最后更新: {{ lastUpdateTime }}</span>
         <button @click="refreshData" class="refresh-btn" :disabled="isLoading">
-          {{ isLoading ? '🔄 更新中...' : '🔄 刷新' }}
+          {{ isLoading ? '更新中...' : '刷新' }}
         </button>
       </div>
     </div>
@@ -192,7 +197,6 @@ export default {
       return this.priceHistory.filter(h => new Date(h.time) >= cutoff);
     },
     priceChange() {
-      // priceHistory is newest-first, so [0] is today, [1] is yesterday
       if (this.priceHistory.length < 2) return 0;
       return this.priceHistory[0].price - this.priceHistory[1].price;
     },
@@ -216,13 +220,10 @@ export default {
       if (!this.currentProductData || !this.currentProductData.trend) {
         return { labels: [], datasets: [] };
       }
-      
-      // priceHistory is newest-first (reversed from trend which is oldest-first)
-      // We want to show chart with oldest on left, newest on right
-      const trend = [...this.priceHistory].reverse(); // oldest-first for chart
-      
+
+      const trend = [...this.priceHistory].reverse();
       const productName = this.currentProductData.name || '';
-      
+
       return {
         labels: trend.map(h => {
           const d = new Date(h.time);
@@ -232,14 +233,14 @@ export default {
           {
             label: productName,
             data: trend.map(h => h.price),
-            borderColor: '#FF6B6B',
-            backgroundColor: 'rgba(255, 107, 107, 0.2)',
+            borderColor: '#c96442',
+            backgroundColor: 'rgba(201, 100, 66, 0.10)',
             fill: true,
             tension: 0.4,
             pointRadius: 6,
             pointHoverRadius: 10,
-            pointBackgroundColor: '#FF6B6B',
-            pointBorderColor: '#fff',
+            pointBackgroundColor: '#c96442',
+            pointBorderColor: '#faf9f5',
             pointBorderWidth: 3
           }
         ]
@@ -258,12 +259,13 @@ export default {
             display: false
           },
           tooltip: {
-            backgroundColor: 'rgba(255, 107, 107, 0.9)',
-            titleColor: '#fff',
-            bodyColor: '#fff',
-            padding: 15,
-            borderColor: '#FF4757',
+            backgroundColor: 'rgba(20, 20, 19, 0.92)',
+            titleColor: '#c96442',
+            bodyColor: '#141413',
+            padding: 14,
+            borderColor: '#c96442',
             borderWidth: 2,
+            cornerRadius: 12,
             displayColors: false,
             callbacks: {
               label: (context) => `💰 价格: ¥${context.raw.toFixed(0)}`
@@ -273,21 +275,21 @@ export default {
         scales: {
           x: {
             grid: {
-              color: 'rgba(255, 107, 107, 0.1)'
+              color: 'rgba(0,0,0,0.05)'
             },
             ticks: {
               maxRotation: 45,
               minRotation: 0,
-              color: '#666'
+              color: '#87867f'
             }
           },
           y: {
             grid: {
-              color: 'rgba(255, 107, 107, 0.1)'
+              color: 'rgba(0,0,0,0.05)'
             },
             ticks: {
               callback: (value) => `¥${value}`,
-              color: '#666'
+              color: '#87867f'
             }
           }
         }
@@ -339,10 +341,10 @@ export default {
         this.searchResults = [];
         return;
       }
-      
+
       const query = this.searchQuery.toLowerCase();
       const results = [];
-      
+
       for (const [catKey, cat] of Object.entries(this.priceData.categories)) {
         for (const item of cat) {
           if (item.name.toLowerCase().includes(query)) {
@@ -350,7 +352,7 @@ export default {
           }
         }
       }
-      
+
       this.searchResults = results;
     },
     formatDate(dateStr) {
@@ -384,19 +386,25 @@ export default {
 <style scoped>
 .price-tracker {
   max-width: 850px;
-  margin: 30px auto;
-  padding: 25px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 24px;
-  box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
+  margin: 40px auto;
+  padding: 32px;
+  background: #faf9f5;
+  border: 1px solid #f0eee6;
+  border-radius: 20px;
+  box-shadow: rgba(0,0,0,0.05) 0px 4px 24px;
 }
 
-.price-tracker h3 {
-  text-align: center;
-  color: #fff;
-  margin-bottom: 25px;
+.section-header {
+  margin-bottom: 24px;
+}
+
+.section-title {
+  font-family: Georgia, serif;
   font-size: 24px;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+  font-weight: 500;
+  color: #141413;
+  text-align: center;
+  line-height: 1.20;
 }
 
 .search-bar {
@@ -407,75 +415,70 @@ export default {
 
 .search-input {
   flex: 1;
-  padding: 14px 20px;
-  border: 3px solid #fff;
-  border-radius: 50px;
+  padding: 12px 16px;
+  border: 1px solid #f0eee6;
+  border-radius: 12px;
   font-size: 15px;
-  background: #fff;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  background: #ffffff;
+  color: #141413;
+  font-family: Arial, sans-serif;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .search-input:focus {
   outline: none;
-  border-color: #FFD93D;
+  border-color: #c96442;
+  box-shadow: 0 0 0 3px rgba(201, 100, 66, 0.10);
 }
 
 .search-btn {
-  padding: 14px 28px;
-  background: #FFD93D;
+  padding: 12px 22px;
+  background: #c96442;
+  color: #faf9f5;
   border: none;
-  border-radius: 50px;
+  border-radius: 12px;
   cursor: pointer;
-  font-weight: bold;
-  color: #333;
-  box-shadow: 0 4px 15px rgba(255, 217, 61, 0.4);
-  transition: all 0.3s;
+  font-weight: 500;
+  font-size: 15px;
+  font-family: Arial, sans-serif;
+  transition: background 0.2s;
 }
 
-.search-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 217, 61, 0.5);
-}
+.search-btn:hover { background: #d97757; }
 
 .search-results {
-  background: #fff;
-  border-radius: 16px;
-  padding: 15px;
+  background: #ffffff;
+  border: 1px solid #f0eee6;
+  border-radius: 12px;
+  padding: 12px;
   margin-bottom: 20px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  box-shadow: 0px 0px 0px 1px #d1cfc5;
 }
 
 .result-item {
   display: flex;
   justify-content: space-between;
-  padding: 12px;
+  padding: 10px 14px;
   cursor: pointer;
-  border-radius: 12px;
-  margin-bottom: 6px;
-  background: #f8f9ff;
-  transition: all 0.2s;
+  border-radius: 8px;
+  margin-bottom: 4px;
+  background: #faf9f5;
+  transition: background 0.15s;
 }
 
-.result-item:hover {
-  background: #667eea;
-  color: #fff;
-}
-
-.result-item:last-child {
-  margin-bottom: 0;
-}
+.result-item:hover { background: #e8e6dc; }
+.result-item:last-child { margin-bottom: 0; }
 
 .result-name {
   font-weight: 500;
+  color: #141413;
+  font-size: 14px;
 }
 
 .result-price {
-  color: #FF6B6B;
-  font-weight: bold;
-}
-
-.result-item:hover .result-price {
-  color: #FFD93D;
+  color: #c96442;
+  font-weight: 700;
+  font-size: 14px;
 }
 
 .category-tabs {
@@ -487,176 +490,167 @@ export default {
 }
 
 .tab-btn {
-  padding: 12px 20px;
-  border: 3px solid transparent;
-  background: rgba(255,255,255,0.9);
-  border-radius: 50px;
+  padding: 10px 18px;
+  border: 1px solid #f0eee6;
+  background: #ffffff;
+  border-radius: 20px;
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
-  color: #333;
-  transition: all 0.3s;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  color: #5e5d59;
+  transition: all 0.2s;
+  font-family: Arial, sans-serif;
 }
 
 .tab-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  border-color: #c96442;
+  color: #c96442;
 }
 
 .tab-btn.active {
-  background: #FFD93D;
-  color: #333;
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(255, 217, 61, 0.4);
+  background: #c96442;
+  border-color: #c96442;
+  color: #faf9f5;
 }
 
 .product-select {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .product-select select {
-  padding: 14px 24px;
+  padding: 12px 20px;
   font-size: 15px;
-  border: 3px solid #fff;
-  border-radius: 50px;
+  border: 1px solid #f0eee6;
+  border-radius: 12px;
   min-width: 280px;
   cursor: pointer;
-  background: #fff;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  background: #ffffff;
+  color: #141413;
+  font-family: Arial, sans-serif;
+  transition: border-color 0.2s;
 }
 
 .product-select select:focus {
   outline: none;
-  border-color: #FFD93D;
+  border-color: #c96442;
 }
 
 .chart-container {
-  background: #fff;
-  border-radius: 20px;
-  padding: 25px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+  background: #ffffff;
+  border: 1px solid #f0eee6;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0px 0px 0px 1px #d1cfc5;
 }
 
 .chart-header {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.product-emoji {
-  font-size: 32px;
+  margin-bottom: 16px;
 }
 
 .product-title {
-  font-size: 20px;
-  font-weight: bold;
-  color: #333;
+  font-family: Georgia, serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: #141413;
 }
 
 .chart-wrapper {
-  height: 280px;
+  height: 260px;
   margin-bottom: 20px;
 }
 
-.chart-wrapper canvas {
-  max-height: 280px;
-}
+.chart-wrapper canvas { max-height: 260px; }
 
 .price-stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 15px;
+  gap: 12px;
   margin-bottom: 20px;
 }
 
 .stat {
   text-align: center;
-  padding: 18px 12px;
-  background: linear-gradient(135deg, #f8f9ff 0%, #e8ecff 100%);
-  border-radius: 16px;
-  border: 2px solid #e8ecff;
-  transition: all 0.3s;
+  padding: 16px 10px;
+  background: #faf9f5;
+  border: 1px solid #f0eee6;
+  border-radius: 12px;
+  transition: transform 0.2s;
 }
 
-.stat:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
-}
+.stat:hover { transform: translateY(-3px); }
 
 .stat-icon {
-  font-size: 24px;
+  font-size: 22px;
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .stat-label {
   display: block;
-  font-size: 12px;
-  color: #888;
-  margin-bottom: 6px;
+  font-size: 11px;
+  color: #87867f;
+  margin-bottom: 4px;
 }
 
 .stat-value {
   display: block;
-  font-size: 18px;
-  font-weight: bold;
-  color: #333;
+  font-size: 16px;
+  font-weight: 700;
+  color: #141413;
 }
 
-.stat.change.up .stat-value {
-  color: #FF6B6B;
-}
-
-.stat.change.down .stat-value {
-  color: #27AE60;
-}
+.stat.up .stat-value { color: #b53333; }
+.stat.down .stat-value { color: #2d8a4e; }
 
 .history-section {
   margin-top: 20px;
   padding-top: 20px;
-  border-top: 2px dashed #e8ecff;
+  border-top: 1px solid #f0eee6;
 }
 
 .history-header {
   text-align: center;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
 }
 
 .history-title {
-  font-size: 18px;
-  font-weight: bold;
-  color: #333;
+  font-family: Georgia, serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #141413;
 }
 
 .history-filter {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   justify-content: center;
-  margin-bottom: 15px;
+  margin-bottom: 14px;
 }
 
 .range-btn {
-  padding: 8px 18px;
-  border: 2px solid #667eea;
-  background: #fff;
-  border-radius: 50px;
+  padding: 6px 16px;
+  border: 1px solid #f0eee6;
+  background: #ffffff;
+  border-radius: 20px;
   cursor: pointer;
   font-size: 13px;
-  color: #667eea;
-  transition: all 0.3s;
+  color: #5e5d59;
+  transition: all 0.2s;
+  font-family: Arial, sans-serif;
 }
 
 .range-btn.active {
-  background: #667eea;
-  color: #fff;
+  background: #c96442;
+  border-color: #c96442;
+  color: #faf9f5;
 }
 
 .history-list {
-  max-height: 220px;
+  max-height: 200px;
   overflow-y: auto;
 }
 
@@ -664,117 +658,60 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 15px;
-  background: #f8f9ff;
-  border-radius: 12px;
-  margin-bottom: 8px;
+  padding: 10px 14px;
+  background: #faf9f5;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  transition: background 0.15s;
 }
 
-.history-date {
-  color: #666;
-  font-size: 13px;
-}
+.history-item:hover { background: #f0eee6; }
 
-.history-price {
-  font-weight: bold;
-  color: #333;
-  font-size: 15px;
-}
-
-.history-change {
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.history-change.up {
-  color: #FF6B6B;
-}
-
-.history-change.down {
-  color: #27AE60;
-}
+.history-date { color: #5e5d59; font-size: 13px; }
+.history-price { font-weight: 700; color: #141413; font-size: 14px; }
+.history-change { font-size: 12px; font-weight: 600; }
+.history-change.up { color: #b53333; }
+.history-change.down { color: #2d8a4e; }
 
 .update-time {
   text-align: center;
   margin-top: 20px;
-  padding-top: 15px;
-  border-top: 2px dashed #e8ecff;
-  color: #888;
+  padding-top: 16px;
+  border-top: 1px solid #f0eee6;
+  color: #87867f;
   font-size: 13px;
-}
-
-.update-icon {
-  margin-right: 5px;
 }
 
 .refresh-btn {
-  margin-left: 15px;
-  padding: 10px 20px;
-  background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
-  color: white;
+  margin-left: 14px;
+  padding: 8px 18px;
+  background: #e8e6dc;
+  color: #4d4c48;
   border: none;
-  border-radius: 50px;
+  border-radius: 20px;
   cursor: pointer;
   font-size: 13px;
-  font-weight: bold;
-  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
-  transition: all 0.3s;
+  font-weight: 500;
+  transition: background 0.2s;
+  font-family: Arial, sans-serif;
 }
 
-.refresh-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.5);
-}
+.refresh-btn:hover:not(:disabled) { background: #d1cfc5; }
+.refresh-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
-.refresh-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.empty-state,
-.loading-state {
+.empty-state, .loading-state {
   text-align: center;
-  padding: 50px;
-  color: #fff;
+  padding: 48px 20px;
+  color: #5e5d59;
 }
 
-.empty-icon,
-.loading-icon {
-  font-size: 60px;
-  margin-bottom: 15px;
-}
-
-.empty-state p,
-.loading-state p {
-  font-size: 18px;
-}
+.empty-icon, .loading-icon { font-size: 48px; margin-bottom: 12px; }
+.empty-state p, .loading-state p { font-size: 16px; }
 
 @media (max-width: 600px) {
-  .price-tracker {
-    margin: 15px;
-    padding: 20px;
-    border-radius: 20px;
-  }
-  
-  .price-stats {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .category-tabs {
-    gap: 8px;
-  }
-  
-  .tab-btn {
-    padding: 10px 16px;
-    font-size: 13px;
-  }
-  
-  .chart-wrapper {
-    height: 220px;
-  }
-  
-  .chart-wrapper canvas {
-    max-height: 220px;
-  }
+  .price-tracker { margin: 20px 16px; padding: 20px 16px; }
+  .price-stats { grid-template-columns: repeat(2, 1fr); }
+  .chart-wrapper { height: 200px; }
+  .chart-wrapper canvas { max-height: 200px; }
 }
 </style>

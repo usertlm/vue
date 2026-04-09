@@ -1,16 +1,19 @@
 <template>
   <div class="hls-player">
-    <h3>🎬 直播测试</h3>
-    <div v-if="error" class="error">{{ error }}</div>
-    <video
-      ref="videoElement"
-      controls
-      autoplay
-      muted
-      playsinline
-      class="video-player"
-    ></video>
-
+    <div class="section-header">
+      <h2 class="section-heading">🎬 直播</h2>
+    </div>
+    <div v-if="error" class="error-msg">{{ error }}</div>
+    <div class="video-wrapper">
+      <video
+        ref="videoElement"
+        controls
+        autoplay
+        muted
+        playsinline
+        class="video-player"
+      ></video>
+    </div>
   </div>
 </template>
 
@@ -44,33 +47,27 @@ export default {
 
       this.error = ''
 
-      // Check if native HLS is supported (Safari iOS/macOS)
       if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        console.log('Using native HLS support')
         video.src = this.src
         video.addEventListener('error', this.handleNativeError)
         return
       }
 
-      // Check if Hls.js is supported
       if (Hls.isSupported()) {
-        console.log('Using Hls.js')
         this.hls = new Hls({
           enableWorker: true,
           lowLatencyMode: true,
           backBufferLength: 90
         })
-        
+
         this.hls.loadSource(this.src)
         this.hls.attachMedia(video)
-        
-        this.hls.on(Hls.Events.MANIFEST_PARSED, (event, data) => {
-          console.log('HLS Manifest parsed, levels:', data.levels)
-          video.play().catch(e => console.log('Play error:', e))
+
+        this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          video.play().catch(() => {})
         })
-        
-        this.hls.on(Hls.Events.ERROR, (event, data) => {
-          console.error('HLS Error:', event, data)
+
+        this.hls.on(Hls.Events.ERROR, (_event, data) => {
           if (data.fatal) {
             switch (data.type) {
               case Hls.ErrorTypes.NETWORK_ERROR:
@@ -94,18 +91,16 @@ export default {
         this.error = '您的浏览器不支持 HLS 播放'
       }
     },
-    
-    handleNativeError(e) {
-      console.error('Native HLS error:', e)
-      this.error = '原生播放失败，尝试使用 Hls.js'
-      // Fallback - try Hls.js if native fails
+
+    handleNativeError() {
+      this.error = '原生播放失败'
       if (Hls.isSupported()) {
         this.hls = new Hls()
         this.hls.loadSource(this.src)
         this.hls.attachMedia(this.$refs.videoElement)
       }
     },
-    
+
     destroyPlayer() {
       if (this.hls) {
         this.hls.stopLoad()
@@ -119,25 +114,45 @@ export default {
 
 <style scoped>
 .hls-player {
-  margin: 20px 0;
+  margin: 0 auto 40px;
   text-align: center;
+}
+
+.section-header {
+  margin-bottom: 20px;
+}
+
+.section-heading {
+  font-family: Georgia, serif;
+  font-size: 28px;
+  font-weight: 500;
+  color: #141413;
+  line-height: 1.20;
+}
+
+.video-wrapper {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: rgba(0,0,0,0.05) 0px 4px 24px;
+  border: 1px solid #f0eee6;
 }
 
 .video-player {
   width: 100%;
   max-width: 800px;
   height: 450px;
-  background: #000;
+  background: #141413;
+  display: block;
+}
+
+.error-msg {
+  color: #b53333;
+  padding: 10px 16px;
+  margin-bottom: 12px;
+  background: #faf9f5;
+  border: 1px solid #e8e6dc;
   border-radius: 8px;
+  font-size: 14px;
+  display: inline-block;
 }
-
-.error {
-  color: #ff6b6b;
-  padding: 10px;
-  margin-bottom: 10px;
-  background: #ffe6e6;
-  border-radius: 4px;
-}
-
-
 </style>

@@ -1,9 +1,88 @@
 <template>
   <div class="chat-container">
+    <!-- Cloudflare-style Attack Verification Overlay -->
+    <div v-if="!isUnlocked" class="attack-overlay">
+      <div class="attack-inner">
+        <div class="cf-logo">
+          <svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#f6821f" d="M120 12.5L12.5 75v90l107.5 62.5 107.5-62.5V75L120 12.5zm60 77.5L120 115 60 90l60-25 60 25-60 25z"/>
+          </svg>
+        </div>
+        <h1 class="attack-title">Just a moment...</h1>
+        <p class="attack-subtitle">Checking your browser before allowing access to this site</p>
+        <div class="cf-bouncer">
+          <div class="bouncer-dots">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="verifying-bar">
+          <div class="verifying-progress" :style="{ width: verifyProgress + '%' }"></div>
+        </div>
+        <p class="verifying-text">{{ verifyText }}</p>
+        <div class="countdown-text">
+          <span v-if="countdown > 0">Redirecting in {{ countdown }}s...</span>
+          <span v-else-if="canVerify" class="verify-btn-label">Complete verification to continue</span>
+        </div>
+        <button
+          v-if="canVerify"
+          class="verify-btn"
+          @click="unlock"
+        >
+          Verify and Unlock
+        </button>
+        <p class="attack-footer">
+          Cloudflare Ray ID: <span class="ray-id">{{ rayId }}</span>
+        </p>
+      </div>
+    </div>
+    <!-- Cloudflare-style Attack Verification Overlay -->
+    <div v-if="!isUnlocked" class="attack-overlay">
+      <div class="attack-inner">
+        <div class="cf-logo">
+          <svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#f6821f" d="M120 12.5L12.5 75v90l107.5 62.5 107.5-62.5V75L120 12.5zm60 77.5L120 115 60 90l60-25 60 25-60 25z"/>
+          </svg>
+        </div>
+        <h1 class="attack-title">Just a moment...</h1>
+        <p class="attack-subtitle">Checking your browser before allowing access to this site</p>
+        <div class="cf-bouncer">
+          <div class="bouncer-dots">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="verifying-bar">
+          <div class="verifying-progress" :style="{ width: verifyProgress + '%' }"></div>
+        </div>
+        <p class="verifying-text">{{ verifyText }}</p>
+        <div class="countdown-text">
+          <span v-if="countdown > 0">Redirecting in {{ countdown }}s...</span>
+          <span v-else-if="canVerify" class="verify-btn-label">Complete verification to continue</span>
+        </div>
+        <button
+          v-if="canVerify"
+          class="verify-btn"
+          @click="unlock"
+        >
+          Verify and Unlock
+        </button>
+        <p class="attack-footer">
+          Cloudflare Ray ID: <span class="ray-id">{{ rayId }}</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="chat-header">
+      <h3 class="chat-title">💬 AI 聊天</h3>
+    </div>
+
     <div class="chat-box" ref="chatBox">
-      <div v-for="(msg, index) in messages" :key="index" :class="['message', msg.type]">
+      <div
+        v-for="(msg, index) in messages"
+        :key="index"
+        :class="['message', msg.type]"
+      >
         <div class="role-line">
-          <span class="role">{{ msg.role }}:</span>
+          <span class="role">{{ msg.role === 'You' ? '你' : 'AI' }}</span>
           <span v-if="msg.role === 'AI' && msg.thinkingTime" class="thinking-time">
             思考 {{ msg.thinkingTime }}s
           </span>
@@ -25,6 +104,7 @@
         </div>
       </div>
     </div>
+
     <div class="input-area">
       <input
         v-model="userInput"
@@ -48,11 +128,75 @@ export default {
       userInput: '',
       messages: [],
       isLoading: false,
+      isUnlocked: false,
+      countdown: 5,
+      verifyProgress: 0,
+      verifyText: 'Verifying your browser...',
+      canVerify: false,
+      rayId: '',
     };
   },
+
+  mounted() {
+    // Check if already verified this session
+    if (sessionStorage.getItem('chatVerified') === '1') {
+      this.isUnlocked = true;
+    } else {
+      this.rayId = this.generateRayId();
+      this.startVerification();
+    }
+  },
+
+  methods: {
+    generateRayId() {
+      return Array.from({ length: 16 }, () =>
+        Math.floor(Math.random() * 16).toString(16)
+      ).join('').toUpperCase();
+    },
+
+    startVerification() {
+      const steps = [
+        { progress: 20, text: 'Verifying your browser...', duration: 800 },
+        { progress: 45, text: 'Checking your connection...', duration: 800 },
+        { progress: 65, text: 'Evaluating your session...', duration: 800 },
+        { progress: 80, text: 'Almost there...', duration: 800 },
+        { progress: 100, text: 'Verifying...', duration: 500 },
+      ];
+
+      let step = 0;
+      const run = () => {
+        if (step < steps.length) {
+          const s = steps[step];
+          this.verifyProgress = s.progress;
+          this.verifyText = s.text;
+          step++;
+          setTimeout(run, s.duration);
+        } else {
+          this.verifyText = 'Verification complete';
+          this.canVerify = true;
+        }
+      };
+
+      // Countdown timer
+      const countTimer = setInterval(() => {
+        if (this.countdown > 0) {
+          this.countdown--;
+        } else {
+          clearInterval(countTimer);
+        }
+      }, 1000);
+
+      run();
+    },
+
+    unlock() {
+      this.isUnlocked = true;
+      sessionStorage.setItem('chatVerified', '1');
+    },
+
   methods: {
     async sendMessage() {
-      if (!this.userInput.trim() || this.isLoading) return;
+      if (!this.isUnlocked || !this.userInput.trim() || this.isLoading) return;
 
       const userMessage = this.userInput.trim();
       this.userInput = '';
@@ -94,16 +238,13 @@ export default {
         }
 
         const data = await response.json();
-
         const responseContent = data.content || '';
         const parsed = this.extractThinkFromContent(responseContent);
         assistantMsg.thinking = data.thinking || parsed.thinking || '';
 
-        // Show debug info if no content
         if (data.debug) {
           assistantMsg.content = this.formatContent('Raw: ' + JSON.stringify(data.raw, null, 2));
         } else {
-          // 流式显示效果 - 逐字显示
           await this.typeoutEffect(assistantMsg, parsed.content);
         }
 
@@ -114,23 +255,17 @@ export default {
         assistantMsg.loading = false;
         assistantMsg.thinkingTime = ((Date.now() - startTime) / 1000).toFixed(1);
         this.isLoading = false;
-
         this.scrollToBottom();
       }
     },
 
     async typeoutEffect(msg, text, speed = 10) {
-      // 速度越小显示越快 (毫秒)
-      // 使用按字符（Unicode 码点）遍历，避免拆分表情符号等多字节字符
       const chars = Array.from(text);
       let currentText = '';
       for (let i = 0; i < chars.length; i++) {
         currentText += chars[i];
         msg.content = this.formatContent(currentText);
-
         await new Promise(resolve => setTimeout(resolve, speed));
-
-        // 每显示3个字符滚动一次
         if (i % 3 === 0) {
           this.scrollToBottom();
         }
@@ -138,10 +273,7 @@ export default {
     },
 
     extractThinkFromContent(content) {
-      if (!content) {
-        return { thinking: '', content: '' };
-      }
-
+      if (!content) return { thinking: '', content: '' };
       const thinkingParts = [];
       const cleanedContent = content
         .replace(/<think>([\s\S]*?)<\/think>/gi, (_, thinkText) => {
@@ -190,39 +322,54 @@ export default {
 
 <style scoped>
 .chat-container {
-  max-width: 600px;
-  margin: 20px auto;
-  padding: 15px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background: #f9f9f9;
+  max-width: 700px;
+  margin: 32px auto;
+  background: #faf9f5;
+  border: 1px solid #f0eee6;
+  border-radius: 16px;
+  box-shadow: rgba(0,0,0,0.05) 0px 4px 24px;
+  overflow: hidden;
+  position: relative;
+}
+
+.chat-header {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid #f0eee6;
+}
+
+.chat-title {
+  font-family: Georgia, serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: #141413;
+  margin: 0;
 }
 
 .chat-box {
   height: 400px;
   overflow-y: auto;
-  border: 1px solid #ccc;
-  padding: 10px;
-  margin-bottom: 10px;
-  background: #fff;
-  text-align: left;
-  border-radius: 4px;
+  padding: 16px 20px;
+  background: #faf9f5;
 }
 
 .message {
-  margin: 12px 0;
-  padding: 10px;
-  border-radius: 8px;
-  line-height: 1.6;
+  margin: 14px 0;
+  padding: 12px 16px;
+  border-radius: 12px;
+  line-height: 1.60;
 }
 
 .message.user {
-  background: #e3f2fd;
+  background: #e8e6dc;
   text-align: right;
+  border-bottom-right-radius: 4px;
 }
 
 .message.assistant {
-  background: #f5f5f5;
+  background: #ffffff;
+  text-align: left;
+  border-bottom-left-radius: 4px;
+  box-shadow: 0px 0px 0px 1px #f0eee6;
 }
 
 .role-line {
@@ -233,52 +380,46 @@ export default {
 }
 
 .role {
-  font-weight: bold;
-  color: #666;
+  font-weight: 600;
+  font-size: 13px;
+  color: #5e5d59;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.message.user .role {
-  color: #1976d2;
-}
-
-.message.assistant .role {
-  color: #388e3c;
-}
+.message.user .role { color: #c96442; }
+.message.assistant .role { color: #4d4c48; }
 
 .thinking-time {
   font-size: 12px;
-  color: #888;
+  color: #87867f;
   font-style: italic;
 }
 
-.thinking-section {
-  margin: 8px 0;
-}
+.thinking-section { margin: 8px 0; }
 
 .thinking-toggle {
-  background: #f0f0f0;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  color: #666;
+  background: #e8e6dc;
+  border: none;
+  color: #5e5d59;
   font-size: 12px;
   cursor: pointer;
   padding: 4px 12px;
   margin-bottom: 4px;
-  transition: all 0.2s ease;
+  border-radius: 6px;
+  transition: background 0.2s;
 }
 
-.thinking-toggle:hover {
-  background: #e0e0e0;
-}
+.thinking-toggle:hover { background: #d1cfc5; }
 
 .thinking-content {
-  background: #fff9e6;
-  border-left: 3px solid #ffcc00;
+  background: #faf9f5;
+  border-left: 3px solid #c96442;
   padding: 8px 12px;
   margin: 4px 0;
   font-size: 13px;
-  color: #555;
-  border-radius: 0 4px 4px 0;
+  color: #5e5d59;
+  border-radius: 0 6px 6px 0;
   max-height: 200px;
   overflow-y: auto;
   white-space: pre-wrap;
@@ -288,34 +429,24 @@ export default {
 }
 
 @keyframes slideDown {
-  from {
-    opacity: 0;
-    max-height: 0;
-  }
-  to {
-    opacity: 1;
-    max-height: 200px;
-  }
+  from { opacity: 0; max-height: 0; }
+  to { opacity: 1; max-height: 200px; }
 }
 
-.content-line {
-  display: inline;
-}
+.content-line { display: inline; }
 
 .message .content {
-  color: #000;
+  color: #141413;
   word-break: break-word;
-}
-
-.message.user .content {
-  color: #000;
+  font-size: 15px;
 }
 
 .message .cursor {
   display: inline-block;
   animation: blink 0.7s infinite;
-  color: #42b983;
+  color: #c96442;
   font-weight: bold;
+  margin-left: 2px;
 }
 
 @keyframes blink {
@@ -326,54 +457,214 @@ export default {
 .input-area {
   display: flex;
   gap: 10px;
+  padding: 16px 20px;
+  border-top: 1px solid #f0eee6;
+  background: #faf9f5;
 }
 
-input {
+.input-area input {
   flex: 1;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
+  padding: 11px 14px;
+  border: 1px solid #f0eee6;
+  border-radius: 10px;
+  font-size: 15px;
+  background: #ffffff;
+  color: #141413;
+  font-family: Arial, sans-serif;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-input:disabled {
-  background: #f5f5f5;
+.input-area input:focus {
+  outline: none;
+  border-color: #c96442;
+  box-shadow: 0 0 0 3px rgba(201, 100, 66, 0.10);
 }
 
-button {
-  padding: 10px 20px;
-  background: #42b983;
-  color: white;
+.input-area input:disabled { background: #f5f4ed; color: #87867f; }
+
+.input-area button {
+  padding: 11px 22px;
+  background: #c96442;
+  color: #faf9f5;
   border: none;
-  border-radius: 4px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 500;
   cursor: pointer;
-  font-size: 14px;
-  transition: background 0.2s ease;
+  transition: background 0.2s;
+  font-family: Arial, sans-serif;
 }
 
-button:hover:not(:disabled) {
-  background: #359268;
-}
-
-button:disabled {
-  background: #a5d6a7;
-  cursor: not-allowed;
-}
+.input-area button:hover:not(:disabled) { background: #d97757; }
+.input-area button:disabled { background: #d1cfc5; cursor: not-allowed; }
 
 code {
-  background: #eee;
-  padding: 2px 4px;
-  border-radius: 3px;
-  font-family: monospace;
+  background: #e8e6dc;
+  padding: 2px 5px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  color: #c96442;
 }
 
-strong {
-  font-weight: bold;
-  color: #333;
+strong { font-weight: 600; color: #141413; }
+em { font-style: italic; color: #5e5d59; }
+
+/* ── Cloudflare Attack Overlay ── */
+.attack-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 200;
+  background: #0a0a0a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  overflow: hidden;
 }
 
-em {
-  font-style: italic;
-  color: #555;
+.attack-inner {
+  text-align: center;
+  padding: 40px 32px;
+  max-width: 480px;
+  width: 100%;
+}
+
+.cf-logo {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 24px;
+  animation: cfPulse 2s ease-in-out infinite;
+}
+
+.cf-logo svg {
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes cfPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.95); }
+}
+
+.attack-title {
+  font-family: Georgia, serif;
+  font-size: 28px;
+  font-weight: 500;
+  color: #ffffff;
+  margin: 0 0 12px 0;
+  letter-spacing: -0.3px;
+}
+
+.attack-subtitle {
+  font-size: 15px;
+  color: #9ca3af;
+  margin: 0 0 28px 0;
+  line-height: 1.5;
+}
+
+/* Bouncing dots */
+.cf-bouncer {
+  margin-bottom: 24px;
+}
+
+.bouncer-dots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  height: 32px;
+}
+
+.bouncer-dots span {
+  display: block;
+  width: 10px;
+  height: 10px;
+  background: #f6821f;
+  border-radius: 50%;
+  animation: bounce 1.4s ease-in-out infinite;
+}
+
+.bouncer-dots span:nth-child(1) { animation-delay: 0s; }
+.bouncer-dots span:nth-child(2) { animation-delay: 0.2s; }
+.bouncer-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes bounce {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+  40% { transform: translateY(-14px); opacity: 1; }
+}
+
+/* Progress bar */
+.verifying-bar {
+  width: 100%;
+  height: 4px;
+  background: #1f2937;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+
+.verifying-progress {
+  height: 100%;
+  background: linear-gradient(90deg, #f6821f, #ff9f4a);
+  border-radius: 4px;
+  transition: width 0.6s ease;
+}
+
+.verifying-text {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0 0 16px 0;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.5px;
+}
+
+.countdown-text {
+  font-size: 14px;
+  color: #4b5563;
+  margin-bottom: 20px;
+  min-height: 20px;
+}
+
+.verify-btn-label {
+  color: #f6821f;
+  font-weight: 500;
+}
+
+/* Verify button */
+.verify-btn {
+  display: inline-block;
+  padding: 13px 32px;
+  background: #f6821f;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 24px;
+  transition: background 0.2s, transform 0.15s;
+  font-family: Arial, sans-serif;
+  letter-spacing: 0.3px;
+}
+
+.verify-btn:hover {
+  background: #ff9f4a;
+  transform: translateY(-1px);
+}
+
+.verify-btn:active {
+  transform: translateY(0);
+}
+
+.attack-footer {
+  font-size: 12px;
+  color: #374151;
+  margin: 0;
+  font-family: 'Courier New', monospace;
+}
+
+.ray-id {
+  color: #6b7280;
 }
 </style>

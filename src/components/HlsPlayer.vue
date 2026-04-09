@@ -47,12 +47,6 @@ export default {
 
       this.error = ''
 
-      if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        video.src = this.src
-        video.addEventListener('error', this.handleNativeError)
-        return
-      }
-
       if (Hls.isSupported()) {
         this.hls = new Hls({
           enableWorker: true,
@@ -87,17 +81,30 @@ export default {
             this.error = '警告: ' + (data.details || '加载问题')
           }
         })
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        // Safari iOS native HLS
+        video.src = this.src
+        video.addEventListener('error', () => this.handleNativeError(video))
       } else {
         this.error = '您的浏览器不支持 HLS 播放'
       }
     },
 
-    handleNativeError() {
-      this.error = '原生播放失败'
+    handleNativeError(video) {
+      this.destroyPlayer()
       if (Hls.isSupported()) {
-        this.hls = new Hls()
+        this.hls = new Hls({ enableWorker: true, lowLatencyMode: true })
         this.hls.loadSource(this.src)
-        this.hls.attachMedia(this.$refs.videoElement)
+        this.hls.attachMedia(video)
+        this.hls.on(Hls.Events.ERROR, (_event, data) => {
+          if (data.fatal) {
+            this.error = '播放失败: ' + (data.details || '未知错误')
+            this.destroyPlayer()
+          }
+        })
+        this.error = ''
+      } else {
+        this.error = '播放失败，请检查网络或换用其他浏览器'
       }
     },
 
@@ -114,45 +121,44 @@ export default {
 
 <style scoped>
 .hls-player {
-  margin: 0 auto 40px;
-  text-align: center;
+  width: 100%;
 }
 
 .section-header {
-  margin-bottom: 20px;
+  padding: 16px 20px 8px;
 }
 
 .section-heading {
-  font-family: Georgia, serif;
-  font-size: 28px;
-  font-weight: 500;
-  color: #141413;
-  line-height: 1.20;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0;
+}
+
+.error-msg {
+  padding: 10px 16px;
+  margin: 0 16px 8px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  color: #ef4444;
+  font-size: 14px;
+  text-align: center;
 }
 
 .video-wrapper {
-  border-radius: 16px;
+  position: relative;
+  width: 100%;
+  background: #000;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: rgba(0,0,0,0.05) 0px 4px 24px;
-  border: 1px solid #f0eee6;
 }
 
 .video-player {
   width: 100%;
-  max-width: 800px;
-  height: 450px;
-  background: #141413;
   display: block;
-}
-
-.error-msg {
-  color: #b53333;
-  padding: 10px 16px;
-  margin-bottom: 12px;
-  background: #faf9f5;
-  border: 1px solid #e8e6dc;
-  border-radius: 8px;
-  font-size: 14px;
-  display: inline-block;
+  max-height: 480px;
+  object-fit: contain;
+  background: #000;
 }
 </style>

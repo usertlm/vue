@@ -1,21 +1,29 @@
 <template>
   <div class="price-chart-container glass">
+    <!-- 装饰气泡 -->
+    <div class="bubble-decoration">
+      <div class="bubble b1"></div>
+      <div class="bubble b2"></div>
+      <div class="bubble b3"></div>
+      <div class="bubble b4"></div>
+    </div>
+
     <!-- 标题和控制 -->
     <div class="chart-header">
       <div class="header-left">
-        <h3>📈 配件价格趋势分析</h3>
+        <h3 class="cartoon-title">📈 配件价格趋势分析</h3>
         <p class="chart-subtitle" v-if="selectedIds.length > 0">
-          实时监测 {{ selectedIds.length }} 个配件，数据每 {{ updateFrequency / 1000 }}s 更新一次
+          ✨ 实时监测 <span class="highlight">{{ selectedIds.length }}</span> 个配件，数据每 {{ updateFrequency / 1000 }}s 更新一次
         </p>
       </div>
       <div class="controls">
-        <button @click="toggleAutoUpdate" :class="{ paused: !autoUpdate }" class="control-btn">
-          {{ autoUpdate ? '⏸ 暂停更新' : '▶ 继续更新' }}
+        <button @click="toggleAutoUpdate" :class="{ paused: !autoUpdate }" class="control-btn cartoon-btn">
+          {{ autoUpdate ? '⏸️ 暂停' : '▶️ 继续' }}
         </button>
-        <button @click="resetData" class="control-btn">
-          🔄 重置数据
+        <button @click="resetData" class="control-btn cartoon-btn">
+          🔄 重置
         </button>
-        <button @click="downloadChart" class="control-btn">
+        <button @click="downloadChart" class="control-btn cartoon-btn">
           ⬇️ 下载
         </button>
       </div>
@@ -521,14 +529,71 @@ export default {
 
 <style scoped>
 .price-chart-container {
-  background: rgba(15, 32, 39, 0.9);
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 255, 231, 0.2);
+  background: linear-gradient(135deg, rgba(15, 32, 39, 0.95), rgba(20, 45, 55, 0.95));
+  border-radius: 25px;
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(0, 255, 231, 0.3);
   padding: 40px;
   margin: 30px auto;
   max-width: 1400px;
-  box-shadow: 0 8px 32px rgba(0, 255, 231, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 255, 231, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 装饰气泡 */
+.bubble-decoration {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.bubble {
+  position: absolute;
+  border: 2px solid rgba(0, 255, 231, 0.2);
+  border-radius: 50%;
+  opacity: 0.6;
+  animation: float 8s ease-in-out infinite;
+}
+
+.b1 {
+  width: 60px;
+  height: 60px;
+  top: 10%;
+  left: 5%;
+  animation-delay: 0s;
+}
+
+.b2 {
+  width: 40px;
+  height: 40px;
+  top: 60%;
+  right: 10%;
+  animation-delay: 2s;
+}
+
+.b3 {
+  width: 50px;
+  height: 50px;
+  bottom: 15%;
+  left: 15%;
+  animation-delay: 4s;
+}
+
+.b4 {
+  width: 35px;
+  height: 35px;
+  top: 40%;
+  right: 5%;
+  animation-delay: 1s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); opacity: 0.6; }
+  50% { transform: translateY(-20px); opacity: 0.3; }
 }
 
 .chart-header {
@@ -538,88 +603,145 @@ export default {
   gap: 20px;
   margin-bottom: 30px;
   flex-wrap: wrap;
+  position: relative;
+  z-index: 2;
 }
 
 .header-left h3 {
   font-size: 28px;
   color: #00ffe7;
-  text-shadow: 0 0 20px #00ffe7;
+  text-shadow: 0 0 20px #00ffe7, 0 0 40px rgba(0, 255, 231, 0.5);
   margin: 0 0 8px 0;
   font-weight: bold;
+  letter-spacing: 1px;
+  animation: flicker 3s ease-in-out infinite;
+}
+
+.cartoon-title {
+  position: relative;
+  display: inline-block;
+}
+
+@keyframes flicker {
+  0%, 100% { text-shadow: 0 0 20px #00ffe7, 0 0 40px rgba(0, 255, 231, 0.5); }
+  50% { text-shadow: 0 0 30px #00ffe7, 0 0 60px rgba(0, 255, 231, 0.7); }
 }
 
 .chart-subtitle {
   color: #aaa;
-  font-size: 13px;
+  font-size: 14px;
   margin: 0;
+  font-weight: 500;
+}
+
+.highlight {
+  color: #FFB347;
+  font-weight: bold;
+  background: rgba(255, 179, 71, 0.2);
+  padding: 2px 6px;
+  border-radius: 6px;
+  transition: all 0.3s;
+}
+
+.chart-subtitle .highlight:hover {
+  background: rgba(255, 179, 71, 0.4);
+  color: #FFD700;
 }
 
 .controls {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   flex-wrap: wrap;
+  position: relative;
+  z-index: 2;
 }
 
 .control-btn {
-  padding: 10px 18px;
-  background: linear-gradient(135deg, rgba(0, 255, 231, 0.1), rgba(0, 212, 255, 0.1));
-  border: 2px solid rgba(0, 255, 231, 0.4);
+  padding: 12px 20px;
+  background: linear-gradient(135deg, rgba(0, 255, 231, 0.15), rgba(0, 212, 255, 0.1));
+  border: 2px solid rgba(0, 255, 231, 0.5);
   color: #00ffe7;
-  border-radius: 12px;
+  border-radius: 15px;
   cursor: pointer;
   transition: all 0.3s;
   font-size: 13px;
   font-weight: bold;
+  position: relative;
+  overflow: hidden;
+}
+
+.control-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 255, 231, 0.2);
+  transition: left 0.3s;
 }
 
 .control-btn:hover {
-  background: linear-gradient(135deg, rgba(0, 255, 231, 0.2), rgba(0, 212, 255, 0.15));
+  background: linear-gradient(135deg, rgba(0, 255, 231, 0.25), rgba(0, 212, 255, 0.2));
   border-color: #00ffe7;
-  box-shadow: 0 0 15px rgba(0, 255, 231, 0.3);
+  box-shadow: 0 0 20px rgba(0, 255, 231, 0.4);
+  transform: translateY(-2px);
+}
+
+.control-btn:hover::before {
+  left: 100%;
 }
 
 .control-btn.paused {
-  background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(255, 107, 157, 0.05));
+  background: linear-gradient(135deg, rgba(255, 107, 157, 0.15), rgba(255, 107, 157, 0.08));
   border-color: #FF6B9D;
   color: #FF6B9D;
+}
+
+.cartoon-btn {
+  font-size: 14px;
+  border-radius: 12px;
 }
 
 /* 空状态 */
 .empty-state {
   text-align: center;
-  padding: 80px 20px;
+  padding: 100px 20px;
   color: #666;
+  position: relative;
+  z-index: 2;
 }
 
 .empty-icon {
-  font-size: 64px;
-  margin-bottom: 20px;
-  opacity: 0.6;
-  animation: pulse 2s ease-in-out infinite;
+  font-size: 80px;
+  margin-bottom: 25px;
+  animation: bounce 2s ease-in-out infinite;
 }
 
-@keyframes pulse {
-  0%, 100% { transform: scale(1); opacity: 0.6; }
-  50% { transform: scale(1.1); opacity: 0.8; }
+@keyframes bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
 }
 
 .empty-state p {
-  margin: 8px 0;
-  font-size: 14px;
+  margin: 12px 0;
+  font-size: 16px;
 }
 
 .empty-hint {
   color: #555;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 /* 快速控制 */
 .component-quick-controls {
   margin-bottom: 25px;
-  background: rgba(0, 255, 231, 0.05);
-  padding: 15px;
-  border-radius: 12px;
-  border: 1px solid rgba(0, 255, 231, 0.1);
+  background: linear-gradient(135deg, rgba(0, 255, 231, 0.08), rgba(0, 212, 255, 0.05));
+  padding: 18px;
+  border-radius: 15px;
+  border: 2px solid rgba(0, 255, 231, 0.15);
+  position: relative;
+  z-index: 2;
 }
 
 .quick-items {
@@ -631,20 +753,30 @@ export default {
 .quick-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: rgba(0, 255, 231, 0.1);
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid rgba(0, 255, 231, 0.2);
+  gap: 10px;
+  background: linear-gradient(135deg, rgba(0, 255, 231, 0.12), rgba(0, 212, 255, 0.08));
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 2px solid rgba(0, 255, 231, 0.25);
   font-size: 12px;
-  color: #ccc;
+  color: #ddd;
+  font-weight: 500;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(0, 255, 231, 0.1);
+}
+
+.quick-item:hover {
+  border-color: var(--quick-color);
+  box-shadow: 0 4px 15px rgba(0, 255, 231, 0.2);
+  transform: translateY(-2px);
 }
 
 .quick-dot {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   display: inline-block;
+  box-shadow: 0 0 8px currentColor;
 }
 
 .quick-name {
@@ -655,30 +787,35 @@ export default {
 }
 
 .quick-remove {
-  background: none;
+  background: rgba(255, 107, 157, 0.2);
   border: none;
   color: #FF6B9D;
   cursor: pointer;
-  font-size: 16px;
-  padding: 0;
-  transition: color 0.2s;
+  font-size: 18px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  transition: all 0.2s;
 }
 
 .quick-remove:hover {
-  color: #fff;
+  background: rgba(255, 107, 157, 0.4);
+  color: #FFB3D9;
 }
 
 /* 图表容器 */
 .chart-wrapper {
-  background: rgba(15, 32, 39, 0.6);
-  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(15, 32, 39, 0.8), rgba(20, 45, 55, 0.8));
+  border-radius: 18px;
   padding: 30px;
   margin-bottom: 25px;
-  border: 1px solid rgba(0, 255, 231, 0.1);
+  border: 2px solid rgba(0, 255, 231, 0.15);
   min-height: 400px;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  z-index: 2;
+  box-shadow: inset 0 1px 0 rgba(0, 255, 231, 0.1), 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 #priceChart {
@@ -689,53 +826,91 @@ export default {
 /* 统计面板 */
 .stats-panel {
   margin-bottom: 25px;
+  position: relative;
+  z-index: 2;
 }
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 15px;
 }
 
 .stat-card {
-  background: linear-gradient(135deg, rgba(0, 255, 231, 0.08), rgba(0, 212, 255, 0.05));
-  border: 2px solid rgba(0, 255, 231, 0.15);
-  border-radius: 12px;
-  padding: 15px;
+  background: linear-gradient(135deg, rgba(0, 255, 231, 0.12), rgba(0, 212, 255, 0.08));
+  border: 2px solid rgba(0, 255, 231, 0.2);
+  border-radius: 15px;
+  padding: 20px;
   text-align: center;
-  transition: all 0.3s;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, transparent, var(--stat-color));
+  opacity: 0;
+  transition: opacity 0.3s;
 }
 
 .stat-card:hover {
   border-color: var(--stat-color);
-  box-shadow: 0 0 20px rgba(0, 255, 231, 0.2);
+  box-shadow: 0 0 25px rgba(0, 255, 231, 0.3), inset 0 0 15px var(--stat-color);
+  transform: translateY(-5px) scale(1.02);
+}
+
+.stat-card:hover::before {
+  opacity: 0.1;
 }
 
 .stat-label {
   font-size: 12px;
-  color: #888;
-  margin-bottom: 8px;
+  color: #999;
+  margin-bottom: 10px;
   font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  z-index: 1;
 }
 
 .stat-value {
-  font-size: 24px;
+  font-size: 28px;
   color: #fff;
   font-weight: bold;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 0 10px var(--stat-color);
 }
 
 .stat-change {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: bold;
+  position: relative;
+  z-index: 1;
 }
 
 .stat-change.positive {
   color: #FF6B9D;
+  background: rgba(255, 107, 157, 0.2);
+  padding: 4px 8px;
+  border-radius: 6px;
+  display: inline-block;
 }
 
 .stat-change.negative {
   color: #4ECDC4;
+  background: rgba(78, 205, 196, 0.2);
+  padding: 4px 8px;
+  border-radius: 6px;
+  display: inline-block;
 }
 
 /* 信息面板 */
@@ -743,22 +918,31 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 15px;
-  background: rgba(0, 255, 231, 0.05);
-  border-radius: 10px;
+  padding: 14px 18px;
+  background: linear-gradient(135deg, rgba(0, 255, 231, 0.08), rgba(0, 212, 255, 0.05));
+  border-radius: 12px;
   font-size: 12px;
-  color: #888;
+  color: #999;
   flex-wrap: wrap;
-  gap: 15px;
+  gap: 18px;
+  border: 1px solid rgba(0, 255, 231, 0.15);
+  position: relative;
+  z-index: 2;
 }
 
 .time-update {
   color: #4ECDC4;
   font-weight: bold;
+  animation: pulse-text 2s ease-in-out infinite;
+}
+
+@keyframes pulse-text {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
 }
 
 .data-points {
-  color: #888;
+  color: #999;
 }
 
 @media (max-width: 768px) {
@@ -768,6 +952,15 @@ export default {
 
   .chart-header {
     flex-direction: column;
+  }
+
+  .control-btn {
+    padding: 10px 16px;
+    font-size: 12px;
+  }
+
+  .header-left h3 {
+    font-size: 22px;
   }
 
   .controls {
@@ -786,6 +979,10 @@ export default {
   .info-panel {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .bubble {
+    display: none;
   }
 }
 </style>
